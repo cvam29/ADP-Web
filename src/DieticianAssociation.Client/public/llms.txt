@@ -1,0 +1,23 @@
+# Association of Dietetics Professionals (ADP)
+
+> Professional development and networking platform for dietetics professionals in India.
+
+The Association of Dietetics Professionals (ADP) is a registered professional body dedicated to advancing the field of dietetics through education, research, networking, and professional development. ADP connects dietitians, nutritionists, food technologists, and other allied health professionals.
+
+## Sections
+
+- [About](/about/): Learn about ADP's mission, leadership team, and organizational history.
+- [Membership](/membership/): Join ADP with Student, Professional, or Institutional membership tiers. Access exclusive resources, continuing education credits, and networking opportunities.
+- [Events](/events/): Browse upcoming and past workshops, webinars, conferences, and professional development sessions. Filter by type, format, and pricing.
+- [Education](/education/): Explore accredited institutions and colleges offering undergraduate, postgraduate, PhD, diploma, certification, and fellowship programs in dietetics and nutrition.
+- [Resources](/resources/): Access professional resources including research papers, clinical tools, practice guidelines, and educational materials. Free and premium content available.
+- [Blog](/blog/): Read expert articles, research insights, and professional perspectives on nutrition science, clinical practice, and public health.
+- [Contact](/contact/): Get in touch with the ADP team for inquiries, partnerships, or support.
+
+## Key Information
+
+- **Focus Areas**: Clinical nutrition, sports nutrition, community nutrition, food science, public health nutrition
+- **Membership Types**: Student, Professional, Institutional
+- **Events**: Workshops, webinars, conferences, seminars (online and in-person)
+- **Education Database**: Universities and colleges offering dietetics courses across India
+- **Certifications**: Professional certification verification available at /verify-certificate/

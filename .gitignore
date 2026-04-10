@@ -1,0 +1,11 @@
+# Repo-level .gitignore — ensure Next.js output is ignored
+
+# Next.js build output
+.next/
+
+# Node modules
+node_modules/
+
+# Optional: Next export output
+out/
+src/DieticianAssociation.Client/.next/cache/eslint/.cache_rvkrwt

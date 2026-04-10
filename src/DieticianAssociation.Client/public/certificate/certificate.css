@@ -1,0 +1,160 @@
+body {
+  background-repeat: no-repeat;
+  background-size: contain;   /* fit inside without cropping */
+  background-position: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* background: #fff; */
+  overflow: hidden; /* no scrollbars */
+}
+
+body.bg-student {
+  background-image: url("/certificate/green-background.png");
+}
+
+body.bg-premium {
+  background-image: url("/certificate/background.jpg");
+}
+
+body.bg-professional {
+  background-image: url("/certificate/golden-background.png");
+}
+
+.background-main {
+  
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  aspect-ratio: 1.414/1; /* landscape ratio: width is bigger than height */
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificate {
+  width: 95%;
+  height: 95%;
+  padding: 4%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center; /* center all middle text */
+}
+
+/* Headings */
+.certificate h1 {
+  color: #472e18;
+  font-size: clamp(40px, 6vw, 70px);
+  font-weight: 900;
+  margin: 0;
+  font-family: "Alike", serif;
+}
+
+.certificate h2 {
+  font-weight: 500;
+  color: #472e18;
+  margin: 10px 0;
+  font-family: "Noticia Text", serif;
+  font-size: clamp(22px, 3vw, 35px);
+  line-height: 1.3;
+}
+
+.certificate p.certify {
+  font-size: clamp(16px, 2vw, 25px);
+  line-height: 1.5;
+  color: #472e18;
+  margin-bottom: 20px;
+  font-family: "Noticia Text", serif;
+}
+
+.certificate p.Registration {
+  font-weight: 700;
+  font-size: clamp(16px, 2vw, 20px);
+  color: #000;
+  margin-bottom: 20px;
+  font-family: "Alike", serif;
+}
+
+/* Top info (Reg left, Darpan right) */
+.top {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  font-size: clamp(14px, 1.5vw, 20px);
+  font-family: "Alike", serif;
+  font-style: italic;
+  margin-bottom: 30px;
+}
+
+/* Footer (signatures left/right, logo center) */
+.certificate .main-sign {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 5%;
+  margin-top: auto;
+  padding: 0 5%;
+  width: 100%;
+}
+
+.certificate .sign {
+  text-align: center;
+  font-family: "Noticia Text", serif;
+  flex: 1;
+}
+
+.certificate .logo {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.certificate .logo img {
+  width: clamp(80px, 10vw, 150px);
+  object-fit: contain;
+}
+
+.certificate .sign h4 {
+  color: #ab7c35;
+  font-size: clamp(18px, 2.5vw, 28px);
+  margin: 10px 0 5px;
+  font-weight: 700;
+}
+
+.certificate .sign p {
+  font-size: clamp(14px, 2vw, 22px);
+  color: #472e18;
+  margin: 0;
+}
+
+/* Watermark logo styling */
+.certificate {
+  position: relative; /* allows absolute positioning inside */
+  overflow: hidden;
+}
+
+.watermark-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* center perfectly */
+  opacity: 0.08; /* adjust transparency */
+  z-index: 0; /* behind text */
+  pointer-events: none; /* so it won’t block clicks */
+}
+
+.watermark-logo img {
+  width: 50%;   /* adjust size of watermark */
+  height: auto;
+}
+
