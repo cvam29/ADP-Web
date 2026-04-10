@@ -2,6 +2,11 @@ import type React from "react"
 import type { Metadata, Viewport } from "next"
 import { DM_Sans, Playfair_Display } from "next/font/google"
 import "./globals.css"
+import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from "@/contexts/auth-context"
+import { RoleBasedLayout } from "@/components/layouts/role-based-layout"
+import { Toaster } from "@/components/ui/toaster"
+import { WebVitals } from "@/components/web-vitals"
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
