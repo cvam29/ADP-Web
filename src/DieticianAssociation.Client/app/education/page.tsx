@@ -195,28 +195,31 @@ export function EducationPage() {
     selectedUniversityType;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-12 px-4">
-        <div className="max-w-7xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+    <div className="min-h-screen bg-background">
+      <section className="border-b border-border bg-secondary/30 py-16 px-4">
+        <div className="max-w-7xl mx-auto flex items-end justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900">Academic Resources</h1>
-            <p className="text-lg text-slate-600 mt-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              Directory
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Academic Resources</h1>
+            <p className="text-base text-muted-foreground mt-2">
               Explore institutions, colleges, and programs in one education directory.
             </p>
           </div>
           <div className="relative w-full sm:w-80">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="Search institutions, colleges, or courses..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 bg-white/90 backdrop-blur"
+              className="pl-10 bg-background border-border"
             />
           </div>
         </div>
       </section>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
+      <div className="max-w-7xl mx-auto px-4 py-10">
         <Tabs
           value={TAB_CONFIG.find((t) => t.value === activeTab)?.key}
           onValueChange={(value) => {

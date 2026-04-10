@@ -98,27 +98,30 @@ export default function PublicEventsPage() {
 	// no-op helper removed
 
 	return (
-			<div className="container py-0">
-				{/* Hero/header aligned with About page theme */}
-				<section className="bg-gradient-to-br from-emerald-50 to-blue-50 rounded-b-2xl py-12 px-4 -mx-4">
-					<div className="max-w-7xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+			<div className="bg-background min-h-screen">
+				{/* Hero */}
+				<section className="border-b border-border bg-secondary/30 py-16 px-4">
+					<div className="max-w-7xl mx-auto flex items-end justify-between gap-6 flex-wrap">
 						<div>
-							<h1 className="text-4xl font-bold text-slate-900">Upcoming Events</h1>
-							<p className="text-lg text-slate-600 mt-2">Discover learning opportunities, workshops, and conferences.</p>
+							<p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+								Calendar
+							</p>
+							<h1 className="text-4xl font-bold tracking-tight text-foreground">Upcoming Events</h1>
+							<p className="text-base text-muted-foreground mt-2">Discover learning opportunities, workshops, and conferences.</p>
 						</div>
 						<div className="relative w-full sm:w-80">
 							<Input
 								placeholder="Search events by title, location, or type"
 								value={searchTerm}
 								onChange={(e) => setSearchTerm(e.target.value)}
-								className="pl-10 bg-white/90 backdrop-blur"
+								className="pl-10 bg-background border-border"
 							/>
-							<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+							<Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
 						</div>
 					</div>
 				</section>
 
-				<div className="py-8 px-4 space-y-6">
+				<div className="container py-8 px-4 space-y-6">
 					{/* Filters */}
 					<div className="max-w-7xl mx-auto space-y-4">
 						<div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">

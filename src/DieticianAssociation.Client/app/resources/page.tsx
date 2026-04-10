@@ -124,13 +124,16 @@ export default function ResourcesPage() {
   const formats = useMemo(() => ["All", ...storeFormats], [storeFormats])
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero Section — matches events page layout */}
-      <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-12 px-4">
-        <div className="max-w-7xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="border-b border-border bg-secondary/30 py-16 px-4">
+        <div className="max-w-7xl mx-auto flex items-end justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900">Resource Library</h1>
-            <p className="text-lg text-slate-600 mt-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              Library
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Resource Library</h1>
+            <p className="text-base text-muted-foreground mt-2">
               Professional resources, research papers, tools, and educational materials.
               {!user && (
                 <span className="text-emerald-600 font-medium">
@@ -146,7 +149,7 @@ export default function ResourcesPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
               placeholder="Search resources..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white/90 backdrop-blur"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           </div>
@@ -241,7 +244,7 @@ export default function ResourcesPage() {
               const { icon: IconComponent, gradient, iconColor } = getIconAndGradient(type)
 
               return (
-                <Card key={resource.id || Math.random()} className="group overflow-hidden border-slate-200 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                <Card key={resource.id || Math.random()} className="group overflow-hidden border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl">
                   {/* Icon header — mimics event card image area */}
                   <div className={`relative h-44 w-full bg-gradient-to-br ${gradient} overflow-hidden flex items-center justify-center`}>
                     <IconComponent className={`w-16 h-16 ${iconColor} opacity-80 group-hover:scale-110 transition-transform duration-300`} />
@@ -291,11 +294,11 @@ export default function ResourcesPage() {
                   {/* Content */}
                   <CardContent className="p-4">
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                      <h3 className="text-base font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
                         {resource.title || 'Untitled Resource'}
                       </h3>
                       {resource.description && (
-                        <p className="text-sm text-slate-600 line-clamp-2">{resource.description}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{resource.description}</p>
                       )}
                     </div>
 

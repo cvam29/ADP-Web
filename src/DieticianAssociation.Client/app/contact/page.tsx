@@ -62,13 +62,18 @@ export default function ContactPage() {
     }
 
     return (
-        <div className="min-h-screen bg-slate-50">
+        <div className="min-h-screen bg-background">
             {/* Hero Section */}
-            <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-20">
+            <section className="border-b border-border bg-secondary/30 py-24">
                 <div className="container mx-auto px-4">
-                    <div className="max-w-4xl mx-auto text-center">
-                        <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">Contact Us</h1>
-                        <p className="text-xl text-slate-600 leading-relaxed">
+                    <div className="max-w-3xl mx-auto text-center">
+                        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+                            Get in Touch
+                        </p>
+                        <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-6 text-balance">
+                            Contact Us
+                        </h1>
+                        <p className="text-base text-muted-foreground leading-relaxed">
                             Have questions about membership, events, or resources? We&rsquo;re here to help you succeed in your nutrition
                             career.
                         </p>
@@ -84,13 +89,13 @@ export default function ContactPage() {
 
                         {/* Contact Information */}
                         <div className="flex flex-col gap-6 lg:h-full">
-                            <Card className="group flex-1 flex flex-col justify-center border-slate-200/60 bg-white/60 backdrop-blur-sm hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:border-emerald-200">
+                            <Card className="group flex-1 flex flex-col justify-center border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl">
                                 <CardContent className="p-8 flex flex-col items-center text-center">
-                                    <div className="w-14 h-14 bg-emerald-50 group-hover:bg-emerald-600 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300 shadow-sm border border-emerald-100 group-hover:border-emerald-600">
-                                        <Mail className="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors duration-300" />
+                                    <div className="w-14 h-14 bg-primary/10 group-hover:bg-primary rounded-2xl flex items-center justify-center mb-5 transition-colors duration-150">
+                                        <Mail className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-150" />
                                     </div>
-                                    <h3 className="font-bold text-slate-900 mb-1.5 text-lg tracking-tight">Email</h3>
-                                    <p className="text-slate-500 text-sm mb-4">Send us a message anytime</p>
+                                    <h3 className="font-semibold text-foreground mb-1.5 text-base tracking-tight">Email</h3>
+                                    <p className="text-muted-foreground text-sm mb-4">Send us a message anytime</p>
                                     <a
                                         href="mailto:info@adp.org.in"
                                         className="text-emerald-600 font-medium hover:text-emerald-700 hover:underline transition-colors break-all"
@@ -100,26 +105,26 @@ export default function ContactPage() {
                                 </CardContent>
                             </Card>
 
-                            <Card className="group flex-1 flex flex-col justify-center border-slate-200/60 bg-white/60 backdrop-blur-sm hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:border-emerald-200">
+                            <Card className="group flex-1 flex flex-col justify-center border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl">
                                 <CardContent className="p-8 flex flex-col items-center text-center">
-                                    <div className="w-14 h-14 bg-emerald-50 group-hover:bg-emerald-600 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300 shadow-sm border border-emerald-100 group-hover:border-emerald-600">
-                                        <Phone className="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors duration-300" />
+                                    <div className="w-14 h-14 bg-primary/10 group-hover:bg-primary rounded-2xl flex items-center justify-center mb-5 transition-colors duration-150">
+                                        <Phone className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-150" />
                                     </div>
-                                    <h3 className="font-bold text-slate-900 mb-1.5 text-lg tracking-tight">Phone</h3>
-                                    <p className="text-slate-500 text-sm mb-4">Call us during business hours</p>
+                                    <h3 className="font-semibold text-foreground mb-1.5 text-base tracking-tight">Phone</h3>
+                                    <p className="text-muted-foreground text-sm mb-4">Call us during business hours</p>
                                     <a href="tel:+918059655000" className="text-emerald-600 font-medium hover:text-emerald-700 hover:underline transition-colors">
                                         +91 80596 55000
                                     </a>
                                 </CardContent>
                             </Card>
 
-                            <Card className="group flex-1 flex flex-col justify-center border-slate-200/60 bg-white/60 backdrop-blur-sm hover:bg-white hover:shadow-xl hover:-translate-y-1 transition-all duration-300 hover:border-emerald-200">
+                            <Card className="group flex-1 flex flex-col justify-center border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl">
                                 <CardContent className="p-8 flex flex-col items-center text-center">
-                                    <div className="w-14 h-14 bg-emerald-50 group-hover:bg-emerald-600 rounded-2xl flex items-center justify-center mb-5 transition-colors duration-300 shadow-sm border border-emerald-100 group-hover:border-emerald-600">
-                                        <MapPin className="w-6 h-6 text-emerald-600 group-hover:text-white transition-colors duration-300" />
+                                    <div className="w-14 h-14 bg-primary/10 group-hover:bg-primary rounded-2xl flex items-center justify-center mb-5 transition-colors duration-150">
+                                        <MapPin className="w-6 h-6 text-primary group-hover:text-primary-foreground transition-colors duration-150" />
                                     </div>
-                                    <h3 className="font-bold text-slate-900 mb-1.5 text-lg tracking-tight">Address</h3>
-                                    <p className="text-slate-500 text-sm mb-4">Visit our headquarters</p>
+                                    <h3 className="font-semibold text-foreground mb-1.5 text-base tracking-tight">Address</h3>
+                                    <p className="text-muted-foreground text-sm mb-4">Visit our headquarters</p>
                                     <a
                                         href={officeMapsLink}
                                         target="_blank"
@@ -136,7 +141,7 @@ export default function ContactPage() {
 
                         {/* Contact Form */}
                         <div className="flex lg:col-span-2 lg:h-full">
-                            <Card className="flex-1 flex flex-col border-slate-200/60 bg-white/60 backdrop-blur-sm shadow-sm hover:shadow-md transition-shadow duration-300">
+                            <Card className="flex-1 flex flex-col border-border bg-card rounded-2xl">
                                 <CardHeader>
                                     <CardTitle className="text-2xl">Send us a Message</CardTitle>
                                     <CardDescription>
@@ -256,12 +261,12 @@ export default function ContactPage() {
 
 
             {/* FAQ Section */}
-            <section className="py-20 bg-white">
+            <section className="py-24 bg-secondary/30 border-t border-border">
                 <div className="container mx-auto px-4">
                     <div className="max-w-4xl mx-auto">
                         <div className="text-center mb-12">
-                            <h2 className="text-3xl font-bold text-slate-900 mb-4">Frequently Asked Questions</h2>
-                            <p className="text-lg text-slate-600">
+                            <h2 className="text-3xl font-bold tracking-tight text-foreground mb-4">Frequently Asked Questions</h2>
+                            <p className="text-base text-muted-foreground">
                                 Quick answers to common questions about our association and services.
                             </p>
                         </div>

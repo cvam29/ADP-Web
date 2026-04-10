@@ -246,13 +246,16 @@ export default function BlogPage() {
    * ------------------------------------------------------
    */
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-12 px-4">
-        <div className="max-w-7xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+      <section className="border-b border-border bg-secondary/30 py-16 px-4">
+        <div className="max-w-7xl mx-auto flex items-end justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900">Blog</h1>
-            <p className="text-lg text-slate-600 mt-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              Knowledge Hub
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Blog</h1>
+            <p className="text-base text-muted-foreground mt-2">
               Insights, research, and professional perspectives from dietetics experts.
             </p>
           </div>
@@ -262,9 +265,9 @@ export default function BlogPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="pl-10 bg-white/90 backdrop-blur"
+              className="pl-10 bg-background border-border"
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
         </div>
       </section>
@@ -328,10 +331,10 @@ export default function BlogPage() {
             return (
               <Card
                 key={post.id}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card transition-colors duration-150 hover:border-primary/30"
               >
                 {/* Cover image */}
-                <div className="relative h-44 w-full bg-gradient-to-br from-emerald-50 to-blue-50 overflow-hidden">
+                <div className="relative h-44 w-full bg-secondary/50 overflow-hidden">
                   {post.image ? (
                     <Image
                       src={post.image}
@@ -356,7 +359,7 @@ export default function BlogPage() {
 
                   {/* Category badge (top-left) */}
                   <div className="absolute left-3 top-3">
-                    <Badge className="bg-white/95 text-emerald-700 text-xs font-semibold shadow-sm border-0">
+                    <Badge className="bg-foreground text-background text-xs font-semibold rounded-full border-0 shadow-sm">
                       {post.category || "Uncategorized"}
                     </Badge>
                   </div>
@@ -392,18 +395,18 @@ export default function BlogPage() {
                 {/* Content */}
                 <CardContent className="flex h-full flex-1 flex-col p-4">
                   <div className="flex-1 space-y-2">
-                    <h3 className="text-base font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                    <h3 className="text-base font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
                       {post.title}
                     </h3>
                     {post.excerpt && (
-                      <p className="text-sm text-slate-600 line-clamp-2">
+                      <p className="text-sm text-muted-foreground line-clamp-2">
                         {post.excerpt}
                       </p>
                     )}
                   </div>
 
                   <div className="mt-auto flex items-center gap-2 pt-4">
-                    <div className="text-xs text-slate-500 flex items-center gap-2">
+                    <div className="text-xs text-muted-foreground flex items-center gap-2">
                       <Calendar className="h-3 w-3" />
                       <time dateTime={post.publishedAt || undefined}>
                         {formatDate(post.publishedAt)}
