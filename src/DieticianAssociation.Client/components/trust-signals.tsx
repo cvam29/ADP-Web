@@ -7,18 +7,18 @@ const stats = [
 
 export function TrustSignals() {
   return (
-    <section className="py-16 bg-zinc-50 dark:bg-zinc-900/40 border-y border-zinc-200 dark:border-zinc-800">
+    <section className="py-16 bg-secondary/40 border-y border-border">
       <div className="container mx-auto px-4">
-        <p className="text-center text-xs font-semibold uppercase tracking-widest text-zinc-400 dark:text-zinc-500 mb-10">
+        <p className="text-center text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-10">
           Trusted by professionals across India
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-0 sm:divide-x sm:divide-zinc-300 dark:sm:divide-zinc-700">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-8 sm:gap-0 sm:divide-x sm:divide-border">
           {stats.map((stat) => (
             <div key={stat.label} className="flex flex-col items-center px-10 text-center">
-              <span className="text-4xl font-bold tracking-tight text-zinc-900 dark:text-zinc-100">
+              <span className="text-4xl font-bold tracking-tight text-primary">
                 {stat.value}
               </span>
-              <span className="text-sm text-zinc-500 dark:text-zinc-400 mt-1">{stat.label}</span>
+              <span className="text-sm text-muted-foreground mt-1">{stat.label}</span>
             </div>
           ))}
         </div>

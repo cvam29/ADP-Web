@@ -4,50 +4,62 @@
 
 @layer base {
   :root {
-    /* Zinc-based neutral palette — warm white, crisp borders */
-    --background: 0 0% 100%;
-    --foreground: 240 5.9% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 5.9% 10%;
+    /* Nutrition / Dietetics palette
+       Primary  : herb green  #2D7A4F  hsl(146 45% 33%)
+       Accent   : amber-gold  #C4893A  hsl(33 54% 49%)
+       BG       : warm cream  #FAFAF7  hsl(80 14% 98%)
+       Border   : sage        #D8E4D4  hsl(120 16% 86%)
+       Foreground: deep forest #1A2E1E hsl(134 27% 14%)
+    */
+    --background: 80 14% 98%;
+    --foreground: 134 27% 14%;
+    --card: 80 14% 98%;
+    --card-foreground: 134 27% 14%;
     --popover: 0 0% 100%;
-    --popover-foreground: 240 5.9% 10%;
-    --primary: 160 84% 35%;
+    --popover-foreground: 134 27% 14%;
+    --primary: 146 45% 33%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
+    --secondary: 120 20% 94%;
+    --secondary-foreground: 134 27% 14%;
+    --muted: 120 20% 94%;
+    --muted-foreground: 134 14% 45%;
+    --accent: 33 54% 49%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --ring: 160 84% 35%;
+    --border: 120 16% 86%;
+    --input: 120 16% 86%;
+    --ring: 146 45% 33%;
     --radius: 0.625rem;
   }
 
   .dark {
-    /* Near-black zinc — deep but not blue-tinted */
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 160 84% 39%;
+    /* Deep forest night palette
+       BG       : #0D1A12  hsl(138 32% 8%)
+       Card     : #122018  hsl(150 26% 10%)
+       Foreground: #F2F5EE hsl(87 27% 95%)
+       Primary  : #4CAF76  hsl(146 37% 49%)
+       Accent   : #D4974A  hsl(33 56% 56%)
+    */
+    --background: 138 32% 8%;
+    --foreground: 87 27% 95%;
+    --card: 150 26% 10%;
+    --card-foreground: 87 27% 95%;
+    --popover: 150 26% 10%;
+    --popover-foreground: 87 27% 95%;
+    --primary: 146 37% 49%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
+    --secondary: 138 20% 14%;
+    --secondary-foreground: 87 27% 95%;
+    --muted: 138 20% 14%;
+    --muted-foreground: 120 10% 60%;
+    --accent: 33 56% 56%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 160 84% 39%;
+    --border: 138 20% 16%;
+    --input: 138 20% 16%;
+    --ring: 146 37% 49%;
   }
 }
 
@@ -60,22 +72,22 @@
   }
 }
 
-/* Custom scrollbar — zinc palette */
+/* Custom scrollbar — sage palette */
 ::-webkit-scrollbar {
   width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #f4f4f5;
+  background: #edf2ea;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d4d4d8;
+  background: #b5ccb0;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #a1a1aa;
+  background: #7faa78;
 }
 
 /* Focus styles for accessibility */
@@ -112,18 +124,18 @@
   }
 }
 
-/* Subtle surface accent — replaces heavy gradients */
+/* Subtle surface accent — warm sage tint */
 .gradient-health {
-  background: #fafafa;
+  background: #f2f6ef;
 }
 
 .gradient-emerald {
-  background: #059669;
+  background: #2d7a4f;
 }
 
 /* Professional styling for forms */
 .form-section {
-  @apply space-y-6 p-6 bg-white rounded-xl border border-zinc-200;
+  @apply space-y-6 p-6 bg-card rounded-xl border border-border;
 }
 
 /* Consistent section rhythm */

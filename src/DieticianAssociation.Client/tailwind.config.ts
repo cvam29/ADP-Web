@@ -53,7 +53,35 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Health-focused color palette
+        // Nutrition / Dietetics brand palette
+        // Primary: herb green
+        herb: {
+          50:  "#f0f7f2",
+          100: "#d9ede0",
+          200: "#b3dbc2",
+          300: "#7fc29f",
+          400: "#4caf76",
+          500: "#2d7a4f",
+          600: "#236040",
+          700: "#1b4c32",
+          800: "#133826",
+          900: "#0d2419",
+          950: "#0d1a12",
+        },
+        // Accent: amber-gold (turmeric / whole grain)
+        grain: {
+          50:  "#fef9f0",
+          100: "#fdefd6",
+          200: "#fad9a0",
+          300: "#f6be62",
+          400: "#d4974a",
+          500: "#c4893a",
+          600: "#a56f28",
+          700: "#7e5320",
+          800: "#5c3c18",
+          900: "#3a2710",
+        },
+        // Keep emerald for backward compat
         emerald: {
           50: "#ecfdf5",
           100: "#d1fae5",

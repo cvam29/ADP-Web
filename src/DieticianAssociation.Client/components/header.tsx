@@ -56,7 +56,7 @@ export function Header() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-white/95 dark:bg-zinc-950/95 backdrop-blur-sm border-b border-zinc-200 dark:border-zinc-800">
+    <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-sm border-b border-border">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Left: Logo + Donate button */}
@@ -71,7 +71,7 @@ export function Header() {
                   className="object-cover rounded-lg"
                 />
               </div>
-              <span className="font-semibold text-base sm:text-lg text-zinc-900 dark:text-zinc-100 line-clamp-1 tracking-tight">
+              <span className="font-semibold text-base sm:text-lg text-foreground line-clamp-1 tracking-tight">
                 Association of Dietetics Professionals
               </span>
             </Link>
@@ -83,7 +83,7 @@ export function Header() {
               aria-label="Donate"
               title="Donate"
               onClick={() => setDonateOpen(true)}
-              className="group ml-1 hidden md:inline-flex items-center gap-2 rounded-full border-emerald-200 bg-emerald-50/60 px-3 py-1.5 text-emerald-700 hover:bg-emerald-100 hover:text-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/60 transition-colors duration-150"
+              className="group ml-1 hidden md:inline-flex items-center gap-2 rounded-full border-border bg-secondary px-3 py-1.5 text-primary hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors duration-150"
             >
               <HeartHandshake className="h-4 w-4" />
               <span className="font-medium">Donate</span>
@@ -101,13 +101,13 @@ export function Header() {
                   aria-current={active ? "page" : undefined}
                   className={`relative px-3 py-2 text-sm font-medium rounded-md transition-colors duration-150 ${
                     active
-                      ? "text-zinc-900 dark:text-zinc-100"
-                      : "text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                      ? "text-foreground"
+                      : "text-muted-foreground hover:text-foreground hover:bg-secondary"
                   }`}
                 >
                   {item.name}
                   {active && (
-                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-zinc-900 dark:bg-zinc-100 rounded-full" />
+                    <span className="absolute bottom-0 left-3 right-3 h-0.5 bg-primary rounded-full" />
                   )}
                 </Link>
               );
@@ -122,7 +122,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="flex items-center space-x-2 text-zinc-700 dark:text-zinc-300 hover:text-zinc-900 dark:hover:text-zinc-100"
+                    className="flex items-center space-x-2 text-muted-foreground hover:text-foreground"
                   >
                     <User className="w-4 h-4" />
                     <span className="hidden sm:inline text-sm">{user.name}</span>
@@ -133,7 +133,7 @@ export function Header() {
                     </Badge>
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56 border-zinc-200 dark:border-zinc-800">
+                <DropdownMenuContent align="end" className="w-56 border-border">
                   <DropdownMenuSeparator />
                   {canUseAdminWorkspace ? (
                     <>
@@ -179,10 +179,10 @@ export function Header() {
               </DropdownMenu>
             ) : (
               <div className="hidden lg:flex items-center gap-2 ml-2">
-                <Button asChild variant="ghost" className="text-sm text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100">
+                <Button asChild variant="ghost" className="text-sm text-muted-foreground hover:text-foreground">
                   <Link href="/login">Login</Link>
                 </Button>
-                <Button asChild className="rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-sm px-5">
+                <Button asChild className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground text-sm px-5">
                   <Link href="/membership/join">Join Now</Link>
                 </Button>
               </div>
@@ -191,11 +191,11 @@ export function Header() {
             {/* Mobile Menu */}
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="lg:hidden text-zinc-600 dark:text-zinc-400">
+                <Button variant="ghost" size="icon" className="lg:hidden text-muted-foreground">
                   <Menu className="w-5 h-5" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[85vw] sm:w-80 bg-white dark:bg-zinc-950 border-zinc-200 dark:border-zinc-800">
+              <SheetContent side="right" className="w-[85vw] sm:w-80 bg-background border-border">
                 <div className="flex flex-col space-y-1 mt-8">
                   {canUseAdminWorkspace ? <DashboardSwitcher compact showLabel={false} /> : null}
 
@@ -206,7 +206,7 @@ export function Header() {
                       setIsOpen(false);
                       setDonateOpen(true);
                     }}
-                    className="inline-flex items-center gap-2 rounded-full bg-emerald-600 hover:bg-emerald-700 mb-3"
+                    className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground mb-3"
                   >
                     <HeartHandshake className="h-4 w-4" />
                     <span>Donate</span>
@@ -221,8 +221,8 @@ export function Header() {
                         aria-current={active ? "page" : undefined}
                         className={`text-sm font-medium px-3 py-2.5 rounded-lg transition-colors duration-150 ${
                           active
-                            ? "text-zinc-900 dark:text-zinc-100 bg-zinc-100 dark:bg-zinc-800"
-                            : "text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 hover:bg-zinc-50 dark:hover:bg-zinc-800/60"
+                            ? "text-foreground bg-secondary"
+                            : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                         }`}
                         onClick={() => setIsOpen(false)}
                       >
@@ -231,15 +231,15 @@ export function Header() {
                     );
                   })}
                   {!user && (
-                    <div className="flex flex-col gap-2 pt-4 border-t border-zinc-200 dark:border-zinc-800">
-                      <Button asChild variant="ghost" className="text-zinc-700 dark:text-zinc-300">
+                    <div className="flex flex-col gap-2 pt-4 border-t border-border">
+                      <Button asChild variant="ghost" className="text-muted-foreground">
                         <Link href="/login" onClick={() => setIsOpen(false)}>
                           Login
                         </Link>
                       </Button>
                       <Button
                         asChild
-                        className="rounded-full bg-emerald-600 hover:bg-emerald-700"
+                        className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground"
                       >
                         <Link href="/membership/join">Join Now</Link>
                       </Button>

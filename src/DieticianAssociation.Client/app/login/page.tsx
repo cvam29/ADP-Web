@@ -66,57 +66,57 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex">
-      {/* Left panel — dark brand side (desktop only) */}
-      <div className="hidden lg:flex lg:w-[42%] flex-col justify-between bg-zinc-950 px-14 py-14 border-r border-zinc-800">
+      {/* Left panel — deep herb green brand side (desktop only) */}
+      <div className="hidden lg:flex lg:w-[42%] flex-col justify-between bg-herb-950 px-14 py-14 border-r border-herb-800">
         <Link href="/" className="flex items-center gap-2.5">
           <Image src="/ADP.svg" alt="ADP logo" width={30} height={30} className="rounded-md" />
-          <span className="font-semibold text-zinc-100 text-sm tracking-tight">Association of Dietetics Professionals</span>
+          <span className="font-semibold text-herb-100 text-sm tracking-tight">Association of Dietetics Professionals</span>
         </Link>
 
         <div className="space-y-10">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-widest text-emerald-500 mb-4">Member Portal</p>
-            <h2 className="text-4xl font-bold text-white tracking-tight leading-[1.15] mb-4">
+            <p className="text-xs font-semibold uppercase tracking-widest text-grain-400 mb-4">Member Portal</p>
+            <h2 className="text-4xl font-bold text-herb-50 tracking-tight leading-[1.15] mb-4">
               Welcome back to ADP
             </h2>
-            <p className="text-zinc-400 text-sm leading-relaxed max-w-xs">
+            <p className="text-herb-400 text-sm leading-relaxed max-w-xs">
               India&apos;s professional community for registered dieticians and nutrition scientists.
             </p>
           </div>
           <div className="space-y-3">
             {trustPoints.map(({ icon: Icon, text }) => (
-              <div key={text} className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 rounded-xl px-4 py-3">
-                <div className="w-7 h-7 rounded-lg bg-emerald-950 flex items-center justify-center flex-shrink-0">
-                  <Icon className="w-3.5 h-3.5 text-emerald-400" />
+              <div key={text} className="flex items-center gap-3 bg-herb-900 border border-herb-800 rounded-xl px-4 py-3">
+                <div className="w-7 h-7 rounded-lg bg-herb-800 flex items-center justify-center flex-shrink-0">
+                  <Icon className="w-3.5 h-3.5 text-grain-400" />
                 </div>
-                <span className="text-zinc-300 text-sm">{text}</span>
+                <span className="text-herb-300 text-sm">{text}</span>
               </div>
             ))}
           </div>
         </div>
 
-        <p className="text-zinc-700 text-xs">
+        <p className="text-herb-700 text-xs">
           &copy; {new Date().getFullYear()} Association of Dietetics Professionals
         </p>
       </div>
 
-      {/* Right panel — clean white form */}
-      <div className="flex-1 flex items-center justify-center bg-white dark:bg-zinc-950 px-6 py-14">
+      {/* Right panel — warm cream form */}
+      <div className="flex-1 flex items-center justify-center bg-background px-6 py-14">
         <div className="w-full max-w-[360px]">
           {/* Mobile logo */}
           <Link href="/" className="flex items-center gap-2 mb-10 lg:hidden">
             <Image src="/ADP.svg" alt="ADP logo" width={28} height={28} className="rounded-md" />
-            <span className="font-semibold text-zinc-900 dark:text-zinc-100 text-sm">ADP</span>
+            <span className="font-semibold text-foreground text-sm">ADP</span>
           </Link>
 
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-100 tracking-tight mb-1.5">Sign in</h1>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400 leading-relaxed">Enter your credentials to access your account.</p>
+            <h1 className="text-2xl font-bold text-foreground tracking-tight mb-1.5">Sign in</h1>
+            <p className="text-sm text-muted-foreground leading-relaxed">Enter your credentials to access your account.</p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <Label htmlFor="email" className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">Email</Label>
+              <Label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Email</Label>
               <Input
                 id="email"
                 type="email"
@@ -124,14 +124,14 @@ function LoginForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="h-11 border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-400 focus-visible:ring-0 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 placeholder:text-zinc-400"
+                className="h-11 border-border focus:border-primary focus-visible:ring-0 rounded-xl bg-secondary text-foreground placeholder:text-muted-foreground"
               />
             </div>
 
             <div className="space-y-1.5">
               <div className="flex items-center justify-between">
-                <Label htmlFor="password" className="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">Password</Label>
-                <Link href="/reset-password" className="text-xs text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors">
+                <Label htmlFor="password" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Password</Label>
+                <Link href="/reset-password" className="text-xs text-muted-foreground hover:text-primary transition-colors">
                   Forgot password?
                 </Link>
               </div>
@@ -143,13 +143,13 @@ function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-11 border-zinc-200 dark:border-zinc-700 focus:border-zinc-900 dark:focus:border-zinc-400 focus-visible:ring-0 rounded-xl bg-zinc-50 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 pr-10"
+                  className="h-11 border-border focus:border-primary focus-visible:ring-0 rounded-xl bg-secondary text-foreground pr-10"
                 />
                 <Button
                   type="button"
                   variant="ghost"
                   size="sm"
-                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                  className="absolute right-0 top-0 h-full px-3 hover:bg-transparent text-muted-foreground hover:text-foreground"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -159,7 +159,7 @@ function LoginForm() {
 
             <Button
               type="submit"
-              className="w-full h-11 rounded-xl bg-zinc-900 hover:bg-zinc-700 dark:bg-zinc-100 dark:hover:bg-zinc-300 dark:text-zinc-900 text-white font-semibold mt-2 transition-colors"
+              className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-2 transition-colors"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -174,10 +174,10 @@ function LoginForm() {
           </form>
 
           <div className="mt-8">
-            <Separator className="bg-zinc-100 dark:bg-zinc-800" />
-            <p className="text-center text-sm text-zinc-500 dark:text-zinc-400 mt-6">
+            <Separator className="bg-border" />
+            <p className="text-center text-sm text-muted-foreground mt-6">
               Don&rsquo;t have an account?{" "}
-              <Link href="/membership/join" className="font-semibold text-zinc-900 dark:text-zinc-100 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+              <Link href="/membership/join" className="font-semibold text-primary hover:text-primary/80 transition-colors">
                 Join ADP
               </Link>
             </p>
@@ -192,11 +192,11 @@ export default function LoginPage() {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-background flex items-center justify-center p-4">
           <PageLoading
             minHeightClassName="min-h-0"
             direction="column"
-            textClassName="text-sm text-zinc-500"
+            textClassName="text-sm text-muted-foreground"
           />
         </div>
       }
