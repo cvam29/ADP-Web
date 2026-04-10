@@ -47,15 +47,15 @@ export default function TrustInfoTicker() {
   return (
     <section
       aria-label="Official credentials and important links"
-      className="relative w-full overflow-hidden border-y border-slate-200 bg-gradient-to-r from-slate-50 via-white to-slate-50"
+      className="relative w-full overflow-hidden border-y border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
     >
       {/* Gradient Fade — Left */}
-      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-slate-50 to-transparent" />
+      <div className="pointer-events-none absolute left-0 top-0 z-10 h-full w-20 bg-gradient-to-r from-white dark:from-zinc-950 to-transparent" />
 
       {/* Gradient Fade — Right */}
-      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-slate-50 to-transparent" />
+      <div className="pointer-events-none absolute right-0 top-0 z-10 h-full w-20 bg-gradient-to-l from-white dark:from-zinc-950 to-transparent" />
 
       <div className="relative flex whitespace-nowrap">
         <div
@@ -63,7 +63,7 @@ export default function TrustInfoTicker() {
           className="flex items-center gap-12 px-8 py-3 text-sm will-change-transform"
         >
           {[...items, ...items].map((item, index) => (
-            <div key={index} className="flex items-center gap-3 text-slate-700">
+            <div key={index} className="flex items-center gap-3">
               {item.link ? (
                 <Link
                   href={item.link}
@@ -73,14 +73,14 @@ export default function TrustInfoTicker() {
                 </Link>
               ) : (
                 <>
-                  <span className="text-slate-500">{item.label}:</span>
-                  <span className="font-semibold tracking-wide text-slate-900">
+                  <span className="text-zinc-500 dark:text-zinc-400">{item.label}:</span>
+                  <span className="font-semibold tracking-wide text-zinc-900 dark:text-zinc-100">
                     {item.value}
                   </span>
                 </>
               )}
 
-              <span className="mx-6 h-4 w-px bg-slate-300" />
+              <span className="mx-6 h-4 w-px bg-zinc-200 dark:bg-zinc-700" />
             </div>
           ))}
         </div>

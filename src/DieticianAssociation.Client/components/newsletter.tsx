@@ -1,33 +1,29 @@
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Mail } from "lucide-react"
 
 export function Newsletter() {
   return (
-    <section className="py-8 bg-emerald-600">
+    <section className="py-24 bg-white dark:bg-zinc-950">
       <div className="container mx-auto px-4">
-        <div className="max-w-2xl mx-auto text-center">
-          <div className="flex justify-center mb-6">
-            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
-              <Mail className="w-8 h-8 text-white" />
-            </div>
-          </div>
-          <h2 className="text-3xl font-bold text-white mb-4">Stay Updated</h2>
-          <p className="text-emerald-100 mb-8 text-lg">
-            Get the latest nutrition research, professional updates, and exclusive member content delivered to your
-            inbox.
+        <div className="max-w-2xl mx-auto bg-zinc-950 dark:bg-zinc-900 border border-zinc-800 rounded-3xl px-8 py-12 text-center">
+          <span className="inline-block text-xs font-semibold uppercase tracking-widest text-emerald-400 mb-5">
+            Newsletter
+          </span>
+          <h2 className="text-3xl font-bold text-white tracking-tight mb-3">Stay Updated</h2>
+          <p className="text-zinc-400 text-base leading-relaxed mb-8">
+            Get the latest nutrition research, professional updates, and exclusive member content delivered to your inbox.
           </p>
-          <form className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <form className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
             <Input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/70"
+              className="flex-1 bg-zinc-800 border-zinc-700 text-white placeholder:text-zinc-500 focus:border-zinc-500 focus-visible:ring-0 rounded-full px-5"
             />
-            <Button type="submit" variant="secondary" className="bg-white text-emerald-600 hover:bg-emerald-50">
+            <Button type="submit" className="rounded-full bg-emerald-600 hover:bg-emerald-500 text-white px-6 shrink-0">
               Subscribe
             </Button>
           </form>
-          <p className="text-emerald-100 text-sm mt-4">No spam. Unsubscribe at any time.</p>
+          <p className="text-zinc-600 text-xs mt-5">No spam. Unsubscribe at any time.</p>
         </div>
       </div>
     </section>

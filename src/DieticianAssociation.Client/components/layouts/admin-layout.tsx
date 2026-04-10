@@ -4,6 +4,7 @@ import { useState, useEffect, ReactNode } from "react";
 import { AdminHeader } from "@/components/layouts/admin-header";
 import { AdminSidebar } from "@/components/layouts/admin-sidebar";
 import Image from "next/image";
+import Link from "next/link";
 
 interface AdminLayoutProps {
   children: ReactNode;
@@ -28,28 +29,22 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const sidebarWidth = collapsed ? "w-16" : "w-64";
 
   return (
-    <div className="h-screen bg-gray-50 overflow-hidden">
-      <div className="flex h-full flex-col bg-gray-50 overflow-hidden">
+    <div className="h-screen bg-zinc-50 dark:bg-zinc-950 overflow-hidden">
+      <div className="flex h-full flex-col overflow-hidden">
         {/* Header aligned with sidebar */}
-        <div className="sticky top-0 z-40 flex bg-gray-50 shadow-sm">
-          {/* Sidebar placeholder for alignment */}
+        <div className="sticky top-0 z-40 flex border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          {/* Sidebar header slot — clean dark brand panel */}
           {isDesktop && (
             <div
-              className={`${sidebarWidth} transition-all duration-300 relative h-16 overflow-hidden bg-gray-100`}
+              className={`${sidebarWidth} transition-all duration-300 h-16 flex items-center justify-center bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 flex-shrink-0 overflow-hidden`}
             >
-              {!collapsed && (
-                <>
-                  <Image
-                    src="/adp-header-crop.jpeg"
-                    alt="Indian nutrition professionals collaborating"
-                    fill
-                    priority
-                    className="object-cover object-left"
-                  />
-
-                  {/* Optional professional overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-gray-900/40 to-transparent" />
-                </>
+              {!collapsed ? (
+                <Link href="/" className="flex items-center gap-2 px-5 w-full">
+                  <Image src="/ADP.svg" alt="ADP logo" width={24} height={24} className="rounded flex-shrink-0" />
+                  <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100 truncate tracking-tight">Admin</span>
+                </Link>
+              ) : (
+                <Image src="/ADP.svg" alt="ADP logo" width={24} height={24} className="rounded" />
               )}
             </div>
           )}
@@ -58,9 +53,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
             <AdminHeader
               onMenuClick={() => {
                 if (isDesktop) {
-                  setCollapsed((prev) => !prev); // collapse toggle
+                  setCollapsed((prev) => !prev);
                 } else {
-                  setSidebarOpen(true); // mobile overlay
+                  setSidebarOpen(true);
                 }
               }}
             />
@@ -71,7 +66,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <div className="flex flex-1 min-h-0">
           {/* Sidebar */}
           {isDesktop ? (
-            <div className={`${sidebarWidth} transition-all duration-300`}>
+            <div className={`${sidebarWidth} transition-all duration-300 flex-shrink-0`}>
               <AdminSidebar
                 isOpen
                 onClose={() => setSidebarOpen(false)}

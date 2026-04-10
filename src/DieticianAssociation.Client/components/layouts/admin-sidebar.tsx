@@ -130,7 +130,7 @@ export function AdminSidebar({
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed top-16 left-0 z-50 h-[calc(100vh-4rem)] bg-gradient-to-b from-white to-gray-50/50 border-r border-gray-200/80 shadow-xl transition-all duration-300 ease-in-out flex flex-col overflow-hidden",
+          "fixed top-16 left-0 z-50 h-[calc(100vh-4rem)] bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 transition-all duration-300 ease-in-out flex flex-col overflow-hidden",
           collapsed ? "lg:w-16" : "lg:w-64",
           "lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
@@ -138,7 +138,7 @@ export function AdminSidebar({
         )}
       >
         {/* Mobile close button */}
-        <div className="lg:hidden flex justify-end p-4 border-b border-gray-200">
+        <div className="lg:hidden flex justify-end p-4 border-b border-zinc-200 dark:border-zinc-800">
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="w-4 h-4" />
           </Button>
@@ -146,28 +146,27 @@ export function AdminSidebar({
 
         {/* Admin info */}
         {user && !collapsed && (
-          <div className="p-5 border-b border-gray-200/80 bg-white/50 backdrop-blur-sm">
+          <div className="p-5 border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
             <div className="flex items-center space-x-3">
-              <Avatar className="w-11 h-11 ring-2 ring-blue-100 ring-offset-2">
+              <Avatar className="w-9 h-9 ring-2 ring-zinc-100 dark:ring-zinc-800">
                 <AvatarImage
                   src={user.avatar || "/admin-placeholder.avif"}
                   alt={user.name ?? ""}
                 />
-                <AvatarFallback className="bg-blue-100 text-blue-700 font-semibold">
-                  {user?.name ??
-                    ""
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("")
-                      .toUpperCase()}
+                <AvatarFallback className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold text-xs">
+                  {(user?.name ?? "")
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")
+                    .toUpperCase()}
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-gray-900 truncate">
+                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
                   {user.name}
                 </p>
                 <Badge
-                  className="bg-blue-100 text-blue-800 border-blue-200 text-xs mt-1.5 flex items-center w-fit shadow-sm"
+                  className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 text-xs mt-1 flex items-center w-fit"
                   variant="outline"
                 >
                   <Shield className="w-3 h-3 mr-1" />
@@ -179,15 +178,15 @@ export function AdminSidebar({
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 min-h-0 p-4 space-y-6 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+        <nav className="flex-1 min-h-0 p-3 space-y-5 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent">
           {/* Admin Section */}
           <div>
             {!collapsed && (
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">
+              <h3 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-2 px-2">
                 Administration
               </h3>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {adminNavigation.map((item) => {
                 const isActive = pathname === item.href;
                 const hasChildren = item.children && item.children.length > 0;
@@ -206,38 +205,36 @@ export function AdminSidebar({
                         type="button"
                         onClick={() => toggleMenu(item.name)}
                         className={cn(
-                          "w-full group relative flex items-center rounded-lg text-sm font-medium transition-all duration-200",
+                          "w-full group relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150",
                           collapsed
-                            ? "justify-center px-3 py-3"
-                            : "px-4 py-3 space-x-3",
+                            ? "justify-center px-3 py-2.5"
+                            : "px-3 py-2.5 space-x-2.5",
                           isActive || isChildActive
-                            ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600 shadow-sm"
-                            : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900",
+                            ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-l-2 border-zinc-900 dark:border-zinc-100"
+                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
                         )}
                       >
                         <item.icon
                           className={cn(
-                            "w-5 h-5 flex-shrink-0 transition-transform duration-200",
+                            "w-4 h-4 flex-shrink-0",
                             isActive || isChildActive
-                              ? "text-blue-600"
-                              : "text-gray-500 group-hover:text-gray-700",
+                              ? "text-zinc-900 dark:text-zinc-100"
+                              : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300",
                           )}
                         />
                         {!collapsed && (
                           <>
-                            <span className="font-medium flex-1 text-left">
-                              {item.name}
-                            </span>
+                            <span className="flex-1 text-left">{item.name}</span>
                             <ChevronDown
                               className={cn(
-                                "w-4 h-4 text-gray-400 transition-transform duration-200",
+                                "w-3.5 h-3.5 text-zinc-400 transition-transform duration-200",
                                 isExpanded && "rotate-180",
                               )}
                             />
                           </>
                         )}
                         {collapsed && (
-                          <span className="absolute left-14 hidden whitespace-nowrap rounded-md bg-gray-900 px-3 py-1.5 text-xs text-white shadow-lg group-hover:block">
+                          <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2.5 py-1.5 text-xs text-zinc-100 shadow-lg group-hover:block z-50">
                             {item.name}
                           </span>
                         )}
@@ -245,9 +242,9 @@ export function AdminSidebar({
                       {!collapsed && (
                         <div
                           className={cn(
-                            "ml-6 space-y-1 border-l-2 border-gray-200 pl-3 overflow-hidden transition-all duration-200",
+                            "ml-4 space-y-0.5 border-l border-zinc-200 dark:border-zinc-800 pl-3 overflow-hidden transition-all duration-200",
                             isExpanded
-                              ? "max-h-96 mt-1 opacity-100"
+                              ? "max-h-96 mt-0.5 opacity-100"
                               : "max-h-0 opacity-0",
                           )}
                         >
@@ -259,18 +256,18 @@ export function AdminSidebar({
                                 href={child.href}
                                 onClick={onClose}
                                 className={cn(
-                                  "group relative flex items-center rounded-lg text-sm font-medium transition-all duration-200 px-3 py-2 space-x-2",
+                                  "group relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150 px-2.5 py-2 space-x-2",
                                   isChildItemActive
-                                    ? "bg-blue-50 text-blue-700"
-                                    : "text-gray-500 hover:bg-gray-50/80 hover:text-gray-900",
+                                    ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"
+                                    : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
                                 )}
                               >
                                 <child.icon
                                   className={cn(
-                                    "w-4 h-4 flex-shrink-0",
+                                    "w-3.5 h-3.5 flex-shrink-0",
                                     isChildItemActive
-                                      ? "text-blue-600"
-                                      : "text-gray-400",
+                                      ? "text-zinc-900 dark:text-zinc-100"
+                                      : "text-zinc-400 dark:text-zinc-500",
                                   )}
                                 />
                                 <span>{child.name}</span>
@@ -289,28 +286,26 @@ export function AdminSidebar({
                     href={item.href}
                     onClick={onClose}
                     className={cn(
-                      "group relative flex items-center rounded-lg text-sm font-medium transition-all duration-200",
+                      "group relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150",
                       collapsed
-                        ? "justify-center px-3 py-3"
-                        : "px-4 py-3 space-x-3",
+                        ? "justify-center px-3 py-2.5"
+                        : "px-3 py-2.5 space-x-2.5",
                       isActive
-                        ? "bg-blue-50 text-blue-700 border-l-4 border-blue-600 shadow-sm"
-                        : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900",
+                        ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-l-2 border-zinc-900 dark:border-zinc-100"
+                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
                     )}
                   >
                     <item.icon
                       className={cn(
-                        "w-5 h-5 flex-shrink-0 transition-transform duration-200",
+                        "w-4 h-4 flex-shrink-0",
                         isActive
-                          ? "text-blue-600"
-                          : "text-gray-500 group-hover:text-gray-700",
+                          ? "text-zinc-900 dark:text-zinc-100"
+                          : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300",
                       )}
                     />
-                    {!collapsed && (
-                      <span className="font-medium">{item.name}</span>
-                    )}
+                    {!collapsed && <span>{item.name}</span>}
                     {collapsed && (
-                      <span className="absolute left-14 hidden whitespace-nowrap rounded-md bg-gray-900 px-3 py-1.5 text-xs text-white shadow-lg group-hover:block">
+                      <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2.5 py-1.5 text-xs text-zinc-100 shadow-lg group-hover:block z-50">
                         {item.name}
                       </span>
                     )}
@@ -320,14 +315,14 @@ export function AdminSidebar({
             </div>
           </div>
 
-          {/* Personal Section */}
+          {/* Workspace Section */}
           <div>
             {!collapsed && (
-              <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3 px-2">
+              <h3 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-2 px-2">
                 Workspace
               </h3>
             )}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {userNavigation.map((item) => {
                 const isActive = pathname === item.href;
                 return (
@@ -336,28 +331,26 @@ export function AdminSidebar({
                     href={item.href}
                     onClick={onClose}
                     className={cn(
-                      "group relative flex items-center rounded-lg text-sm font-medium transition-all duration-200",
+                      "group relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150",
                       collapsed
-                        ? "justify-center px-3 py-3"
-                        : "px-4 py-3 space-x-3",
+                        ? "justify-center px-3 py-2.5"
+                        : "px-3 py-2.5 space-x-2.5",
                       isActive
-                        ? "bg-emerald-50 text-emerald-700 border-l-4 border-emerald-600 shadow-sm"
-                        : "text-gray-600 hover:bg-gray-50/80 hover:text-gray-900",
+                        ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-2 border-emerald-600"
+                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
                     )}
                   >
                     <item.icon
                       className={cn(
-                        "w-5 h-5 flex-shrink-0 transition-transform duration-200",
+                        "w-4 h-4 flex-shrink-0",
                         isActive
-                          ? "text-emerald-600"
-                          : "text-gray-500 group-hover:text-gray-700",
+                          ? "text-emerald-600 dark:text-emerald-400"
+                          : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300",
                       )}
                     />
-                    {!collapsed && (
-                      <span className="font-medium">{item.name}</span>
-                    )}
+                    {!collapsed && <span>{item.name}</span>}
                     {collapsed && (
-                      <span className="absolute left-14 hidden whitespace-nowrap rounded-md bg-gray-900 px-3 py-1.5 text-xs text-white shadow-lg group-hover:block">
+                      <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2.5 py-1.5 text-xs text-zinc-100 shadow-lg group-hover:block z-50">
                         {item.name}
                       </span>
                     )}
@@ -369,17 +362,17 @@ export function AdminSidebar({
         </nav>
 
         {/* Collapse toggle button */}
-        <div className="p-4 border-t border-gray-200/80 bg-white/30 backdrop-blur-sm hidden lg:flex justify-center">
+        <div className="p-3 border-t border-zinc-100 dark:border-zinc-800 hidden lg:flex justify-center">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setCollapsed(!collapsed)}
-            className="w-9 h-9 rounded-lg hover:bg-gray-100 transition-colors duration-200"
+            className="w-8 h-8 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-150"
           >
             {collapsed ? (
-              <ChevronRight className="w-4 h-4 text-gray-600" />
+              <ChevronRight className="w-4 h-4 text-zinc-500" />
             ) : (
-              <ChevronLeft className="w-4 h-4 text-gray-600" />
+              <ChevronLeft className="w-4 h-4 text-zinc-500" />
             )}
           </Button>
         </div>

@@ -19,13 +19,13 @@ export function Footer() {
   const quickLinks = publicNavigation.filter((item) => item.href !== "/");
 
   return (
-    <footer className="bg-slate-900 text-white">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-zinc-950 text-white border-t border-zinc-800">
+      <div className="container mx-auto px-4 py-14">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
           {/* Company Info */}
-          <div className="space-y-4">
+          <div className="space-y-5">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8  rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg flex items-center justify-center">
                 <Image
                   src="/ADP.svg"
                   alt="Association of Dietetics Professionals logo"
@@ -34,83 +34,68 @@ export function Footer() {
                   className="object-cover rounded-lg"
                 />
               </div>
-              <span className="font-bold text-lg">
+              <span className="font-semibold text-base text-zinc-100">
                 {process.env.NEXT_PUBLIC_WEBSITE_NAME ||
                   "Association of Dietetics Professionals"}
               </span>
             </div>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Empowering nutrition professionals worldwide through education,
+            <p className="text-zinc-400 text-sm leading-relaxed">
+              Empowering nutrition professionals across India through education,
               resources, and community support.
             </p>
             <div className="flex space-x-4">
               <Link
-                href={
-                  process.env.NEXT_PUBLIC_FACEBOOK_URL ||
-                  "https://www.facebook.com/adp.org.in"
-                }
-                className="text-slate-400 hover:text-emerald-400 transition-colors"
+                href={process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/adp.org.in"}
+                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaFacebook className="w-5 h-5" />
+                <FaFacebook className="w-4 h-4" />
               </Link>
               <Link
-                href={
-                  process.env.NEXT_PUBLIC_TWITTER_URL ||
-                  "https://x.com/adp_org_in"
-                }
-                className="text-slate-400 hover:text-emerald-400 transition-colors"
+                href={process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/adp_org_in"}
+                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaXTwitter className="w-5 h-5" />
+                <FaXTwitter className="w-4 h-4" />
               </Link>
               <Link
-                href={
-                  process.env.NEXT_PUBLIC_LINKEDIN_URL ||
-                  "https://www.linkedin.com/company/adp-org-in/"
-                }
-                className="text-slate-400 hover:text-emerald-400 transition-colors"
+                href={process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/adp-org-in/"}
+                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaLinkedin className="w-5 h-5" />
+                <FaLinkedin className="w-4 h-4" />
               </Link>
               <Link
-                href={
-                  process.env.NEXT_PUBLIC_YOUTUBE_URL ||
-                  "https://www.youtube.com/@adp_org_in"
-                }
-                className="text-slate-400 hover:text-emerald-400 transition-colors"
+                href={process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/@adp_org_in"}
+                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaYoutube className="w-5 h-5" />
+                <FaYoutube className="w-4 h-4" />
               </Link>
               <Link
-                href={
-                  process.env.NEXT_PUBLIC_INSTAGRAM_URL ||
-                  "https://www.instagram.com/adp.org.in/"
-                }
-                className="text-slate-400 hover:text-emerald-400 transition-colors"
+                href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/adp.org.in/"}
+                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <FaInstagram className="w-5 h-5" />
+                <FaInstagram className="w-4 h-4" />
               </Link>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Quick Links</h3>
-            <ul className="space-y-2">
+            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Quick Links</h3>
+            <ul className="space-y-2.5">
               {quickLinks.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-slate-400 hover:text-emerald-400 transition-colors text-sm"
+                    className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150 text-sm"
                   >
                     {item.name}
                   </Link>
@@ -121,13 +106,13 @@ export function Footer() {
 
           {/* Member Resources */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Member Resources</h3>
-            <ul className="space-y-2">
+            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Member Resources</h3>
+            <ul className="space-y-2.5">
               {memberResourceLinks.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-slate-400 hover:text-emerald-400 transition-colors text-sm"
+                    className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150 text-sm"
                   >
                     {item.label}
                   </Link>
@@ -138,22 +123,22 @@ export function Footer() {
 
           {/* Contact Info */}
           <div className="space-y-4">
-            <h3 className="font-semibold text-lg">Contact Us</h3>
+            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Contact Us</h3>
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
-                <Mail className="w-4 h-4 text-emerald-400" />
+                <Mail className="w-4 h-4 text-zinc-500 flex-shrink-0" />
                 <a
                   href="mailto:info@adp.org.in"
-                  className="text-slate-400 text-sm hover:text-emerald-400 transition-colors"
+                  className="text-zinc-500 text-sm hover:text-zinc-100 transition-colors duration-150"
                 >
                   info@adp.org.in
                 </a>
               </div>
               <div className="flex items-center space-x-3">
-                <Phone className="w-4 h-4 text-emerald-400" />
+                <Phone className="w-4 h-4 text-zinc-500 flex-shrink-0" />
                 <a
                   href="tel:+918059655000"
-                  className="text-slate-400 text-sm hover:text-emerald-400 transition-colors"
+                  className="text-zinc-500 text-sm hover:text-zinc-100 transition-colors duration-150"
                 >
                   +91 80596 55000
                 </a>
@@ -166,10 +151,8 @@ export function Footer() {
                   className="flex items-start gap-2 group"
                   title="View on Google Maps"
                 >
-                  <MapPin className="w-5 h-5 text-emerald-400 mt-0.5 group-hover:text-emerald-500 transition-colors" />
-                  <address className="not-italic text-slate-400 text-sm leading-relaxed">
-                    {/* <span className="block">Rz-96, UG Floor</span>
-                                        <span className="block">Uttam Nagar</span> */}
+                  <MapPin className="w-4 h-4 text-zinc-500 mt-0.5 flex-shrink-0 group-hover:text-zinc-100 transition-colors duration-150" />
+                  <address className="not-italic text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-100 transition-colors duration-150">
                     <span className="block">New Delhi - 110059</span>
                   </address>
                 </a>
@@ -178,31 +161,20 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-slate-400 text-sm">
-              © {new Date().getFullYear()}{" "}
-              {process.env.NEXT_PUBLIC_WEBSITE_NAME ||
-                "Association of Dietetics Professionals"}
-              . All rights reserved.
+        <div className="border-t border-zinc-800/60 mt-12 pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-zinc-600 text-sm">
+              &copy; {new Date().getFullYear()}{" "}
+              {process.env.NEXT_PUBLIC_WEBSITE_NAME || "Association of Dietetics Professionals"}. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
-              <Link
-                href="/privacy"
-                className="text-slate-400 hover:text-emerald-400 text-sm transition-colors"
-              >
+            <div className="flex space-x-6">
+              <Link href="/privacy" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-150">
                 Privacy Policy
               </Link>
-              <Link
-                href="/terms"
-                className="text-slate-400 hover:text-emerald-400 text-sm transition-colors"
-              >
+              <Link href="/terms" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-150">
                 Terms of Service
               </Link>
-              <Link
-                href="/accessibility"
-                className="text-slate-400 hover:text-emerald-400 text-sm transition-colors"
-              >
+              <Link href="/accessibility" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-150">
                 Accessibility
               </Link>
             </div>
