@@ -325,18 +325,18 @@ export function StepPersonalInfo({
     <div className="space-y-8">
       {/* Section Header */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">
+        <h3 className="text-lg font-bold text-foreground mb-1">
           Personal Information
         </h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Please provide your personal details
         </p>
       </div>
 
       {/* Basic Information Section */}
-      <div className="bg-gray-50 rounded-xl p-6">
-        <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6">
+        <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             1
           </span>
           Basic Information
@@ -345,25 +345,25 @@ export function StepPersonalInfo({
           <div>
             <Label
               htmlFor="firstName"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
-              First Name <span className="text-red-500">*</span>
+              First Name <span className="text-destructive">*</span>
             </Label>
             <Input
               id="firstName"
               placeholder="John"
               value={data.firstName}
               onChange={(e) => handleChange("firstName", e.target.value)}
-              className={`${errors.firstName ? "border-red-500 focus:ring-red-500" : "focus:ring-emerald-500"}`}
+              className={errors.firstName ? "border-destructive" : ""}
             />
             {errors.firstName && (
-              <p className="text-red-500 text-xs mt-1">{errors.firstName}</p>
+              <p className="text-destructive text-xs mt-1">{errors.firstName}</p>
             )}
           </div>
           <div>
             <Label
               htmlFor="lastName"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
               Last Name
             </Label>
@@ -372,10 +372,10 @@ export function StepPersonalInfo({
               placeholder="Doe"
               value={data.lastName}
               onChange={(e) => handleChange("lastName", e.target.value)}
-              className={`${errors.lastName ? "border-red-500 focus:ring-red-500" : "focus:ring-emerald-500"}`}
+              className={errors.lastName ? "border-destructive" : ""}
             />
             {errors.lastName && (
-              <p className="text-red-500 text-xs mt-1">{errors.lastName}</p>
+              <p className="text-destructive text-xs mt-1">{errors.lastName}</p>
             )}
           </div>
         </div>
@@ -383,108 +383,78 @@ export function StepPersonalInfo({
           <div>
             <Label
               htmlFor="dob"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
-              Date of Birth <span className="text-red-500">*</span>
+              Date of Birth <span className="text-destructive">*</span>
             </Label>
             <Input
               id="dob"
               type="date"
               value={data.dateOfBirth}
               onChange={(e) => handleChange("dateOfBirth", e.target.value)}
-              className={`${errors.dateOfBirth ? "border-red-500 focus:ring-red-500" : "focus:ring-emerald-500"}`}
+              className={errors.dateOfBirth ? "border-destructive" : ""}
             />
             {errors.dateOfBirth && (
-              <p className="text-red-500 text-xs mt-1">{errors.dateOfBirth}</p>
+              <p className="text-destructive text-xs mt-1">{errors.dateOfBirth}</p>
             )}
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
           <div>
-            <Label className="text-sm font-medium text-gray-700 block mb-2">
-              Gender <span className="text-red-500">*</span>
+            <Label className="text-sm font-medium text-foreground block mb-2">
+              Gender <span className="text-destructive">*</span>
             </Label>
             <RadioGroup
               value={data.gender}
               onValueChange={(val) => handleChange("gender", val)}
             >
-              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white transition">
+              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background transition">
                 <RadioGroupItem value="male" id="male" />
-                <Label
-                  htmlFor="male"
-                  className="font-normal cursor-pointer text-gray-700"
-                >
-                  Male
-                </Label>
+                <Label htmlFor="male" className="font-normal cursor-pointer text-foreground">Male</Label>
               </div>
-              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white transition">
+              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background transition">
                 <RadioGroupItem value="female" id="female" />
-                <Label
-                  htmlFor="female"
-                  className="font-normal cursor-pointer text-gray-700"
-                >
-                  Female
-                </Label>
+                <Label htmlFor="female" className="font-normal cursor-pointer text-foreground">Female</Label>
               </div>
-              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white transition">
+              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background transition">
                 <RadioGroupItem value="other" id="other" />
-                <Label
-                  htmlFor="other"
-                  className="font-normal cursor-pointer text-gray-700"
-                >
-                  Other
-                </Label>
+                <Label htmlFor="other" className="font-normal cursor-pointer text-foreground">Other</Label>
               </div>
             </RadioGroup>
             {errors.gender && (
-              <p className="text-red-500 text-xs mt-1">{errors.gender}</p>
+              <p className="text-destructive text-xs mt-1">{errors.gender}</p>
             )}
           </div>
 
           <div>
-            <Label className="text-sm font-medium text-gray-700 block mb-2">
-              Nationality <span className="text-red-500">*</span>
+            <Label className="text-sm font-medium text-foreground block mb-2">
+              Nationality <span className="text-destructive">*</span>
             </Label>
-
             <RadioGroup
               value={data.nationality}
               onValueChange={(val) => handleChange("nationality", val)}
             >
-              {/* Indian */}
-              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white transition">
+              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background transition">
                 <RadioGroupItem value="0" id="indian" />
-                <Label
-                  htmlFor="indian"
-                  className="font-normal cursor-pointer text-gray-700"
-                >
-                  Indian
-                </Label>
+                <Label htmlFor="indian" className="font-normal cursor-pointer text-foreground">Indian</Label>
               </div>
-
-              {/* Other / NRI */}
-              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-white transition">
+              <div className="flex items-center space-x-3 p-3 rounded-lg hover:bg-background transition">
                 <RadioGroupItem value="99" id="other" />
-                <Label
-                  htmlFor="other"
-                  className="font-normal cursor-pointer text-gray-700"
-                >
-                  NRI / Other
-                </Label>
+                <Label htmlFor="other" className="font-normal cursor-pointer text-foreground">NRI / Other</Label>
               </div>
             </RadioGroup>
-
             {errors.nationality && (
-              <p className="text-red-500 text-xs mt-1">{errors.nationality}</p>
+              <p className="text-destructive text-xs mt-1">{errors.nationality}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Contact Information Section */}
-      <div className="bg-gray-50 rounded-xl p-6">
-        <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6">
+        <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             2
           </span>
           Contact Information
@@ -493,9 +463,9 @@ export function StepPersonalInfo({
           <div>
             <Label
               htmlFor="email"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
-              Email Address <span className="text-red-500">*</span>
+              Email Address <span className="text-destructive">*</span>
             </Label>
             <Input
               id="email"
@@ -503,20 +473,16 @@ export function StepPersonalInfo({
               placeholder="john@example.com"
               value={data.email}
               onChange={(e) => handleChange("email", e.target.value)}
-              className={`${errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-emerald-500"}`}
+              className={errors.email ? "border-destructive" : ""}
             />
             {errors.email && (
-              <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+              <p className="text-destructive text-xs mt-1">{errors.email}</p>
             )}
             {!errors.email && emailStatus === "checking" && (
-              <p className="text-gray-500 text-xs mt-1">
-                Checking email availability...
-              </p>
+              <p className="text-muted-foreground text-xs mt-1">Checking email availability...</p>
             )}
             {!errors.email && emailStatus === "available" && (
-              <p className="text-emerald-600 text-xs mt-1">
-                Email is available
-              </p>
+              <p className="text-primary text-xs mt-1">Email is available</p>
             )}
           </div>
 
@@ -524,7 +490,7 @@ export function StepPersonalInfo({
             <div>
               <Label
                 htmlFor="countryCode"
-                className="text-sm font-medium text-gray-700 block mb-2"
+                className="text-sm font-medium text-foreground block mb-2"
               >
                 Country Code
               </Label>
@@ -533,17 +499,14 @@ export function StepPersonalInfo({
                 onValueChange={(value) => handleChange("countryCode", value)}
                 disabled={loading || countries.length === 0}
               >
-                <SelectTrigger id="countryCode" className="focus:ring-emerald-500">
+                <SelectTrigger id="countryCode">
                   <SelectValue placeholder="Select code" />
                 </SelectTrigger>
                 <SelectContent searchable>
                   {countries
                     .map((country) => {
                       const dialCode = normalizeDialCode(country.phoneCode);
-                      if (!dialCode) {
-                        return null;
-                      }
-
+                      if (!dialCode) return null;
                       const countryName = country.name?.trim() || "Unknown";
                       return (
                         <SelectItem key={country.id} value={dialCode}>
@@ -558,9 +521,9 @@ export function StepPersonalInfo({
             <div>
               <Label
                 htmlFor="phone"
-                className="text-sm font-medium text-gray-700 block mb-2"
+                className="text-sm font-medium text-foreground block mb-2"
               >
-                Phone Number <span className="text-red-500">*</span>
+                Phone Number <span className="text-destructive">*</span>
               </Label>
               <Input
                 id="phone"
@@ -570,10 +533,10 @@ export function StepPersonalInfo({
                 onChange={(e) =>
                   handleChange("phone", e.target.value.replace(/\D/g, ""))
                 }
-                className={`${errors.phone ? "border-red-500 focus:ring-red-500" : "focus:ring-emerald-500"}`}
+                className={errors.phone ? "border-destructive" : ""}
               />
               {errors.phone && (
-                <p className="text-red-500 text-xs mt-1">{errors.phone}</p>
+                <p className="text-destructive text-xs mt-1">{errors.phone}</p>
               )}
             </div>
           </div>
@@ -581,9 +544,9 @@ export function StepPersonalInfo({
       </div>
 
       {/* Address Information Section */}
-      <div className="bg-gray-50 rounded-xl p-6">
-        <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6">
+        <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             3
           </span>
           Address Information
@@ -592,23 +555,22 @@ export function StepPersonalInfo({
           <div>
             <Label
               htmlFor="street"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
-              Street Address <span className="text-red-500">*</span>
+              Street Address <span className="text-destructive">*</span>
             </Label>
             <Input
               id="street"
               placeholder="123 Main Street"
               value={data.streetAddress}
               onChange={(e) => handleChange("streetAddress", e.target.value)}
-              className="focus:ring-emerald-500"
             />
           </div>
 
           <div>
             <Label
               htmlFor="address2"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
               Apartment, Suite, etc. (Optional)
             </Label>
@@ -617,7 +579,6 @@ export function StepPersonalInfo({
               placeholder="Apartment or suite number"
               value={data.addressLine2}
               onChange={(e) => handleChange("addressLine2", e.target.value)}
-              className="focus:ring-emerald-500"
             />
           </div>
 
@@ -625,9 +586,9 @@ export function StepPersonalInfo({
             <div>
               <Label
                 htmlFor="country"
-                className="text-sm font-medium text-gray-700 block mb-2"
+                className="text-sm font-medium text-foreground block mb-2"
               >
-                Country <span className="text-red-500">*</span>
+                Country <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={data.countryId?.toString()}
@@ -658,9 +619,9 @@ export function StepPersonalInfo({
             <div>
               <Label
                 htmlFor="state"
-                className="text-sm font-medium text-gray-700 block mb-2"
+                className="text-sm font-medium text-foreground block mb-2"
               >
-                State <span className="text-red-500">*</span>
+                State <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={data.stateId?.toString()}
@@ -697,9 +658,9 @@ export function StepPersonalInfo({
             <div>
               <Label
                 htmlFor="city"
-                className="text-sm font-medium text-gray-700 block mb-2"
+                className="text-sm font-medium text-foreground block mb-2"
               >
-                City <span className="text-red-500">*</span>
+                City <span className="text-destructive">*</span>
               </Label>
               <Select
                 value={data.cityId?.toString()}
@@ -731,7 +692,7 @@ export function StepPersonalInfo({
             <div>
               <Label
                 htmlFor="postal"
-                className="text-sm font-medium text-gray-700 block mb-2"
+                className="text-sm font-medium text-foreground block mb-2"
               >
                 Postal Code
               </Label>
@@ -748,18 +709,18 @@ export function StepPersonalInfo({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-end gap-3 pt-6 border-t border-gray-200">
+      <div className="flex justify-end gap-3 pt-6 border-t border-border">
         <Button
           variant="outline"
           onClick={() => window.location.reload()}
-          className="px-6 text-gray-700 border-gray-300 hover:bg-gray-50"
+          className="px-6"
         >
           Cancel
         </Button>
         <Button
           onClick={handleNext}
           disabled={isCheckingEmail}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 font-semibold"
+          className="px-8 font-semibold"
         >
           Continue to Membership →
         </Button>

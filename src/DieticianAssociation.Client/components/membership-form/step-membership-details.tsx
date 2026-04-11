@@ -185,10 +185,10 @@ export function StepMembershipDetails({
     return (
       <div className="space-y-8">
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">
+          <h3 className="text-lg font-bold text-foreground mb-1">
             Select Your Membership
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Choose the membership plan that best fits your needs
           </p>
         </div>
@@ -204,10 +204,10 @@ export function StepMembershipDetails({
     return (
       <div className="space-y-8">
         <div>
-          <h3 className="text-lg font-bold text-gray-900 mb-1">
+          <h3 className="text-lg font-bold text-foreground mb-1">
             Select Your Membership
           </h3>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-muted-foreground">
             Choose the membership plan that best fits your needs
           </p>
         </div>
@@ -229,10 +229,10 @@ export function StepMembershipDetails({
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">
+        <h3 className="text-lg font-bold text-foreground mb-1">
           Select Your Membership
         </h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Choose the membership plan that best fits your needs
         </p>
       </div>
@@ -240,11 +240,11 @@ export function StepMembershipDetails({
       {/* Membership Selection */}
       <div className="space-y-6">
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-            <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+          <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+            <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
               1
             </span>
-            Choose Your Plan <span className="text-red-500">*</span>
+            Choose Your Plan <span className="text-destructive">*</span>
           </h4>
           <RadioGroup
             value={data.membershipPlanId}
@@ -267,8 +267,8 @@ export function StepMembershipDetails({
                         p-6 rounded-xl border-2 cursor-pointer transition-all duration-200
                         ${
                           data.membershipPlanId === plan.id?.toString()
-                            ? "border-emerald-600 bg-gradient-to-br from-emerald-50 to-emerald-100 shadow-lg"
-                            : "border-gray-200 bg-white hover:border-emerald-300 hover:shadow-md"
+                            ? "border-primary bg-primary/10 shadow-lg"
+                            : "border-border bg-card hover:border-primary/50 hover:shadow-md"
                         }
                       `}
                     >
@@ -281,20 +281,20 @@ export function StepMembershipDetails({
                         <div className="flex-1">
                           <Label
                             htmlFor={plan.id?.toString() ?? ""}
-                            className="text-sm font-semibold text-gray-900 cursor-pointer block"
+                            className="text-sm font-semibold text-foreground cursor-pointer block"
                           >
                             {plan.name ?? "Membership"}
                           </Label>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             {getTierDescription(plan.tier)}
                           </p>
-                          <p className="text-2xl font-bold text-emerald-600 mt-3">
+                          <p className="text-2xl font-bold text-primary mt-3">
                             {formatCurrency(price)}
                           </p>
-                          <p className="text-xs text-gray-500 mt-1">
+                          <p className="text-xs text-muted-foreground mt-1">
                             + GST: {formatCurrency(priceWithGST)}
                           </p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {formatDuration(plan.duration ?? undefined)}
                           </p>
                         </div>
@@ -306,7 +306,7 @@ export function StepMembershipDetails({
             </div>
           </RadioGroup>
           {errors.membershipPlanId && (
-            <p className="text-red-500 text-xs mt-2">
+            <p className="text-destructive text-xs mt-2">
               {errors.membershipPlanId}
             </p>
           )}
@@ -315,23 +315,23 @@ export function StepMembershipDetails({
         {/* Membership Comparison Table */}
         {sortedPlans.length > 0 && (
           <div className="space-y-3">
-            <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-              <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+            <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+              <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
                 2
               </span>
               Membership Comparison
             </h4>
-            <div className="overflow-x-auto border border-gray-200 rounded-xl">
+            <div className="overflow-x-auto border border-border rounded-xl">
               <Table className="text-sm">
                 <TableHeader>
-                  <TableRow className="bg-gradient-to-r from-emerald-50 to-emerald-100 border-b border-gray-200">
-                    <TableHead className="font-semibold text-gray-900">
+                  <TableRow className="bg-secondary/40 border-b border-border">
+                    <TableHead className="font-semibold text-foreground">
                       Feature
                     </TableHead>
                     {sortedPlans.map((plan) => (
                       <TableHead
                         key={plan.id}
-                        className="text-center font-semibold text-gray-900"
+                        className="text-center font-semibold text-foreground"
                       >
                         {getTierName(plan.tier)}
                       </TableHead>
@@ -339,8 +339,8 @@ export function StepMembershipDetails({
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  <TableRow className="bg-white">
-                    <TableCell className="font-medium text-gray-700 w-40">
+                  <TableRow className="bg-card">
+                    <TableCell className="font-medium text-foreground w-40">
                       Membership Fee (Inc. GST)
                     </TableCell>
                     {sortedPlans.map((plan) => {
@@ -352,10 +352,10 @@ export function StepMembershipDetails({
                       return (
                         <TableCell key={plan.id} className="text-center">
                           <div className="flex flex-col items-center">
-                            <span className="text-emerald-600 font-bold text-sm">
+                            <span className="text-primary font-bold text-sm">
                               {formatCurrency(priceWithGST)}
                             </span>
-                            <span className="text-[10px] text-gray-400 mt-0.5">
+                            <span className="text-[10px] text-muted-foreground mt-0.5">
                               Base: {formatCurrency(price)}
                             </span>
                           </div>
@@ -363,14 +363,14 @@ export function StepMembershipDetails({
                       );
                     })}
                   </TableRow>
-                  <TableRow className="bg-gray-50">
-                    <TableCell className="font-medium text-gray-700 w-40">
+                  <TableRow className="bg-secondary/30">
+                    <TableCell className="font-medium text-foreground w-40">
                       Validity
                     </TableCell>
                     {sortedPlans.map((plan) => (
                       <TableCell
                         key={plan.id}
-                        className="text-center text-gray-600"
+                        className="text-center text-muted-foreground"
                       >
                         {formatDuration(plan.duration ?? undefined)}
                       </TableCell>
@@ -379,14 +379,14 @@ export function StepMembershipDetails({
                   {sortedPlans.some(
                     (p) => p.features && p.features.length > 0,
                   ) && (
-                    <TableRow className="bg-white">
-                      <TableCell className="font-medium text-gray-700 w-40">
+                    <TableRow className="bg-card">
+                      <TableCell className="font-medium text-foreground w-40">
                         Key Features
                       </TableCell>
                       {sortedPlans.map((plan) => (
                         <TableCell
                           key={plan.id}
-                          className="text-center text-gray-600"
+                          className="text-center text-muted-foreground"
                         >
                           <ul className="text-xs space-y-1">
                             {(plan.features ?? [])
@@ -407,9 +407,9 @@ export function StepMembershipDetails({
       </div>
 
       {/* Educational Qualifications */}
-      <div className="bg-gray-50 rounded-xl p-6">
-        <h4 className="text-sm font-semibold text-gray-900 mb-4 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6">
+        <h4 className="text-sm font-semibold text-foreground mb-4 flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             3
           </span>
           Educational Qualifications
@@ -418,10 +418,10 @@ export function StepMembershipDetails({
           {data.educationDetails.map((edu, idx) => (
             <div
               key={idx}
-              className="p-4 bg-white border border-gray-200 rounded-lg space-y-3"
+              className="p-4 bg-card border border-border rounded-lg space-y-3"
             >
               <div className="flex justify-between items-center mb-2">
-                <p className="text-sm font-semibold text-gray-700">
+                <p className="text-sm font-semibold text-foreground">
                   {edu.title}
                 </p>
                 {data.educationDetails.length > 1 && (
@@ -445,7 +445,7 @@ export function StepMembershipDetails({
                 <div>
                   <Label
                     htmlFor={`course-${idx}`}
-                    className="text-xs font-medium text-gray-700 block mb-1"
+                    className="text-xs font-medium text-foreground block mb-1"
                   >
                     Course / Stream
                   </Label>
@@ -456,12 +456,10 @@ export function StepMembershipDetails({
                     onChange={(e) =>
                       handleEducationChange(idx, "course", e.target.value)
                     }
-                    className={`focus:ring-emerald-500 text-sm ${
-                      errors[`edu_${idx}_course`] ? "border-red-500" : ""
-                    }`}
+                    className={`text-sm ${errors[`edu_${idx}_course`] ? "border-destructive" : ""}`}
                   />
                   {errors[`edu_${idx}_course`] && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-destructive text-xs mt-1">
                       {errors[`edu_${idx}_course`]}
                     </p>
                   )}
@@ -469,7 +467,7 @@ export function StepMembershipDetails({
                 <div>
                   <Label
                     htmlFor={`university-${idx}`}
-                    className="text-xs font-medium text-gray-700 block mb-1"
+                    className="text-xs font-medium text-foreground block mb-1"
                   >
                     University / Board *
                   </Label>
@@ -480,12 +478,10 @@ export function StepMembershipDetails({
                     onChange={(e) =>
                       handleEducationChange(idx, "university", e.target.value)
                     }
-                    className={`focus:ring-emerald-500 text-sm ${
-                      errors[`edu_${idx}_university`] ? "border-red-500" : ""
-                    }`}
+                    className={`text-sm ${errors[`edu_${idx}_university`] ? "border-destructive" : ""}`}
                   />
                   {errors[`edu_${idx}_university`] && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-destructive text-xs mt-1">
                       {errors[`edu_${idx}_university`]}
                     </p>
                   )}
@@ -493,7 +489,7 @@ export function StepMembershipDetails({
                 <div>
                   <Label
                     htmlFor={`status-${idx}`}
-                    className="text-xs font-medium text-gray-700 block mb-1"
+                    className="text-xs font-medium text-foreground block mb-1"
                   >
                     Status *
                   </Label>
@@ -505,9 +501,7 @@ export function StepMembershipDetails({
                     }
                   >
                     <SelectTrigger
-                      className={`text-sm focus:ring-emerald-500 ${
-                        errors[`edu_${idx}_status`] ? "border-red-500" : ""
-                      }`}
+                      className={`text-sm ${errors[`edu_${idx}_status`] ? "border-destructive" : ""}`}
                     >
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
@@ -521,7 +515,7 @@ export function StepMembershipDetails({
                     </SelectContent>
                   </Select>
                   {errors[`edu_${idx}_status`] && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-destructive text-xs mt-1">
                       {errors[`edu_${idx}_status`]}
                     </p>
                   )}
@@ -530,7 +524,7 @@ export function StepMembershipDetails({
                 <div>
                   <Label
                     htmlFor={`marks-${idx}`}
-                    className="text-xs font-medium text-gray-700 block mb-1"
+                    className="text-xs font-medium text-foreground block mb-1"
                   >
                     Marks % / CGPA *
                   </Label>
@@ -541,12 +535,10 @@ export function StepMembershipDetails({
                     onChange={(e) =>
                       handleEducationChange(idx, "marks", e.target.value)
                     }
-                    className={`focus:ring-emerald-500 text-sm ${
-                      errors[`edu_${idx}_marks`] ? "border-red-500" : ""
-                    }`}
+                    className={`text-sm ${errors[`edu_${idx}_marks`] ? "border-destructive" : ""}`}
                   />
                   {errors[`edu_${idx}_marks`] && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-destructive text-xs mt-1">
                       {errors[`edu_${idx}_marks`]}
                     </p>
                   )}
@@ -555,7 +547,7 @@ export function StepMembershipDetails({
                 <div className="col-span-2">
                   <Label
                     htmlFor={`degree-file-${idx}`}
-                    className="text-xs font-medium text-gray-700 block mb-1"
+                    className="text-xs font-medium text-foreground block mb-1"
                   >
                     Degree Certificate *
                   </Label>
@@ -603,10 +595,10 @@ export function StepMembershipDetails({
                         onClick={() =>
                           document.getElementById(`degree-file-${idx}`)?.click()
                         }
-                        className={`w-full text-xs hover:bg-gray-50 ${
+                        className={`w-full text-xs ${
                           errors[`edu_${idx}_degreeFile`]
-                            ? "border-red-500 text-red-600"
-                            : "border-gray-300 text-gray-700"
+                            ? "border-destructive text-destructive"
+                            : ""
                         }`}
                       >
                         <Upload className="w-3 h-3 mr-2" />
@@ -614,12 +606,12 @@ export function StepMembershipDetails({
                       </Button>
                     </div>
                     {edu.degreeFile && (
-                      <div className="flex items-center gap-2 px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-md text-xs">
-                        <FileText className="w-3 h-3 text-emerald-600" />
-                        <span className="text-emerald-700 max-w-[150px] truncate">
+                      <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/30 rounded-md text-xs">
+                        <FileText className="w-3 h-3 text-primary" />
+                        <span className="text-primary max-w-[150px] truncate">
                           {edu.degreeFile.name}
                         </span>
-                        <span className="text-emerald-600">
+                        <span className="text-primary/80">
                           ({(edu.degreeFile.size / 1024).toFixed(1)} KB)
                         </span>
                         <button
@@ -631,18 +623,18 @@ export function StepMembershipDetails({
                             ) as HTMLInputElement;
                             if (input) input.value = "";
                           }}
-                          className="text-emerald-600 hover:text-emerald-800"
+                          className="text-primary hover:text-primary/70"
                         >
                           <X className="w-3 h-3" />
                         </button>
                       </div>
                     )}
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">
+                  <p className="text-xs text-muted-foreground mt-1">
                     Upload a photo or PDF of your degree (Max 10MB)
                   </p>
                   {errors[`edu_${idx}_degreeFile`] && (
-                    <p className="text-red-500 text-xs mt-1">
+                    <p className="text-destructive text-xs mt-1">
                       {errors[`edu_${idx}_degreeFile`]}
                     </p>
                   )}
@@ -669,7 +661,7 @@ export function StepMembershipDetails({
                 educationDetails: [...data.educationDetails, newEducation],
               });
             }}
-            className="w-full border-emerald-300 text-emerald-600 hover:bg-emerald-50 font-medium"
+            className="w-full font-medium"
           >
             + Add Qualification
           </Button>
@@ -691,17 +683,17 @@ export function StepMembershipDetails({
       </div> */}
 
       {/* Action Buttons */}
-      <div className="flex justify-between gap-3 pt-6 border-t border-gray-200">
+      <div className="flex justify-between gap-3 pt-6 border-t border-border">
         <Button
           variant="outline"
           onClick={onBack}
-          className="px-6 text-gray-700 border-gray-300 hover:bg-gray-50 bg-transparent"
+          className="px-6 bg-transparent"
         >
           ← Back
         </Button>
         <Button
           onClick={handleNext}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 font-semibold"
+          className="px-8 font-semibold"
         >
           Continue to Payment →
         </Button>
