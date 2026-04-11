@@ -122,40 +122,38 @@ export function MembershipTestimonials() {
     publicTestimonials.length > 0 ? (publicTestimonials as unknown as TestimonialDto[]) : fallbackTestimonials
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-24 bg-background border-t border-border">
       <div className="container mx-auto px-4">
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold text-slate-900 mb-4">What Our Members Say</h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">Testimonials</p>
+          <h2 className="text-3xl font-bold tracking-tight text-foreground mb-4">What Our Members Say</h2>
+          <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Hear from nutrition professionals who have advanced their careers through our association.
           </p>
         </div>
 
-        <div className="grid gap-8 max-w-6xl mx-auto md:grid-cols-3 md:auto-rows-fr">
+        <div className="grid gap-6 max-w-6xl mx-auto md:grid-cols-3 md:auto-rows-fr">
           {loading && publicTestimonials.length === 0 && (
-            <div className="md:col-span-3 text-center text-slate-500">Loading testimonials...</div>
+            <div className="md:col-span-3 text-center text-muted-foreground">Loading testimonials...</div>
           )}
           {testimonials.map((testimonial, index) => (
             <Card
               key={testimonial.id ?? index}
-              className="group h-full overflow-hidden border-0 bg-white ring-1 ring-slate-200 shadow-md hover:shadow-xl transition-all duration-300 relative rounded-2xl animate-in fade-in-0 slide-in-from-bottom-4"
+              className="group h-full overflow-hidden border-border bg-card hover:border-primary/30 transition-colors duration-150 relative rounded-2xl animate-in fade-in-0 slide-in-from-bottom-4"
               style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}
             >
-              {/* Decorative background element */}
-              <div className="absolute top-0 right-0 -mr-8 -mt-8 h-32 w-32 rounded-full bg-emerald-50 opacity-50 blur-3xl transition-transform duration-500 group-hover:scale-150"></div>
-              
-              <CardContent className="flex h-full flex-col p-8 relative z-10">
-                <div className="mb-6 flex items-center justify-between">
-                  <div className="flex bg-amber-50 px-3 py-1 rounded-full">
+              <CardContent className="flex h-full flex-col p-7 relative z-10">
+                <div className="mb-5 flex items-center justify-between">
+                  <div className="flex gap-0.5">
                     {[...Array(testimonial.rating ?? 0)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-amber-400 fill-current" />
+                      <Star key={i} className="w-4 h-4 text-accent fill-current" />
                     ))}
                   </div>
-                  <span className="text-6xl font-serif text-slate-200 opacity-60 leading-none h-8">&ldquo;</span>
+                  <span className="text-5xl font-serif text-muted-foreground/20 leading-none h-8">&ldquo;</span>
                 </div>
 
                 <div className={`flex-1 ${TESTIMONIAL_PREVIEW_HEIGHT}`}>
-                  <p className="line-clamp-[8] md:line-clamp-6 text-slate-700 font-medium text-lg leading-relaxed">
+                  <p className="line-clamp-[8] md:line-clamp-6 text-foreground/80 text-base leading-relaxed">
                     {testimonial.content}
                   </p>
                 </div>
@@ -164,24 +162,24 @@ export function MembershipTestimonials() {
                   <button
                     type="button"
                     onClick={() => setSelectedTestimonial(testimonial)}
-                    className="mb-8 mt-4 self-start text-sm font-semibold text-emerald-600 transition-colors hover:text-emerald-800 flex items-center gap-1 group-hover:underline"
+                    className="mb-6 mt-4 self-start text-sm font-semibold text-primary transition-colors hover:text-primary/80 flex items-center gap-1"
                   >
                     Read full story
                     <span className="text-xs">→</span>
                   </button>
                 )}
 
-                <div className="mt-auto flex items-center space-x-4 border-t border-slate-100 pt-6">
+                <div className="mt-auto flex items-center gap-4 border-t border-border pt-5">
                   <Image
                     src={testimonial.photoUrl || testimonial.submittedBy?.avatar || "/placeholder.svg"}
                     alt={testimonial.memberName || "Member"}
-                    width={56}
-                    height={56}
-                    className="h-14 w-14 rounded-full object-cover ring-2 ring-emerald-50"
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 rounded-full object-cover ring-2 ring-border"
                   />
                   <div className="min-w-0 flex-1">
-                    <div className="font-bold text-slate-900 truncate">{testimonial.memberName}</div>
-                    <div className="text-sm font-medium text-slate-500 truncate">{testimonial.professionalTitle}</div>
+                    <div className="font-semibold text-foreground truncate text-sm">{testimonial.memberName}</div>
+                    <div className="text-xs text-muted-foreground truncate">{testimonial.professionalTitle}</div>
                   </div>
                 </div>
               </CardContent>
@@ -190,40 +188,40 @@ export function MembershipTestimonials() {
         </div>
 
         <Dialog open={Boolean(selectedTestimonial)} onOpenChange={(open) => !open && setSelectedTestimonial(null)}>
-          <DialogContent className="max-h-[85vh] w-[95vw] sm:max-w-2xl overflow-hidden border-slate-200 p-0">
+          <DialogContent className="max-h-[85vh] w-[95vw] sm:max-w-2xl overflow-hidden border-border bg-card p-0">
             {selectedTestimonial && (
               <div className="flex max-h-[85vh] flex-col">
-                <DialogHeader className="border-b border-slate-100 px-6 pb-5 pt-6 text-left">
-                  <div className="mb-4 flex items-center">
+                <DialogHeader className="border-b border-border px-6 pb-5 pt-6 text-left">
+                  <div className="mb-4 flex items-center gap-0.5">
                     {[...Array(selectedTestimonial.rating ?? 0)].map((_, i) => (
-                      <Star key={i} className="h-4 w-4 fill-current text-amber-400" />
+                      <Star key={i} className="h-4 w-4 fill-current text-accent" />
                     ))}
                   </div>
-                  <DialogTitle className="text-2xl text-slate-900">
+                  <DialogTitle className="text-2xl text-foreground">
                     {selectedTestimonial.memberName}
                   </DialogTitle>
-                  <DialogDescription className="text-base text-slate-500">
+                  <DialogDescription className="text-base text-muted-foreground">
                     {selectedTestimonial.professionalTitle}
                   </DialogDescription>
                 </DialogHeader>
 
                 <div className="overflow-y-auto px-6 py-5">
-                  <p className="whitespace-pre-line text-lg italic leading-9 text-slate-700">
+                  <p className="whitespace-pre-line text-base italic leading-8 text-foreground/80">
                     &ldquo;{selectedTestimonial.content}&rdquo;
                   </p>
                 </div>
 
-                <div className="flex items-center space-x-3 border-t border-slate-100 px-6 py-5">
+                <div className="flex items-center gap-3 border-t border-border px-6 py-5">
                   <Image
                     src={selectedTestimonial.photoUrl || selectedTestimonial.submittedBy?.avatar || "/placeholder.svg"}
                     alt={selectedTestimonial.memberName || "Member"}
-                    width={56}
-                    height={56}
-                    className="h-14 w-14 rounded-full object-cover"
+                    width={48}
+                    height={48}
+                    className="h-12 w-12 rounded-full object-cover"
                   />
                   <div className="min-w-0">
-                    <div className="font-semibold text-slate-900">{selectedTestimonial.memberName}</div>
-                    <div className="text-sm leading-6 text-slate-500">{selectedTestimonial.professionalTitle}</div>
+                    <div className="font-semibold text-foreground text-sm">{selectedTestimonial.memberName}</div>
+                    <div className="text-xs text-muted-foreground">{selectedTestimonial.professionalTitle}</div>
                   </div>
                 </div>
               </div>

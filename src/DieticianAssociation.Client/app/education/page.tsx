@@ -343,12 +343,12 @@ export function EducationPage() {
           className="w-full"
         >
           <div className="mb-6 overflow-x-auto pb-2 -mx-2 px-2 scrollbar-hide md:overflow-visible md:px-0 md:pb-0">
-            <TabsList className="grid h-auto min-w-max grid-flow-col auto-cols-[minmax(150px,1fr)] gap-1 rounded-xl border border-gray-100 bg-white p-1.5 shadow-sm md:min-w-0 md:grid-flow-row md:grid-cols-6">
+            <TabsList className="grid h-auto min-w-max grid-flow-col auto-cols-[minmax(150px,1fr)] gap-1 rounded-xl border border-border bg-card p-1.5 shadow-sm md:min-w-0 md:grid-flow-row md:grid-cols-6">
               {TAB_CONFIG.map((tab) => (
                 <TabsTrigger
                   key={tab.key}
                   value={tab.key}
-                  className="whitespace-nowrap rounded-lg px-4 py-2.5 text-center text-sm font-medium text-gray-500 transition-all hover:text-gray-900 data-[state=active]:bg-emerald-600 data-[state=active]:text-white data-[state=active]:shadow-sm md:min-w-0"
+                  className="whitespace-nowrap rounded-lg px-4 py-2.5 text-center text-sm font-medium text-muted-foreground transition-all hover:text-foreground data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm md:min-w-0"
                 >
                   {tab.label}
                 </TabsTrigger>
@@ -364,17 +364,17 @@ export function EducationPage() {
                     <CardContent className="space-y-4 p-6">
                       <div className="mb-4 flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <Filter className="h-5 w-5 text-gray-600" />
-                          <h2 className="text-lg font-semibold">Filters</h2>
+                          <Filter className="h-5 w-5 text-muted-foreground" />
+                          <h2 className="text-base font-semibold text-foreground">Filters</h2>
                         </div>
                         {hasActiveFilters && (
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={clearFilters}
-                            className="text-emerald-600 hover:text-emerald-700"
+                            className="text-primary hover:text-primary/80 h-auto py-1 px-2"
                           >
-                            <X className="mr-1 h-4 w-4" />
+                            <X className="mr-1 h-3.5 w-3.5" />
                             Clear
                           </Button>
                         )}
@@ -389,7 +389,7 @@ export function EducationPage() {
                           }
                           disabled={true}
                         >
-                          <SelectTrigger className="bg-gray-50 text-gray-500 cursor-not-allowed">
+                          <SelectTrigger className="bg-muted text-muted-foreground cursor-not-allowed">
                             <SelectValue placeholder="All countries" />
                           </SelectTrigger>
                           <SelectContent>
@@ -482,9 +482,9 @@ export function EducationPage() {
 
                 <div className="space-y-6 lg:col-span-3 xl:col-span-4">
                   <div className="flex items-center justify-between">
-                    <p className="text-sm text-slate-500">
-                      Showing <span className="font-semibold text-slate-900">{entries.length}</span> of{" "}
-                      <span className="font-semibold text-slate-900">{pageInfo?.totalItems ?? 0}</span> results
+                    <p className="text-sm text-muted-foreground">
+                      Showing <span className="font-semibold text-foreground">{entries.length}</span> of{" "}
+                      <span className="font-semibold text-foreground">{pageInfo?.totalItems ?? 0}</span> results
                     </p>
                     {streaming && entries.length > 0 && (
                       <p className="text-sm text-muted-foreground">Loading results progressively...</p>
@@ -494,21 +494,21 @@ export function EducationPage() {
                   {loading ? (
                     <div className="space-y-4">
                       {[...Array(6)].map((_, i) => (
-                        <Card key={i} className="overflow-hidden rounded-xl">
+                        <Card key={i} className="overflow-hidden rounded-xl border-border bg-card">
                           <CardContent className="p-4 md:p-5">
                             <div className="flex flex-col gap-4 md:grid md:grid-cols-[88px_minmax(0,1fr)_150px] md:items-center">
-                              <div className="h-20 w-20 animate-pulse rounded-2xl bg-gray-100" />
+                              <div className="h-20 w-20 animate-pulse rounded-2xl bg-muted" />
                               <div className="space-y-3">
-                                <div className="h-5 w-2/3 animate-pulse rounded bg-gray-200" />
-                                <div className="h-4 w-1/2 animate-pulse rounded bg-gray-100" />
+                                <div className="h-5 w-2/3 animate-pulse rounded bg-muted" />
+                                <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
                                 <div className="flex gap-2">
-                                  <div className="h-6 w-28 animate-pulse rounded-full bg-gray-100" />
-                                  <div className="h-6 w-24 animate-pulse rounded-full bg-gray-100" />
+                                  <div className="h-6 w-28 animate-pulse rounded-full bg-muted" />
+                                  <div className="h-6 w-24 animate-pulse rounded-full bg-muted" />
                                 </div>
                               </div>
                               <div className="space-y-3 md:ml-auto md:w-[150px]">
-                                <div className="ml-auto h-4 w-20 animate-pulse rounded bg-gray-100" />
-                                <div className="ml-auto h-9 w-28 animate-pulse rounded-md bg-gray-200" />
+                                <div className="ml-auto h-4 w-20 animate-pulse rounded bg-muted" />
+                                <div className="ml-auto h-9 w-28 animate-pulse rounded-md bg-muted" />
                               </div>
                             </div>
                           </CardContent>
@@ -518,11 +518,11 @@ export function EducationPage() {
                   ) : entries.length === 0 ? (
                     <Card>
                       <CardContent className="py-12 text-center">
-                        <Building2 className="mx-auto mb-4 h-12 w-12 text-gray-400" />
-                        <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                        <Building2 className="mx-auto mb-4 h-12 w-12 text-muted-foreground/40" />
+                        <h3 className="mb-2 text-base font-semibold text-foreground">
                           No results found
                         </h3>
-                        <p className="mb-4 text-gray-600">
+                        <p className="mb-4 text-sm text-muted-foreground">
                           Try adjusting your filters or search query
                         </p>
                         {hasActiveFilters && (
@@ -534,10 +534,10 @@ export function EducationPage() {
                     </Card>
                   ) : (
                     <div className="space-y-4">
-                      <div className="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:block">
+                      <div className="hidden overflow-hidden rounded-2xl border border-border bg-card md:block">
                         <Table>
-                          <TableHeader className="bg-slate-50/80">
-                            <TableRow className="hover:bg-slate-50/80">
+                          <TableHeader className="bg-secondary/50">
+                            <TableRow className="hover:bg-secondary/50 border-border">
                               <TableHead className="w-[28%]">Institution</TableHead>
                               <TableHead className="w-[20%]">Type</TableHead>
                               <TableHead className="w-[16%]">University</TableHead>
@@ -557,15 +557,13 @@ export function EducationPage() {
                               return (
                                 <TableRow
                                   key={`${item.entityType}-${item.entityId}`}
-                                  className="bg-white transition-colors hover:bg-emerald-50/40 animate-in fade-in-0 slide-in-from-bottom-2"
+                                  className="border-border transition-colors hover:bg-secondary/40 animate-in fade-in-0 slide-in-from-bottom-2"
                                   style={{ animationDelay: `${Math.min(index, 8) * 50}ms`, animationFillMode: "both" }}
                                 >
                                   <TableCell className="align-top">
                                     <div className="flex items-start gap-3">
                                       <div className={`mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
-                                        isCollege
-                                          ? "bg-blue-50 text-blue-600"
-                                          : "bg-emerald-50 text-emerald-600"
+                                        isCollege ? "bg-primary/10 text-primary" : "bg-accent/10 text-accent"
                                       }`}>
                                         {isCollege ? (
                                           <GraduationCap className="h-5 w-5" />
@@ -574,11 +572,11 @@ export function EducationPage() {
                                         )}
                                       </div>
                                       <div className="min-w-0 space-y-1">
-                                        <p className="line-clamp-2 font-semibold text-slate-900">
+                                        <p className="line-clamp-2 font-semibold text-foreground">
                                           {item.name}
                                         </p>
                                         {item.code && (
-                                          <p className="text-xs uppercase tracking-wide text-slate-500">
+                                          <p className="text-xs uppercase tracking-wide text-muted-foreground">
                                             Code: {item.code}
                                           </p>
                                         )}
@@ -589,29 +587,29 @@ export function EducationPage() {
                                     {item.institutionTypeCategory ? (
                                       <Badge
                                         variant="outline"
-                                        className="h-6 whitespace-nowrap rounded-full border-emerald-200 px-2.5 py-0 text-[11px] font-medium leading-none text-emerald-700"
+                                        className="h-6 whitespace-nowrap rounded-full border-primary/30 px-2.5 py-0 text-[11px] font-medium leading-none text-primary"
                                       >
                                         {item.institutionTypeCategory}
                                       </Badge>
                                     ) : isCollege ? (
-                                      <Badge className="h-6 whitespace-nowrap rounded-full bg-slate-900 px-2.5 py-0 text-[11px] font-medium leading-none text-white hover:bg-slate-900">
+                                      <Badge className="h-6 whitespace-nowrap rounded-full bg-foreground px-2.5 py-0 text-[11px] font-medium leading-none text-background hover:bg-foreground/90">
                                         College
                                       </Badge>
                                     ) : null}
                                   </TableCell>
                                   <TableCell>
-                                    <p className="line-clamp-2 text-sm text-slate-600">
+                                    <p className="line-clamp-2 text-sm text-muted-foreground">
                                       {item.universityName || "Independent institution"}
                                     </p>
                                   </TableCell>
                                   <TableCell>
                                     {location ? (
-                                      <div className="flex items-start gap-1.5 text-sm text-slate-600">
-                                        <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
+                                      <div className="flex items-start gap-1.5 text-sm text-muted-foreground">
+                                        <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
                                         <span className="line-clamp-2">{location}</span>
                                       </div>
                                     ) : (
-                                      <span className="text-sm text-slate-400">Location unavailable</span>
+                                      <span className="text-sm text-muted-foreground/50">Location unavailable</span>
                                     )}
                                   </TableCell>
                                   <TableCell>
@@ -622,32 +620,26 @@ export function EducationPage() {
                                             key={value}
                                             className={`h-3.5 w-3.5 ${
                                               (item.rating ?? 0) >= value
-                                                ? "fill-amber-400 text-amber-400"
-                                                : "fill-gray-200 text-gray-200"
+                                                ? "fill-accent text-accent"
+                                                : "fill-muted text-muted"
                                             }`}
                                           />
                                         ))}
                                       </div>
-                                      <p className="text-xs text-slate-500">
-                                        {(item.rating ?? 0) > 0
-                                          ? `${item.rating}/5`
-                                          : "Not rated"}
+                                      <p className="text-xs text-muted-foreground">
+                                        {(item.rating ?? 0) > 0 ? `${item.rating}/5` : "Not rated"}
                                       </p>
                                     </div>
                                   </TableCell>
                                   <TableCell className="text-right">
                                     {websiteUrl ? (
-                                      <Button asChild size="sm" className="min-w-24">
-                                        <a
-                                          href={websiteUrl}
-                                          target="_blank"
-                                          rel="noopener noreferrer"
-                                        >
+                                      <Button asChild size="sm" variant="outline" className="min-w-24 border-border">
+                                        <a href={websiteUrl} target="_blank" rel="noopener noreferrer">
                                           Visit
                                         </a>
                                       </Button>
                                     ) : (
-                                      <span className="text-sm text-slate-400">N/A</span>
+                                      <span className="text-sm text-muted-foreground/50">N/A</span>
                                     )}
                                   </TableCell>
                                 </TableRow>
@@ -660,12 +652,6 @@ export function EducationPage() {
                       <div className="space-y-4 md:hidden">
                         {entries.map((item, index) => {
                           const isCollege = item.entityType === 2;
-                          const gradient = isCollege
-                            ? "from-blue-100 to-indigo-50"
-                            : "from-emerald-100 to-teal-50";
-                          const iconColor = isCollege
-                            ? "text-blue-500"
-                            : "text-emerald-600";
                           const ItemIcon = isCollege ? GraduationCap : Building2;
                           const websiteUrl = normalizeExternalUrl(item.websiteUrl);
                           const location = [item.districtName, item.stateName]
@@ -675,32 +661,32 @@ export function EducationPage() {
                           return (
                             <Card
                               key={`${item.entityType}-${item.entityId}`}
-                              className="group overflow-hidden rounded-xl border-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl animate-in fade-in-0 slide-in-from-bottom-4"
+                              className="group overflow-hidden rounded-xl border-border bg-card hover:border-primary/30 transition-colors duration-150 animate-in fade-in-0 slide-in-from-bottom-4"
                               style={{ animationDelay: `${Math.min(index, 8) * 60}ms`, animationFillMode: "both" }}
                             >
                               <CardContent className="p-0">
                                 <div className="flex flex-col gap-4 p-4">
                                   <div className="flex items-start gap-4">
-                                    <div className={`flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${gradient} shadow-sm`}>
-                                      <ItemIcon className={`h-8 w-8 ${iconColor}`} />
+                                    <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl ${isCollege ? "bg-primary/10" : "bg-accent/10"}`}>
+                                      <ItemIcon className={`h-7 w-7 ${isCollege ? "text-primary" : "text-accent"}`} />
                                     </div>
                                     <div className="min-w-0 flex-1 space-y-2">
                                       {item.institutionTypeCategory && (
                                         <div className="flex flex-wrap items-center gap-2">
                                           <Badge
                                             variant="outline"
-                                            className="border-emerald-200 text-emerald-700"
+                                            className="border-primary/30 text-primary text-xs"
                                           >
                                             {item.institutionTypeCategory}
                                           </Badge>
                                         </div>
                                       )}
-                                      <div className="space-y-1.5">
-                                        <h3 className="text-base font-semibold text-slate-900">
+                                      <div className="space-y-1">
+                                        <h3 className="text-sm font-semibold text-foreground">
                                           {item.name}
                                         </h3>
                                         {item.code && (
-                                          <p className="text-xs uppercase tracking-wide text-slate-500">
+                                          <p className="text-xs uppercase tracking-wide text-muted-foreground">
                                             Code: {item.code}
                                           </p>
                                         )}
@@ -708,25 +694,25 @@ export function EducationPage() {
                                     </div>
                                   </div>
 
-                                  <div className="grid grid-cols-1 gap-3 rounded-xl bg-slate-50 p-3">
+                                  <div className="grid grid-cols-1 gap-3 rounded-xl bg-secondary/50 p-3">
                                     <div>
-                                      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                                         University
                                       </p>
-                                      <p className="mt-1 text-sm text-slate-700">
+                                      <p className="mt-1 text-sm text-foreground">
                                         {item.universityName || "Independent institution"}
                                       </p>
                                     </div>
                                     <div>
-                                      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                                         Location
                                       </p>
-                                      <p className="mt-1 text-sm text-slate-700">
+                                      <p className="mt-1 text-sm text-foreground">
                                         {location || "Location unavailable"}
                                       </p>
                                     </div>
                                     <div>
-                                      <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                                      <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                                         Rating
                                       </p>
                                       <div className="mt-1 flex items-center gap-2">
@@ -736,16 +722,14 @@ export function EducationPage() {
                                               key={value}
                                               className={`h-3.5 w-3.5 ${
                                                 (item.rating ?? 0) >= value
-                                                  ? "fill-amber-400 text-amber-400"
-                                                  : "fill-gray-200 text-gray-200"
+                                                  ? "fill-accent text-accent"
+                                                  : "fill-muted text-muted"
                                               }`}
                                             />
                                           ))}
                                         </div>
-                                        <span className="text-xs text-slate-500">
-                                          {(item.rating ?? 0) > 0
-                                            ? `${item.rating}/5`
-                                            : "Not rated"}
+                                        <span className="text-xs text-muted-foreground">
+                                          {(item.rating ?? 0) > 0 ? `${item.rating}/5` : "Not rated"}
                                         </span>
                                       </div>
                                     </div>

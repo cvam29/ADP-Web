@@ -1,21 +1,31 @@
-import type { Metadata } from "next"
+"use client"
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Users, Target, Award, Calendar } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
+import { useEffect, useRef, type ReactNode } from "react"
 
-export const metadata: Metadata = {
-  title: "About Us",
-  description:
-    "Learn about the Association of Dietetics Professionals — our mission, leadership, and commitment to advancing dietetics in India.",
-  openGraph: {
-    title: "About Us | Association of Dietetics Professionals",
-    description:
-      "Learn about the Association of Dietetics Professionals — our mission, leadership, and commitment to advancing dietetics in India.",
-  },
-  alternates: { canonical: "/about/" },
+// Simple scroll-reveal wrapper
+function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add("is-visible"); observer.disconnect() } },
+      { threshold: 0.12 }
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+  return (
+    <div ref={ref} className={`reveal ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+      {children}
+    </div>
+  )
 }
 
 const leadership = [
@@ -84,7 +94,7 @@ export default function AboutPage() {
             <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
               Who We Are
             </p>
-            <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-6 text-balance">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-6 text-balance leading-tight">
               About Our Association
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
@@ -152,9 +162,9 @@ export default function AboutPage() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {leadership.map((leader, index) => (
+              <Reveal key={index} delay={index * 80}>
               <Card
-                key={index}
-                className="group border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl overflow-hidden"
+                className="group border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl overflow-hidden h-full"
               >
                 <CardHeader className="text-center pt-8 pb-4">
                   <div className="relative mx-auto mb-4 h-[110px] w-[110px]">
@@ -179,6 +189,7 @@ export default function AboutPage() {
                   <p className="text-sm text-muted-foreground text-center leading-relaxed">{leader.bio}</p>
                 </CardContent>
               </Card>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -232,10 +243,10 @@ export default function AboutPage() {
           <p className="text-xs font-semibold uppercase tracking-widest text-primary mb-4">
             Get Involved
           </p>
-          <h2 className="text-3xl font-bold text-background mb-4 tracking-tight text-balance">
+          <h2 className="text-3xl font-bold mb-4 tracking-tight text-balance" style={{ color: "hsl(var(--background))" }}>
             Join Our Mission
           </h2>
-          <p className="text-muted text-base mb-10 max-w-2xl mx-auto leading-relaxed" style={{ color: "hsl(var(--background) / 0.6)" }}>
+          <p className="text-base mb-10 max-w-2xl mx-auto leading-relaxed" style={{ color: "hsl(var(--background) / 0.65)" }}>
             Be part of a community that&rsquo;s shaping the future of nutrition and dietetics in India.
             Together, we can make a lasting impact on public health across the nation.
           </p>
@@ -243,7 +254,16 @@ export default function AboutPage() {
             <Button asChild size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8">
               <Link href="/membership">Become a Member</Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="rounded-full border-background/20 text-background hover:bg-background/10 px-8">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full px-8 border-2"
+              style={{
+                backgroundColor: "transparent",
+                borderColor: "hsl(var(--background) / 0.35)",
+                color: "hsl(var(--background))",
+              }}
+            >
               <Link href="/contact">Contact Us</Link>
             </Button>
           </div>
