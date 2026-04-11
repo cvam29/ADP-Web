@@ -36,6 +36,7 @@ public class BlogController(IBlogService blogService) : ControllerBase
         [FromQuery] string? sortBy = null,
         [FromQuery] string? sortDirection = null,
         [FromQuery] string? category = null,
+        [FromQuery] bool featured = false,
         CancellationToken cancellationToken = default)
     {
         var request = new PagedRequest
@@ -52,10 +53,10 @@ public class BlogController(IBlogService blogService) : ControllerBase
         Response.Headers["Cache-Control"] = "no-cache, no-transform";
         Response.Headers["X-Accel-Buffering"] = "no";
 
-        var pageInfo = await _blogService.GetPublicBlogStreamPageInfoAsync(request, category, cancellationToken);
+        var pageInfo = await _blogService.GetPublicBlogStreamPageInfoAsync(request, category, featured, cancellationToken);
         await WriteStreamMessageAsync(new { type = "meta", pageInfo }, cancellationToken);
 
-        await foreach (var post in _blogService.StreamPublicPostsAsync(request, category, cancellationToken))
+        await foreach (var post in _blogService.StreamPublicPostsAsync(request, category, featured, cancellationToken))
         {
             await WriteStreamMessageAsync(new { type = "item", item = post }, cancellationToken);
         }

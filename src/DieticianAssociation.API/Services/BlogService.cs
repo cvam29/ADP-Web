@@ -27,13 +27,18 @@ public class BlogService(
         return Task.CompletedTask;
     }
 
-    private IQueryable<BlogPost> BuildPublicPublishedPostsQuery(PagedRequest request, string? category)
+    private IQueryable<BlogPost> BuildPublicPublishedPostsQuery(PagedRequest request, string? category, bool featuredOnly)
     {
         var query = _context.BlogPosts
             .AsNoTracking()
             .Include(p => p.Author)
             .Where(p => p.IsPublished)
             .AsQueryable();
+
+        if (featuredOnly)
+        {
+            query = query.Where(p => p.Featured);
+        }
 
         if (!string.IsNullOrWhiteSpace(request.Search))
         {
@@ -188,6 +193,7 @@ public class BlogService(
     public async Task<DieticianAssociation.API.Helper.PageInfo> GetPublicBlogStreamPageInfoAsync(
         PagedRequest request,
         string? category = null,
+        bool featuredOnly = false,
         CancellationToken cancellationToken = default)
     {
         if (!request.IsValid)
@@ -195,7 +201,7 @@ public class BlogService(
             throw new ArgumentException("Invalid pagination parameters", nameof(request));
         }
 
-        var totalItems = await BuildPublicPublishedPostsQuery(request, category).CountAsync(cancellationToken);
+        var totalItems = await BuildPublicPublishedPostsQuery(request, category, featuredOnly).CountAsync(cancellationToken);
 
         return new DieticianAssociation.API.Helper.PageInfo
         {
@@ -211,6 +217,7 @@ public class BlogService(
     public async IAsyncEnumerable<BlogPostDto> StreamPublicPostsAsync(
         PagedRequest request,
         string? category = null,
+        bool featuredOnly = false,
         [EnumeratorCancellation] CancellationToken cancellationToken = default)
     {
         if (!request.IsValid)
@@ -218,7 +225,7 @@ public class BlogService(
             throw new ArgumentException("Invalid pagination parameters", nameof(request));
         }
 
-        var query = BuildPublicPublishedPostsQuery(request, category)
+        var query = BuildPublicPublishedPostsQuery(request, category, featuredOnly)
             .Skip(request.Skip)
             .Take(request.PageSize)
             .AsAsyncEnumerable();

@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { startTransition, useCallback, useEffect, useRef, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Dialog,
@@ -13,6 +13,7 @@ import { Star } from "lucide-react"
 import Image from "next/image"
 import { useTestimonialStore } from "@/store/useTestimonialStore"
 import type { TestimonialDto } from "@/services/generated"
+import { streamTestimonials } from "@/lib/content-stream"
 
 const LONG_TESTIMONIAL_THRESHOLD = 280
 const TESTIMONIAL_PREVIEW_HEIGHT = "md:h-[17rem]"
@@ -48,18 +49,74 @@ const fallbackTestimonials: TestimonialDto[] = [
 ]
 
 export function MembershipTestimonials() {
-  const { publicTestimonials, loading, fetchPublicTestimonials } = useTestimonialStore()
+  const { fetchPublicTestimonials } = useTestimonialStore()
+  const [publicTestimonials, setPublicTestimonials] = useState<TestimonialDto[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedTestimonial, setSelectedTestimonial] = useState<TestimonialDto | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+
+  const loadTestimonials = useCallback(async () => {
+    abortRef.current?.abort()
+    const abortController = new AbortController()
+    abortRef.current = abortController
+
+    try {
+      setLoading(true)
+      setPublicTestimonials([])
+
+      await streamTestimonials(
+        {
+          page: 1,
+          pageSize: 3,
+          featured: true,
+          sortBy: "submittedAt",
+          sortDirection: "desc",
+        },
+        {
+          signal: abortController.signal,
+          onMeta: () => {
+            setLoading(false)
+          },
+          onItem: (testimonial) => {
+            startTransition(() => {
+              setPublicTestimonials((prev) => [...prev, testimonial])
+              setLoading(false)
+            })
+          },
+        },
+      )
+    } catch (streamError) {
+      if (abortController.signal.aborted) {
+        return
+      }
+
+      try {
+        const result = await fetchPublicTestimonials({
+          page: 1,
+          pageSize: 3,
+          filters: { isFeatured: true },
+          sortBy: "submittedAt",
+          sortDirection: "desc",
+        })
+
+        setPublicTestimonials((result.items ?? []) as unknown as TestimonialDto[])
+      } finally {
+        setLoading(false)
+      }
+    } finally {
+      if (abortRef.current === abortController) {
+        abortRef.current = null
+      }
+    }
+  }, [fetchPublicTestimonials])
 
   useEffect(() => {
-    void fetchPublicTestimonials({
-      page: 1,
-      pageSize: 3,
-      filters: { isFeatured: true },
-      sortBy: "submittedAt",
-      sortDirection: "desc",
-    }).catch(() => undefined)
-  }, [fetchPublicTestimonials])
+    void loadTestimonials()
+
+    return () => {
+      abortRef.current?.abort()
+    }
+  }, [loadTestimonials])
 
   const testimonials: TestimonialDto[] =
     publicTestimonials.length > 0 ? (publicTestimonials as unknown as TestimonialDto[]) : fallbackTestimonials
@@ -81,7 +138,8 @@ export function MembershipTestimonials() {
           {testimonials.map((testimonial, index) => (
             <Card
               key={testimonial.id ?? index}
-              className="group h-full overflow-hidden border-0 bg-white ring-1 ring-slate-200 shadow-md hover:shadow-xl transition-all duration-300 relative rounded-2xl"
+              className="group h-full overflow-hidden border-0 bg-white ring-1 ring-slate-200 shadow-md hover:shadow-xl transition-all duration-300 relative rounded-2xl animate-in fade-in-0 slide-in-from-bottom-4"
+              style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}
             >
               {/* Decorative background element */}
               <div className="absolute top-0 right-0 -mr-8 -mt-8 h-32 w-32 rounded-full bg-emerald-50 opacity-50 blur-3xl transition-transform duration-500 group-hover:scale-150"></div>

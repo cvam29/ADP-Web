@@ -1,5 +1,7 @@
 namespace DieticianAssociation.API.Services;
 
+using System.Runtime.CompilerServices;
+
 public class TestimonialService(
     ApplicationDbContext context,
     ICacheService cacheService,
@@ -20,30 +22,19 @@ public class TestimonialService(
         return Task.CompletedTask;
     }
 
-    public async Task<PagedResult<TestimonialDto>> GetPublicTestimonialsAsync(PagedRequest request, CancellationToken cancellationToken = default)
+    private IQueryable<Testimonial> BuildPublicTestimonialsQuery(PagedRequest request, bool featuredOnly)
     {
         var normalizedRequest = request ?? new PagedRequest();
-        var cacheKey = _cacheService.GenerateKey(
-            "testimonials",
-            $"v{TestimonialCacheVersion}",
-            "public",
-            normalizedRequest.Page.ToString(),
-            normalizedRequest.PageSize.ToString(),
-            normalizedRequest.Search ?? string.Empty,
-            normalizedRequest.SortBy ?? string.Empty,
-            normalizedRequest.SortDirection,
-            normalizedRequest.Filters?.Count.ToString() ?? "0");
-
-        var cachedResult = await _cacheService.GetAsync<PagedResult<TestimonialDto>>(cacheKey, cancellationToken);
-        if (cachedResult != null)
-        {
-            return cachedResult;
-        }
-
         var query = _context.Testimonials
             .AsNoTracking()
             .Include(x => x.SubmittedBy)
-            .Where(x => x.Status == TestimonialStatuses.Approved);
+            .Where(x => x.Status == TestimonialStatuses.Approved)
+            .AsQueryable();
+
+        if (featuredOnly)
+        {
+            query = query.Where(x => x.IsFeatured);
+        }
 
         if (!string.IsNullOrWhiteSpace(normalizedRequest.Search))
         {
@@ -67,6 +58,31 @@ public class TestimonialService(
             query = query.ApplySorting(normalizedRequest.SortBy, normalizedRequest.SortDirection);
         }
 
+        return query;
+    }
+
+    public async Task<PagedResult<TestimonialDto>> GetPublicTestimonialsAsync(PagedRequest request, CancellationToken cancellationToken = default)
+    {
+        var normalizedRequest = request ?? new PagedRequest();
+        var cacheKey = _cacheService.GenerateKey(
+            "testimonials",
+            $"v{TestimonialCacheVersion}",
+            "public",
+            normalizedRequest.Page.ToString(),
+            normalizedRequest.PageSize.ToString(),
+            normalizedRequest.Search ?? string.Empty,
+            normalizedRequest.SortBy ?? string.Empty,
+            normalizedRequest.SortDirection,
+            normalizedRequest.Filters?.Count.ToString() ?? "0");
+
+        var cachedResult = await _cacheService.GetAsync<PagedResult<TestimonialDto>>(cacheKey, cancellationToken);
+        if (cachedResult != null)
+        {
+            return cachedResult;
+        }
+
+        var query = BuildPublicTestimonialsQuery(normalizedRequest, featuredOnly: false);
+
         var result = await query.ToPagedResultAsync(normalizedRequest, MapperExtensions.MapToTestimonialDto, cancellationToken);
 
         await _cacheService.SetAsync(
@@ -76,6 +92,45 @@ public class TestimonialService(
             cancellationToken);
 
         return result;
+    }
+
+    public async Task<DieticianAssociation.API.Helper.PageInfo> GetPublicTestimonialsStreamPageInfoAsync(PagedRequest request, bool featuredOnly = false, CancellationToken cancellationToken = default)
+    {
+        var normalizedRequest = request ?? new PagedRequest();
+        if (!normalizedRequest.IsValid)
+        {
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+        }
+
+        var totalItems = await BuildPublicTestimonialsQuery(normalizedRequest, featuredOnly).CountAsync(cancellationToken);
+        return new DieticianAssociation.API.Helper.PageInfo
+        {
+            CurrentPage = normalizedRequest.Page,
+            PageSize = normalizedRequest.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling((double)totalItems / normalizedRequest.PageSize),
+            HasPrevious = normalizedRequest.Page > 1,
+            HasNext = normalizedRequest.Page * normalizedRequest.PageSize < totalItems,
+        };
+    }
+
+    public async IAsyncEnumerable<TestimonialDto> StreamPublicTestimonialsAsync(PagedRequest request, bool featuredOnly = false, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var normalizedRequest = request ?? new PagedRequest();
+        if (!normalizedRequest.IsValid)
+        {
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+        }
+
+        var query = BuildPublicTestimonialsQuery(normalizedRequest, featuredOnly)
+            .Skip(normalizedRequest.Skip)
+            .Take(normalizedRequest.PageSize)
+            .AsAsyncEnumerable();
+
+        await foreach (var testimonial in query.WithCancellation(cancellationToken))
+        {
+            yield return MapperExtensions.MapToTestimonialDto(testimonial);
+        }
     }
 
     public async Task<PagedResult<TestimonialDto>> GetAdminTestimonialsAsync(PagedRequest request, CancellationToken cancellationToken = default)

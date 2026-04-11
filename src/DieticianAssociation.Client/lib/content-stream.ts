@@ -9,6 +9,7 @@ import type {
   GetApiResourcesPublicFreeStreamParams,
   GetApiResourcesStreamParams,
   ResourceDto,
+  TestimonialDto,
 } from "@/services/generated";
 import { API_BASE_URL } from "@/services/api-client";
 
@@ -39,11 +40,21 @@ type StreamHandlers<T> = {
   onItem: (item: T) => void;
 };
 
-type BlogStreamParams = GetApiBlogStreamParams;
+type BlogStreamParams = GetApiBlogStreamParams & {
+  featured?: boolean;
+};
 type EventStreamParams = GetApiEventsStreamParams;
 type ResourceStreamParams = GetApiResourcesStreamParams;
 type PublicFreeResourceStreamParams = GetApiResourcesPublicFreeStreamParams;
 type AcademicsStreamParams = GetApiEducationAcademicsStreamParams;
+type TestimonialStreamParams = {
+  page?: number;
+  pageSize?: number;
+  search?: string;
+  sortBy?: string;
+  sortDirection?: "asc" | "desc";
+  featured?: boolean;
+};
 
 type AcademicsStreamMetaMessage = {
   type: "meta";
@@ -158,6 +169,7 @@ export const streamBlogPosts = async (
       sortBy: params.sortBy,
       sortDirection: params.sortDirection,
       category: params.category,
+      featured: params.featured === undefined ? undefined : Number(params.featured),
     }),
     {
       method: "GET",
@@ -336,4 +348,30 @@ export const streamAcademics = async (
   }
 
   handlers.onItem(message.item);
+};
+
+export const streamTestimonials = async (
+  params: TestimonialStreamParams,
+  handlers: StreamHandlers<TestimonialDto>,
+) => {
+  const response = await fetch(
+    buildStreamUrl("/api/testimonials/stream", {
+      page: params.page,
+      pageSize: params.pageSize,
+      search: params.search,
+      sortBy: params.sortBy,
+      sortDirection: params.sortDirection,
+      featured: params.featured === undefined ? undefined : Number(params.featured),
+    }),
+    {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        Accept: "application/x-ndjson",
+      },
+      signal: handlers.signal,
+    },
+  );
+
+  await parseStream(response, handlers);
 };
