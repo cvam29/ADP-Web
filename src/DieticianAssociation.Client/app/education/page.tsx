@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useRef, useState } from "react";
 import { useEducationStore } from "@/store/useEducationStore";
 import { useGeoStore } from "@/store/useGeoStore";
 import { Card, CardContent } from "@/components/ui/card";
@@ -24,6 +24,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import type {
+  AcademicsEntryDto,
+  AcademicsPagedRequest,
+  AcademicsPagedResponseDto,
+  GetApiEducationAcademicsStreamSelectedTab,
+} from "@/services/generated";
 import {
   Building2,
   MapPin,
@@ -36,6 +42,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { streamAcademics } from "@/lib/content-stream";
 
 const TAB_CONFIG = [
   { value: 1, key: "ug-courses", label: "UG Courses" },
@@ -72,8 +79,6 @@ export function EducationPage() {
     fetchUniversities,
     fetchDistrictsByState,
     fetchAcademicsPaginated,
-    academicsData,
-    loading,
     districts,
     collegeTypes,
     fetchCollegeTypes,
@@ -90,6 +95,12 @@ export function EducationPage() {
   const [selectedDistrict, setSelectedDistrict] = useState<number | null>(null);
   // University type filter (string, matches CollegeTypeDto.name)
   const [selectedUniversityType, setSelectedUniversityType] = useState<string | undefined>(undefined);
+  const [academicsData, setAcademicsData] = useState<AcademicsPagedResponseDto | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [streaming, setStreaming] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const requestIdRef = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -123,7 +134,7 @@ export function EducationPage() {
       filters.institutionTypeCategory = selectedUniversityType;
     }
 
-    fetchAcademicsPaginated({
+    const request: AcademicsPagedRequest = {
       page,
       pageSize: 10,
       selectedTab: activeTab as any,
@@ -135,7 +146,103 @@ export function EducationPage() {
       includeColleges: true,
       sortBy: "name",
       sortDirection: "asc",
-    });
+    };
+
+    abortRef.current?.abort();
+    const requestId = requestIdRef.current + 1;
+    requestIdRef.current = requestId;
+    const abortController = new AbortController();
+    abortRef.current = abortController;
+
+    const loadAcademics = async () => {
+      try {
+        setLoading(true);
+        setStreaming(true);
+        setError(null);
+        setAcademicsData(null);
+
+        await streamAcademics(
+          {
+            page: request.page,
+            pageSize: request.pageSize,
+            selectedTab: request.selectedTab as GetApiEducationAcademicsStreamSelectedTab | undefined,
+            search: request.search ?? undefined,
+            stateId: request.stateId ?? undefined,
+            districtId: request.districtId ?? undefined,
+            universityId: request.universityId ?? undefined,
+            includeInstitutions: request.includeInstitutions,
+            includeColleges: request.includeColleges,
+            sortBy: request.sortBy ?? undefined,
+            sortDirection: request.sortDirection as "asc" | "desc" | undefined,
+            institutionTypeCategory: selectedUniversityType,
+          },
+          {
+            signal: abortController.signal,
+            onMeta: (metadata) => {
+              if (requestId !== requestIdRef.current) {
+                return;
+              }
+
+              startTransition(() => {
+                setAcademicsData(metadata);
+              });
+            },
+            onItem: (item: AcademicsEntryDto) => {
+              if (requestId !== requestIdRef.current) {
+                return;
+              }
+
+              startTransition(() => {
+                setAcademicsData((prev) => {
+                  if (!prev) {
+                    return prev;
+                  }
+
+                  return {
+                    ...prev,
+                    results: {
+                      ...prev.results,
+                      items: [...(prev.results?.items ?? []), item],
+                    },
+                  };
+                });
+                setLoading(false);
+              });
+            },
+          },
+        );
+      } catch (streamError) {
+        if (abortController.signal.aborted || requestId !== requestIdRef.current) {
+          return;
+        }
+
+        try {
+          const result = await fetchAcademicsPaginated(request);
+          if (requestId !== requestIdRef.current) {
+            return;
+          }
+
+          setAcademicsData(result);
+        } catch (fallbackError) {
+          setError(fallbackError instanceof Error ? fallbackError.message : "Unable to load academic resources.");
+        }
+      } finally {
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+          setStreaming(false);
+        }
+
+        if (abortRef.current === abortController) {
+          abortRef.current = null;
+        }
+      }
+    };
+
+    loadAcademics().catch(() => undefined);
+
+    return () => {
+      abortController.abort();
+    };
   }, [
     activeTab,
     page,
@@ -178,6 +285,10 @@ export function EducationPage() {
 
   const entries = academicsData?.results?.items ?? [];
   const pageInfo = academicsData?.results;
+
+  if (error) {
+    return <div className="flex min-h-[200px] items-center justify-center text-red-600">{error}</div>;
+  }
 
   // Derive university types from fetched universities (unique, non-empty)
   const universityTypes = Array.from(
@@ -375,6 +486,9 @@ export function EducationPage() {
                       Showing <span className="font-semibold text-slate-900">{entries.length}</span> of{" "}
                       <span className="font-semibold text-slate-900">{pageInfo?.totalItems ?? 0}</span> results
                     </p>
+                    {streaming && entries.length > 0 && (
+                      <p className="text-sm text-muted-foreground">Loading results progressively...</p>
+                    )}
                   </div>
 
                   {loading ? (
@@ -433,7 +547,7 @@ export function EducationPage() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {entries.map((item) => {
+                            {entries.map((item, index) => {
                               const isCollege = item.entityType === 2;
                               const location = [item.districtName, item.stateName]
                                 .filter(Boolean)
@@ -443,7 +557,8 @@ export function EducationPage() {
                               return (
                                 <TableRow
                                   key={`${item.entityType}-${item.entityId}`}
-                                  className="bg-white transition-colors hover:bg-emerald-50/40"
+                                  className="bg-white transition-colors hover:bg-emerald-50/40 animate-in fade-in-0 slide-in-from-bottom-2"
+                                  style={{ animationDelay: `${Math.min(index, 8) * 50}ms`, animationFillMode: "both" }}
                                 >
                                   <TableCell className="align-top">
                                     <div className="flex items-start gap-3">
@@ -543,7 +658,7 @@ export function EducationPage() {
                       </div>
 
                       <div className="space-y-4 md:hidden">
-                        {entries.map((item) => {
+                        {entries.map((item, index) => {
                           const isCollege = item.entityType === 2;
                           const gradient = isCollege
                             ? "from-blue-100 to-indigo-50"
@@ -560,7 +675,8 @@ export function EducationPage() {
                           return (
                             <Card
                               key={`${item.entityType}-${item.entityId}`}
-                              className="group overflow-hidden rounded-xl border-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+                              className="group overflow-hidden rounded-xl border-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl animate-in fade-in-0 slide-in-from-bottom-4"
+                              style={{ animationDelay: `${Math.min(index, 8) * 60}ms`, animationFillMode: "both" }}
                             >
                               <CardContent className="p-0">
                                 <div className="flex flex-col gap-4 p-4">

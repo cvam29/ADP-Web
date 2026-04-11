@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
+import { startTransition, useEffect, useMemo, useRef, useState } from "react"
 import { useEventsStore } from "@/store/useEventsStore"
 import { Input } from "@/components/ui/input"
 import { Search, X } from "lucide-react"
@@ -11,9 +11,15 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import type { EventDto } from "@/services/generated"
+import { streamEvents } from "@/lib/content-stream"
 
 export default function PublicEventsPage() {
-	const { events, fetchEvents, loading } = useEventsStore()
+	const fetchEvents = useEventsStore((state) => state.fetchEvents)
+	const [events, setEvents] = useState<EventDto[]>([])
+	const [loading, setLoading] = useState(true)
+	const [streaming, setStreaming] = useState(false)
+	const [error, setError] = useState<string | null>(null)
 	const [searchTerm, setSearchTerm] = useState("")
 	const [initialLoading, setInitialLoading] = useState(true)
 	const [statusTab, setStatusTab] = useState<"all" | "upcoming" | "past">("all")
@@ -21,17 +27,84 @@ export default function PublicEventsPage() {
 	const [formatFilter, setFormatFilter] = useState<string>("all")
 	const [freeOnly, setFreeOnly] = useState<boolean>(false)
 	const [sortBy, setSortBy] = useState<"dateAsc" | "dateDesc">("dateAsc")
+	const abortRef = useRef<AbortController | null>(null)
+	const requestIdRef = useRef(0)
 
 	useEffect(() => {
 		const load = async () => {
+			abortRef.current?.abort()
+			const requestId = requestIdRef.current + 1
+			requestIdRef.current = requestId
+			const abortController = new AbortController()
+			abortRef.current = abortController
+
 			try {
+				setLoading(true)
+				setStreaming(true)
+				setError(null)
 				setInitialLoading(true)
-				await fetchEvents({ page: 1, pageSize: 50 })
+				setEvents([])
+
+				await streamEvents(
+					{ page: 1, pageSize: 50, sortBy: "Date", sortDirection: "asc" },
+					{
+						signal: abortController.signal,
+						onMeta: () => {
+							if (requestId !== requestIdRef.current) {
+								return
+							}
+
+							setInitialLoading(false)
+						},
+						onItem: (eventItem) => {
+							if (requestId !== requestIdRef.current) {
+								return
+							}
+
+							startTransition(() => {
+								setEvents((prev) => [...prev, eventItem])
+								setLoading(false)
+								setInitialLoading(false)
+							})
+						},
+					},
+				)
+			} catch (err) {
+				if (abortController.signal.aborted || requestId !== requestIdRef.current) {
+					return
+				}
+
+				try {
+					const result = await fetchEvents({ page: 1, pageSize: 50 })
+					if (requestId !== requestIdRef.current) {
+						return
+					}
+
+					setEvents(result.items ?? [])
+				} catch (fallbackError) {
+					setError(
+						fallbackError instanceof Error
+							? fallbackError.message
+							: "Unable to load events.",
+					)
+				}
 			} finally {
-				setInitialLoading(false)
+				if (requestId === requestIdRef.current) {
+					setLoading(false)
+					setStreaming(false)
+					setInitialLoading(false)
+				}
+
+				if (abortRef.current === abortController) {
+					abortRef.current = null
+				}
 			}
 		}
 		load()
+
+		return () => {
+			abortRef.current?.abort()
+		}
 	}, [fetchEvents])
 
 	const uniqueTypes = useMemo(() => {
@@ -96,6 +169,14 @@ export default function PublicEventsPage() {
 	}, [events, searchTerm, statusTab, typeFilter, formatFilter, freeOnly, sortBy])
 
 	// no-op helper removed
+
+	if (error) {
+		return (
+			<div className="flex items-center justify-center min-h-[200px] text-red-600">
+				{error}
+			</div>
+		)
+	}
 
 	return (
 			<div className="bg-background min-h-screen">
@@ -190,9 +271,21 @@ export default function PublicEventsPage() {
 				<ADPSpinner size="sm" />
 				</div>
 			) : (
+			<>
+			{streaming && filtered.length > 0 && (
+				<p className="max-w-7xl mx-auto mb-4 text-sm text-muted-foreground">
+					Loading events progressively...
+				</p>
+			)}
 			<div className="max-w-7xl mx-auto grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-		  {filtered.map((e) => (
-			<EventCard key={e.id || e.title} event={e} />
+		  {filtered.map((e, index) => (
+			<div
+				key={e.id || e.title}
+				className="animate-in fade-in-0 slide-in-from-bottom-4 duration-500"
+				style={{ animationDelay: `${Math.min(index, 8) * 60}ms`, animationFillMode: "both" }}
+			>
+				<EventCard event={e} />
+			</div>
 		  ))}
 
 		  {filtered.length === 0 && (
@@ -201,6 +294,7 @@ export default function PublicEventsPage() {
 			</div>
 		  )}
 		</div>
+			</>
 			)}
 		  </div>
 	</div>

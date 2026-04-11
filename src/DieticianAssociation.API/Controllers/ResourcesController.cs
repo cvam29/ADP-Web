@@ -1,4 +1,6 @@
 using DieticianAssociation.API.Constants;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DieticianAssociation.API.Controllers;
 
@@ -8,6 +10,10 @@ public class ResourcesController(IResourceService resourceService, IBlobStorageS
 {
     private readonly IResourceService _resourceService = resourceService;
     private readonly IBlobStorageService _blobStorageService = blobStorageService;
+    private static readonly JsonSerializerOptions StreamJsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
     [HttpPost("paginated")]
     [Authorize]
@@ -19,6 +25,40 @@ public class ResourcesController(IResourceService resourceService, IBlobStorageS
         return Ok(result);
     }
 
+    [HttpGet("stream")]
+    [Authorize]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task StreamResources(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 50,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDirection = null,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new PagedRequest
+        {
+            Page = page,
+            PageSize = pageSize,
+            Search = search,
+            SortBy = sortBy,
+            SortDirection = string.IsNullOrWhiteSpace(sortDirection) ? "desc" : sortDirection
+        };
+
+        Response.StatusCode = StatusCodes.Status200OK;
+        Response.ContentType = "application/x-ndjson";
+        Response.Headers["Cache-Control"] = "no-cache, no-transform";
+        Response.Headers["X-Accel-Buffering"] = "no";
+
+        var pageInfo = await _resourceService.GetResourceStreamPageInfoAsync(request, cancellationToken);
+        await WriteStreamMessageAsync(new { type = "meta", pageInfo }, cancellationToken);
+
+        await foreach (var resource in _resourceService.StreamResourcesAsync(request, cancellationToken))
+        {
+            await WriteStreamMessageAsync(new { type = "item", item = resource }, cancellationToken);
+        }
+    }
+
     [HttpPost("public/free/paginated")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(PagedResult<ResourceDto>), StatusCodes.Status200OK)]
@@ -27,6 +67,40 @@ public class ResourcesController(IResourceService resourceService, IBlobStorageS
     {
         var result = await _resourceService.GetPaginatedFreeResourcesAsync(request, cancellationToken);
         return Ok(result);
+    }
+
+    [HttpGet("public/free/stream")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task StreamFreeResources(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 50,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDirection = null,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new PagedRequest
+        {
+            Page = page,
+            PageSize = pageSize,
+            Search = search,
+            SortBy = sortBy,
+            SortDirection = string.IsNullOrWhiteSpace(sortDirection) ? "desc" : sortDirection
+        };
+
+        Response.StatusCode = StatusCodes.Status200OK;
+        Response.ContentType = "application/x-ndjson";
+        Response.Headers["Cache-Control"] = "no-cache, no-transform";
+        Response.Headers["X-Accel-Buffering"] = "no";
+
+        var pageInfo = await _resourceService.GetFreeResourceStreamPageInfoAsync(request, cancellationToken);
+        await WriteStreamMessageAsync(new { type = "meta", pageInfo }, cancellationToken);
+
+        await foreach (var resource in _resourceService.StreamFreeResourcesAsync(request, cancellationToken))
+        {
+            await WriteStreamMessageAsync(new { type = "item", item = resource }, cancellationToken);
+        }
     }
 
     // Removed non-paginated list endpoints to standardize on POST paginated pattern
@@ -229,6 +303,13 @@ public class ResourcesController(IResourceService resourceService, IBlobStorageS
             len /= 1024;
         }
         return $"{len:0.##} {sizes[order]}";
+    }
+
+    private async Task WriteStreamMessageAsync(object payload, CancellationToken cancellationToken)
+    {
+        var line = JsonSerializer.Serialize(payload, StreamJsonOptions);
+        await Response.WriteAsync(line + "\n", cancellationToken);
+        await Response.Body.FlushAsync(cancellationToken);
     }
 }
 

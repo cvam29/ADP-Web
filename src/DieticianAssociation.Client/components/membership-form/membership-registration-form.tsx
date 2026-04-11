@@ -91,7 +91,9 @@ export function MembershipRegistrationForm({
   });
 
   const [declaration, setDeclaration] = useState<DeclarationData>({
-    agreeRules: false,
+    agreeTerms: false,
+    agreePrivacy: false,
+    agreeDataUsage: false,
     agreeDeclaration: false,
     captcha: "",
     captchaCode: "745874578",

@@ -8,6 +8,8 @@ namespace DieticianAssociation.API.Interfaces
         Task<BlogPostDto?> UpdatePostAsync(string id, CreateBlogPostDto updatePost, CancellationToken cancellationToken = default);
         Task<bool> DeletePostAsync(string id, CancellationToken cancellationToken = default);
         Task<PagedResult<BlogPostDto>> GetPaginatedPostsAsync(PagedRequest request, CancellationToken cancellationToken = default);
+        Task<DieticianAssociation.API.Helper.PageInfo> GetPublicBlogStreamPageInfoAsync(PagedRequest request, string? category = null, CancellationToken cancellationToken = default);
+        IAsyncEnumerable<BlogPostDto> StreamPublicPostsAsync(PagedRequest request, string? category = null, CancellationToken cancellationToken = default);
         Task<List<BlogSlugDto>> GetPublishedBlogSlugsAsync(CancellationToken cancellationToken = default);
         Task<PagedResult<BlogPostDto>> GetMyPostsAsync(string authorId, PagedRequest request, CancellationToken cancellationToken = default);
         Task<BlogPostDto?> SubmitEditAsync(string id, string authorId, CreateBlogPostDto editPost, CancellationToken cancellationToken = default);

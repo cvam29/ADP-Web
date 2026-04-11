@@ -60,7 +60,7 @@ interface EducationState {
   // Reference data actions
   fetchCollegeTypes: () => Promise<void>;
   fetchDistrictsByState: (stateId: number) => Promise<void>;
-  fetchAcademicsPaginated: (request: AcademicsPagedRequest) => Promise<void>;
+  fetchAcademicsPaginated: (request: AcademicsPagedRequest) => Promise<AcademicsPagedResponseDto>;
 
   // UI actions
   setCurrentTab: (tab: "universities" | "colleges") => void;
@@ -386,6 +386,7 @@ export const useEducationStore = create<EducationState>()(
       try {
         const result = await api.postApiEducationAcademicsPaginated(request);
         set({ academicsData: result.data, loading: false });
+        return result.data;
       } catch (err) {
         const error = handleError(err);
         set({ error, loading: false });
@@ -394,6 +395,7 @@ export const useEducationStore = create<EducationState>()(
           description: error,
           variant: "error",
         });
+        throw err;
       }
     },
 

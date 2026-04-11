@@ -2,7 +2,7 @@
 
 import PageLoading from "@/components/page-loading";
 
-import { useState, useEffect, useCallback } from "react";
+import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -28,9 +28,10 @@ import type {
   PagedRequest,
 } from "@/services/generated";
 import { getBlogPostUrl } from "@/lib/blog-utils";
+import { streamBlogPosts } from "@/lib/content-stream";
 
 export default function BlogPage() {
-  const { fetchPosts, loading, error } = useBlogStore();
+  const fetchPosts = useBlogStore((state) => state.fetchPosts);
 
   type UIPagination = {
     items: BlogPostDto[];
@@ -58,6 +59,14 @@ export default function BlogPage() {
   const [sortBy, setSortBy] = useState("PublishedDate");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [streaming, setStreaming] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const requestIdRef = useRef(0);
+
+  const getErrorMessage = (value: unknown) =>
+    value instanceof Error ? value.message : "Unable to load blog posts.";
 
   /**
    * ------------------------------------------------------
@@ -79,52 +88,146 @@ export default function BlogPage() {
    */
   const fetchBlogPosts = useCallback(
     async (params: Partial<PagedRequest & { category?: string }> = {}) => {
+      abortRef.current?.abort();
+
+      const requestId = requestIdRef.current + 1;
+      requestIdRef.current = requestId;
+      const abortController = new AbortController();
+      abortRef.current = abortController;
+
+      const effectiveCategory =
+        params.category !== undefined
+          ? params.category === "all"
+            ? undefined
+            : params.category
+          : selectedCategory === "all"
+            ? undefined
+            : selectedCategory;
+
+      const requestParams: PagedRequest = {
+        page: params.page ?? paginationData.currentPage,
+        pageSize: params.pageSize ?? paginationData.pageSize,
+        search:
+          params.search !== undefined ? params.search : debouncedSearchTerm,
+        sortBy: params.sortBy ?? sortBy,
+        sortDirection: params.sortDirection ?? sortDirection,
+      };
+
       try {
-        const effectiveCategory =
-          params.category !== undefined
-            ? params.category === "all"
-              ? undefined
-              : params.category
-            : selectedCategory === "all"
-              ? undefined
-              : selectedCategory;
+        setLoading(true);
+        setStreaming(true);
+        setError(null);
 
-        const requestParams: PagedRequest = {
-          page: params.page ?? paginationData.currentPage,
-          pageSize: params.pageSize ?? paginationData.pageSize,
-          search:
-            params.search !== undefined ? params.search : debouncedSearchTerm,
-          sortBy: params.sortBy ?? sortBy,
-          sortDirection: params.sortDirection ?? sortDirection,
-          filters: {
-            isPublished: true,
-            ...(effectiveCategory ? { category: effectiveCategory } : {}),
+        setPaginationData((prev) => ({
+          ...prev,
+          items: [],
+          currentPage: requestParams.page ?? 1,
+          pageSize: requestParams.pageSize ?? prev.pageSize,
+        }));
+
+        await streamBlogPosts(
+          {
+            page: requestParams.page,
+            pageSize: requestParams.pageSize,
+            search: requestParams.search ?? undefined,
+            sortBy: requestParams.sortBy ?? undefined,
+            sortDirection: requestParams.sortDirection as "asc" | "desc" | undefined,
+            category: effectiveCategory,
           },
-        };
+          {
+            signal: abortController.signal,
+            onMeta: (pageInfo) => {
+              if (requestId !== requestIdRef.current) {
+                return;
+              }
 
-        const result: BlogPostDtoPagedResult = await fetchPosts(requestParams);
+              startTransition(() => {
+                setPaginationData({
+                  items: [],
+                  currentPage: pageInfo.currentPage,
+                  pageSize: pageInfo.pageSize,
+                  totalItems: pageInfo.totalItems,
+                  totalPages: pageInfo.totalPages,
+                  hasPreviousPage: pageInfo.hasPrevious,
+                  hasNextPage: pageInfo.hasNext,
+                });
+              });
+            },
+            onItem: (post) => {
+              if (requestId !== requestIdRef.current) {
+                return;
+              }
 
-        setPaginationData({
-          items: result.items ?? [],
-          currentPage: result.page ?? 1,
-          pageSize: result.pageSize ?? requestParams.pageSize ?? 10,
-          totalItems: result.totalItems ?? 0,
-          totalPages: result.totalPages ?? 0,
-          hasPreviousPage: result.hasPrevious ?? false,
-          hasNextPage: result.hasNext ?? false,
-        });
+              startTransition(() => {
+                setPaginationData((prev) => ({
+                  ...prev,
+                  items: [...prev.items, post],
+                }));
+                setLoading(false);
+              });
 
-        const currentCategories = Array.from(
-          new Set(
-            (result.items ?? []).map((post) => post.category).filter(Boolean),
-          ),
-        ) as string[];
-
-        setCategories((prev) =>
-          Array.from(new Set([...prev, ...currentCategories])),
+              if (post.category) {
+                setCategories((prev) =>
+                  prev.includes(post.category as string)
+                    ? prev
+                    : [...prev, post.category as string],
+                );
+              }
+            },
+          },
         );
       } catch (err) {
-        console.error("Error fetching blog posts:", err);
+        if (abortController.signal.aborted || requestId !== requestIdRef.current) {
+          return;
+        }
+
+        console.error("Error streaming blog posts:", err);
+
+        try {
+          const result: BlogPostDtoPagedResult = await fetchPosts({
+            ...requestParams,
+            filters: {
+              isPublished: true,
+              ...(effectiveCategory ? { category: effectiveCategory } : {}),
+            },
+          });
+
+          if (requestId !== requestIdRef.current) {
+            return;
+          }
+
+          setPaginationData({
+            items: result.items ?? [],
+            currentPage: result.page ?? 1,
+            pageSize: result.pageSize ?? requestParams.pageSize ?? 10,
+            totalItems: result.totalItems ?? 0,
+            totalPages: result.totalPages ?? 0,
+            hasPreviousPage: result.hasPrevious ?? false,
+            hasNextPage: result.hasNext ?? false,
+          });
+
+          const currentCategories = Array.from(
+            new Set(
+              (result.items ?? []).map((post) => post.category).filter(Boolean),
+            ),
+          ) as string[];
+
+          setCategories((prev) =>
+            Array.from(new Set([...prev, ...currentCategories])),
+          );
+        } catch (fallbackError) {
+          console.error("Error fetching blog posts fallback:", fallbackError);
+          setError(getErrorMessage(fallbackError));
+        }
+      } finally {
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+          setStreaming(false);
+        }
+
+        if (abortRef.current === abortController) {
+          abortRef.current = null;
+        }
       }
     },
     [
@@ -137,6 +240,12 @@ export default function BlogPage() {
       sortDirection,
     ],
   );
+
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
 
   /**
    * ------------------------------------------------------
@@ -169,9 +278,10 @@ export default function BlogPage() {
     });
   };
 
-  const handleSortChange = (field: string) => {
+  const handleSortChange = (field: string, direction?: "asc" | "desc") => {
     const newDirection =
-      field === sortBy && sortDirection === "desc" ? "asc" : "desc";
+      direction ??
+      (field === sortBy && sortDirection === "desc" ? "asc" : "desc");
 
     setSortBy(field);
     setSortDirection(newDirection);
@@ -293,9 +403,7 @@ export default function BlogPage() {
             value={`${sortBy}-${sortDirection}`}
             onValueChange={(value) => {
               const [field, direction] = value.split("-");
-              setSortBy(field);
-              setSortDirection(direction as "asc" | "desc");
-              handleSortChange(field);
+              handleSortChange(field, direction as "asc" | "desc");
             }}
           >
             <SelectTrigger className="w-full sm:w-[180px]">
@@ -320,8 +428,14 @@ export default function BlogPage() {
 
       {/* Blog Grid */}
       <div className="max-w-7xl mx-auto px-4 pb-12">
+        {streaming && paginationData.items.length > 0 && (
+          <p className="mb-4 text-sm text-muted-foreground">
+            Loading posts progressively...
+          </p>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {paginationData.items.map((post) => {
+          {paginationData.items.map((post, index) => {
             const postUrl = getBlogPostUrl({
               id: post.id as string,
               title: post.title ?? undefined,
@@ -331,7 +445,11 @@ export default function BlogPage() {
             return (
               <Card
                 key={post.id}
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card transition-colors duration-150 hover:border-primary/30"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card transition-colors duration-150 hover:border-primary/30 animate-in fade-in-0 slide-in-from-bottom-4"
+                style={{
+                  animationDelay: `${Math.min(index, 8) * 60}ms`,
+                  animationFillMode: "both",
+                }}
               >
                 {/* Cover image */}
                 <div className="relative h-44 w-full bg-secondary/50 overflow-hidden">

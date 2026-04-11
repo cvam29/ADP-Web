@@ -1,5 +1,7 @@
 namespace DieticianAssociation.API.Services;
 
+using System.Runtime.CompilerServices;
+
 public interface IEventService
 {
     Task<EventDto?> GetEventByIdAsync(string id, CancellationToken cancellationToken = default);
@@ -11,12 +13,37 @@ public interface IEventService
 
     // Paginated methods
     Task<PagedResult<EventDto>> GetPaginatedEventsAsync(PagedRequest request, CancellationToken cancellationToken = default);
+    Task<DieticianAssociation.API.Helper.PageInfo> GetPublicEventStreamPageInfoAsync(PagedRequest request, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<EventDto> StreamPublicEventsAsync(PagedRequest request, CancellationToken cancellationToken = default);
 }
 
 public class EventService(ApplicationDbContext context, ILogger<BlogService> logger) : IEventService
 {
     private readonly ApplicationDbContext _context = context;
     private readonly ILogger<BlogService> _logger = logger;
+
+    private IQueryable<Event> BuildPublicEventQuery(PagedRequest request)
+    {
+        var query = _context.AssociationEvents
+            .AsNoTracking()
+            .Include(e => e.Speakers)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var searchTerm = request.Search.ToLower();
+            query = query.Where(e =>
+                (e.Title != null && e.Title.ToLower().Contains(searchTerm)) ||
+                (e.Description != null && e.Description.ToLower().Contains(searchTerm)) ||
+                (e.Location != null && e.Location.ToLower().Contains(searchTerm)) ||
+                (e.Type != null && e.Type.ToLower().Contains(searchTerm)));
+        }
+
+        var sortBy = string.IsNullOrWhiteSpace(request.SortBy) ? "Date" : request.SortBy;
+        var sortDirection = string.IsNullOrWhiteSpace(request.SortBy) ? "asc" : request.SortDirection;
+
+        return query.ApplySorting(sortBy, sortDirection);
+    }
 
     public async Task<EventDto?> GetEventByIdAsync(string id, CancellationToken cancellationToken = default)
     {
@@ -205,6 +232,46 @@ public class EventService(ApplicationDbContext context, ILogger<BlogService> log
         {
             _logger.LogError(ex, "Error getting paginated events");
             throw;
+        }
+    }
+
+    public async Task<DieticianAssociation.API.Helper.PageInfo> GetPublicEventStreamPageInfoAsync(PagedRequest request, CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+        {
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+        }
+
+        var totalItems = await BuildPublicEventQuery(request).CountAsync(cancellationToken);
+
+        return new DieticianAssociation.API.Helper.PageInfo
+        {
+            CurrentPage = request.Page,
+            PageSize = request.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling((double)totalItems / request.PageSize),
+            HasPrevious = request.Page > 1,
+            HasNext = request.Page * request.PageSize < totalItems,
+        };
+    }
+
+    public async IAsyncEnumerable<EventDto> StreamPublicEventsAsync(
+        PagedRequest request,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+        {
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+        }
+
+        var query = BuildPublicEventQuery(request)
+            .Skip(request.Skip)
+            .Take(request.PageSize)
+            .AsAsyncEnumerable();
+
+        await foreach (var eventItem in query.WithCancellation(cancellationToken))
+        {
+            yield return MapperExtensions.MapToEventDto(eventItem);
         }
     }
 }

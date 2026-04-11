@@ -2,7 +2,7 @@
 
 import PageLoading from "@/components/page-loading"
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { startTransition, useState, useEffect, useMemo, useCallback, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
 import { useResourcesStore } from "@/store/useResourcesStore"
 import type { ResourceDto } from "@/services/generated"
+import { streamPublicFreeResources, streamResources } from "@/lib/content-stream"
 
 export default function ResourcesPage() {
   const { user } = useAuth()
@@ -25,41 +26,104 @@ export default function ResourcesPage() {
 
   // Store state & actions
   const {
-    resources,
-    categories: storeCategories,
-    formats: storeFormats,
-    loading,
     fetchResources,
     fetchPublicFreeResources,
-    fetchCategories,
-    fetchFormats,
     download,
     downloadPublicFree,
   } = useResourcesStore()
+  const [resources, setResources] = useState<ResourceDto[]>([])
+  const [loading, setLoading] = useState(true)
+  const [streaming, setStreaming] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+  const requestIdRef = useRef(0)
 
   const isAuthenticated = !!user
 
   // Load resources (initial + on auth change)
   const load = useCallback(async (q?: string) => {
+    abortRef.current?.abort()
+    const requestId = requestIdRef.current + 1
+    requestIdRef.current = requestId
+    const abortController = new AbortController()
+    abortRef.current = abortController
+
     const params = q?.trim()
       ? { search: q.trim(), page: 1, pageSize: 50 }
       : { page: 1, pageSize: 50 }
+
     try {
-      if (isAuthenticated) {
-        await fetchResources(params as any)
-      } else {
-        await fetchPublicFreeResources(params as any)
+      setLoading(true)
+      setStreaming(true)
+      setError(null)
+      setResources([])
+
+      const streamRequest = isAuthenticated ? streamResources : streamPublicFreeResources
+      await streamRequest(
+        {
+          page: params.page,
+          pageSize: params.pageSize,
+          search: params.search,
+          sortBy: "PublishedDate",
+          sortDirection: "desc",
+        },
+        {
+          signal: abortController.signal,
+          onMeta: () => {
+            if (requestId !== requestIdRef.current) {
+              return
+            }
+
+            setLoading(false)
+          },
+          onItem: (resource) => {
+            if (requestId !== requestIdRef.current) {
+              return
+            }
+
+            startTransition(() => {
+              setResources((prev) => [...prev, resource])
+              setLoading(false)
+            })
+          },
+        },
+      )
+    } catch (streamError) {
+      if (abortController.signal.aborted || requestId !== requestIdRef.current) {
+        return
       }
-      // derive categories & formats from freshly fetched list
-      await fetchCategories()
-      await fetchFormats()
-    } catch (e) {
-      // errors already handled by store toast
+
+      try {
+        const result = isAuthenticated
+          ? await fetchResources(params as any)
+          : await fetchPublicFreeResources(params as any)
+
+        if (requestId !== requestIdRef.current) {
+          return
+        }
+
+        setResources(result.items ?? [])
+      } catch (fallbackError) {
+        setError(fallbackError instanceof Error ? fallbackError.message : "Unable to load resources.")
+      }
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setLoading(false)
+        setStreaming(false)
+      }
+
+      if (abortRef.current === abortController) {
+        abortRef.current = null
+      }
     }
-  }, [isAuthenticated, fetchResources, fetchPublicFreeResources, fetchCategories, fetchFormats])
+  }, [isAuthenticated, fetchResources, fetchPublicFreeResources])
 
   useEffect(() => {
     load()
+
+    return () => {
+      abortRef.current?.abort()
+    }
   }, [load])
 
   // Handle search (Enter key or explicit trigger)
@@ -120,8 +184,18 @@ export default function ResourcesPage() {
   }
 
   // Build categories / formats list for UI (prepend All)
-  const categories = useMemo(() => ["All", ...storeCategories], [storeCategories])
-  const formats = useMemo(() => ["All", ...storeFormats], [storeFormats])
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set((resources ?? []).map((r) => r.category).filter(Boolean))) as string[]],
+    [resources],
+  )
+  const formats = useMemo(
+    () => ["All", ...Array.from(new Set((resources ?? []).map((r) => r.format).filter(Boolean))) as string[]],
+    [resources],
+  )
+
+  if (error) {
+    return <div className="flex min-h-[200px] items-center justify-center text-red-600">{error}</div>
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -215,6 +289,9 @@ export default function ResourcesPage() {
 
       {/* Resources Grid */}
       <section className="max-w-7xl mx-auto px-4 pb-12">
+        {streaming && filteredResources.length > 0 && (
+          <p className="mb-4 text-sm text-muted-foreground">Loading resources progressively...</p>
+        )}
         {loading ? (
           <PageLoading
             minHeightClassName="py-12"
@@ -225,7 +302,7 @@ export default function ResourcesPage() {
           />
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredResources.map((resource) => {
+            {filteredResources.map((resource, index) => {
               const type = (resource.type || '').toLowerCase()
               const getIconAndGradient = (t: string) => {
                 switch (t) {
@@ -244,7 +321,7 @@ export default function ResourcesPage() {
               const { icon: IconComponent, gradient, iconColor } = getIconAndGradient(type)
 
               return (
-                <Card key={resource.id || Math.random()} className="group overflow-hidden border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl">
+                <Card key={resource.id || `${resource.title}-${index}`} className="group overflow-hidden border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl animate-in fade-in-0 slide-in-from-bottom-4" style={{ animationDelay: `${Math.min(index, 8) * 60}ms`, animationFillMode: "both" }}>
                   {/* Icon header — mimics event card image area */}
                   <div className={`relative h-44 w-full bg-gradient-to-br ${gradient} overflow-hidden flex items-center justify-center`}>
                     <IconComponent className={`w-16 h-16 ${iconColor} opacity-80 group-hover:scale-110 transition-transform duration-300`} />

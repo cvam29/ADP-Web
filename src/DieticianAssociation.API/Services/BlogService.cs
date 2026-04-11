@@ -1,5 +1,7 @@
 namespace DieticianAssociation.API.Services;
 
+using System.Runtime.CompilerServices;
+
 public class BlogService(
     ApplicationDbContext context,
     ICacheService cacheService,
@@ -23,6 +25,37 @@ public class BlogService(
         _cacheService.IncrementVersion(_cacheSettings.BlogVersion);
         _logger.LogInformation("Blog cache version incremented");
         return Task.CompletedTask;
+    }
+
+    private IQueryable<BlogPost> BuildPublicPublishedPostsQuery(PagedRequest request, string? category)
+    {
+        var query = _context.BlogPosts
+            .AsNoTracking()
+            .Include(p => p.Author)
+            .Where(p => p.IsPublished)
+            .AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var search = request.Search.Trim();
+            query = query.Where(p =>
+                (p.Title != null && EF.Functions.ILike(p.Title, $"%{search}%")) ||
+                (p.Content != null && EF.Functions.ILike(p.Content, $"%{search}%")) ||
+                (p.Excerpt != null && EF.Functions.ILike(p.Excerpt, $"%{search}%")) ||
+                (p.Author != null && p.Author.Name != null &&
+                 EF.Functions.ILike(p.Author.Name, $"%{search}%"))
+            );
+        }
+
+        if (!string.IsNullOrWhiteSpace(category) && !string.Equals(category, "all", StringComparison.OrdinalIgnoreCase))
+        {
+            query = query.Where(p => p.Category == category);
+        }
+
+        var sortBy = string.IsNullOrWhiteSpace(request.SortBy) ? "PublishedDate" : request.SortBy;
+        var sortDirection = string.IsNullOrWhiteSpace(request.SortBy) ? "desc" : request.SortDirection;
+
+        return query.ApplySorting(sortBy, sortDirection);
     }
 
     // -------------------------
@@ -150,6 +183,50 @@ public class BlogService(
         );
 
         return result;
+    }
+
+    public async Task<DieticianAssociation.API.Helper.PageInfo> GetPublicBlogStreamPageInfoAsync(
+        PagedRequest request,
+        string? category = null,
+        CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+        {
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+        }
+
+        var totalItems = await BuildPublicPublishedPostsQuery(request, category).CountAsync(cancellationToken);
+
+        return new DieticianAssociation.API.Helper.PageInfo
+        {
+            CurrentPage = request.Page,
+            PageSize = request.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling((double)totalItems / request.PageSize),
+            HasPrevious = request.Page > 1,
+            HasNext = request.Page * request.PageSize < totalItems,
+        };
+    }
+
+    public async IAsyncEnumerable<BlogPostDto> StreamPublicPostsAsync(
+        PagedRequest request,
+        string? category = null,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+        {
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+        }
+
+        var query = BuildPublicPublishedPostsQuery(request, category)
+            .Skip(request.Skip)
+            .Take(request.PageSize)
+            .AsAsyncEnumerable();
+
+        await foreach (var post in query.WithCancellation(cancellationToken))
+        {
+            yield return MapperExtensions.MapToBlogPostDto(post);
+        }
     }
 
     // -------------------------
