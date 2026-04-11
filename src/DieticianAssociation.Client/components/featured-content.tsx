@@ -6,16 +6,68 @@ import { ADPSpinner } from "@/components/ui/adp-spinner"
 import Link from "next/link"
 import Image from "next/image"
 import { getBlogPostUrl } from "@/lib/blog-utils"
-import { useEffect } from "react"
-import { useBlogStore } from "@/store/useBlogStore"
+import { startTransition, useCallback, useEffect, useRef, useState } from "react"
 import type { BlogPostDto } from "@/services/generated"
+import { streamBlogPosts } from "@/lib/content-stream"
 
 export function FeaturedContent() {
-  const { featured: featuredPosts, fetchFeatured, loading, error } = useBlogStore()
+  const [featuredPosts, setFeaturedPosts] = useState<BlogPostDto[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+
+  const loadFeaturedPosts = useCallback(async () => {
+    abortRef.current?.abort()
+    const abortController = new AbortController()
+    abortRef.current = abortController
+
+    try {
+      setLoading(true)
+      setError(null)
+      setFeaturedPosts([])
+
+      await streamBlogPosts(
+        {
+          page: 1,
+          pageSize: 3,
+          sortBy: "PublishedDate",
+          sortDirection: "desc",
+          featured: true,
+        },
+        {
+          signal: abortController.signal,
+          onMeta: () => {
+            setLoading(false)
+          },
+          onItem: (post) => {
+            startTransition(() => {
+              setFeaturedPosts((prev) => [...prev, post])
+              setLoading(false)
+            })
+          },
+        },
+      )
+    } catch (streamError) {
+      if (abortController.signal.aborted) {
+        return
+      }
+
+      setError(streamError instanceof Error ? streamError.message : "Unable to load featured articles.")
+      setLoading(false)
+    } finally {
+      if (abortRef.current === abortController) {
+        abortRef.current = null
+      }
+    }
+  }, [])
 
   useEffect(() => {
-    fetchFeatured(3)
-  }, [fetchFeatured])
+    loadFeaturedPosts()
+
+    return () => {
+      abortRef.current?.abort()
+    }
+  }, [loadFeaturedPosts])
 
   const sectionHeading = (
     <div className="text-center mb-14">
@@ -49,7 +101,7 @@ export function FeaturedContent() {
           {sectionHeading}
           <div className="text-center">
             <p className="text-red-600 mb-4 text-sm">{error}</p>
-            <Button variant="outline" onClick={() => fetchFeatured(3)} className="rounded-full">Try Again</Button>
+            <Button variant="outline" onClick={loadFeaturedPosts} className="rounded-full">Try Again</Button>
           </div>
         </div>
       </section>
@@ -66,8 +118,8 @@ export function FeaturedContent() {
           </div>
         ) : (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredPosts.map((post: BlogPostDto) => (
-              <div key={post.id ?? Math.random().toString(36)} className="group flex flex-col bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors duration-150">
+            {featuredPosts.map((post: BlogPostDto, index: number) => (
+              <div key={post.id ?? `${post.title}-${index}`} className="group flex flex-col bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:border-zinc-400 dark:hover:border-zinc-600 transition-colors duration-150 animate-in fade-in-0 slide-in-from-bottom-4" style={{ animationDelay: `${index * 80}ms`, animationFillMode: "both" }}>
                 <div className="relative overflow-hidden flex-none">
                   <Image
                     src={post.image || "/placeholder.svg"}

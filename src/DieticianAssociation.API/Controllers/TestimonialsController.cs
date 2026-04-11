@@ -1,4 +1,6 @@
 using DieticianAssociation.API.Constants;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DieticianAssociation.API.Controllers;
 
@@ -7,6 +9,10 @@ namespace DieticianAssociation.API.Controllers;
 public class TestimonialsController(ITestimonialService testimonialService) : ControllerBase
 {
     private readonly ITestimonialService _testimonialService = testimonialService;
+    private static readonly JsonSerializerOptions StreamJsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
     [HttpPost("paginated")]
     [AllowAnonymous]
@@ -15,6 +21,41 @@ public class TestimonialsController(ITestimonialService testimonialService) : Co
     {
         var result = await _testimonialService.GetPublicTestimonialsAsync(request, cancellationToken);
         return Ok(result);
+    }
+
+    [HttpGet("stream")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task StreamPublicTestimonials(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 3,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDirection = null,
+        [FromQuery] bool featured = false,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new PagedRequest
+        {
+            Page = page,
+            PageSize = pageSize,
+            Search = search,
+            SortBy = sortBy,
+            SortDirection = string.IsNullOrWhiteSpace(sortDirection) ? "desc" : sortDirection
+        };
+
+        Response.StatusCode = StatusCodes.Status200OK;
+        Response.ContentType = "application/x-ndjson";
+        Response.Headers["Cache-Control"] = "no-cache, no-transform";
+        Response.Headers["X-Accel-Buffering"] = "no";
+
+        var pageInfo = await _testimonialService.GetPublicTestimonialsStreamPageInfoAsync(request, featured, cancellationToken);
+        await WriteStreamMessageAsync(new { type = "meta", pageInfo }, cancellationToken);
+
+        await foreach (var testimonial in _testimonialService.StreamPublicTestimonialsAsync(request, featured, cancellationToken))
+        {
+            await WriteStreamMessageAsync(new { type = "item", item = testimonial }, cancellationToken);
+        }
     }
 
     [HttpGet("mine")]
@@ -81,5 +122,12 @@ public class TestimonialsController(ITestimonialService testimonialService) : Co
     {
         await _testimonialService.DeleteTestimonialAsync(id, cancellationToken);
         return NoContent();
+    }
+
+    private async Task WriteStreamMessageAsync(object payload, CancellationToken cancellationToken)
+    {
+        var line = JsonSerializer.Serialize(payload, StreamJsonOptions);
+        await Response.WriteAsync(line + "\n", cancellationToken);
+        await Response.Body.FlushAsync(cancellationToken);
     }
 }

@@ -2,100 +2,79 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Phone, MapPin } from "lucide-react";
+import { Mail, Phone, MapPin, ExternalLink } from "lucide-react";
 import { FaFacebook, FaLinkedin, FaInstagram, FaYoutube } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 import { memberResourceNav } from "@/lib/member-access";
 import { publicNavigation } from "../lib/site-navigation";
 
+const socialLinks = [
+  { Icon: FaFacebook,  href: process.env.NEXT_PUBLIC_FACEBOOK_URL  || "https://www.facebook.com/adp.org.in",                    label: "Facebook" },
+  { Icon: FaXTwitter,  href: process.env.NEXT_PUBLIC_TWITTER_URL   || "https://x.com/adp_org_in",                               label: "X / Twitter" },
+  { Icon: FaLinkedin,  href: process.env.NEXT_PUBLIC_LINKEDIN_URL  || "https://www.linkedin.com/company/adp-org-in/",            label: "LinkedIn" },
+  { Icon: FaYoutube,   href: process.env.NEXT_PUBLIC_YOUTUBE_URL   || "https://www.youtube.com/@adp_org_in",                    label: "YouTube" },
+  { Icon: FaInstagram, href: process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/adp.org.in/",                  label: "Instagram" },
+]
+
 export function Footer() {
   const memberResourceLinks = [
     { label: "Login Portal", href: "/login" },
-    ...memberResourceNav.map((item) => ({
-      label: item.label,
-      href: item.href,
-    })),
-  ];
-  const quickLinks = publicNavigation.filter((item) => item.href !== "/");
+    ...memberResourceNav.map((item) => ({ label: item.label, href: item.href })),
+  ]
+  const quickLinks = publicNavigation.filter((item) => item.href !== "/")
 
   return (
-    <footer className="bg-zinc-950 text-white border-t border-zinc-800">
-      <div className="container mx-auto px-4 py-14">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Company Info */}
-          <div className="space-y-5">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 rounded-lg flex items-center justify-center">
-                <Image
-                  src="/ADP.svg"
-                  alt="Association of Dietetics Professionals logo"
-                  width={32}
-                  height={32}
-                  className="object-cover rounded-lg"
-                />
-              </div>
-              <span className="font-semibold text-base text-zinc-100">
-                {process.env.NEXT_PUBLIC_WEBSITE_NAME ||
-                  "Association of Dietetics Professionals"}
+    <footer className="bg-herb-950 border-t border-herb-900">
+      <div className="container mx-auto px-4 lg:px-6">
+
+        {/* Main grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-10 py-16">
+
+          {/* Brand column — full width on mobile */}
+          <div className="col-span-2 lg:col-span-1 space-y-5">
+            <Link href="/" className="flex items-center gap-2.5 group">
+              <Image
+                src="/ADP.svg"
+                alt="ADP logo"
+                width={36}
+                height={36}
+                className="rounded-lg transition-transform duration-200 group-hover:scale-105"
+              />
+              <span className="font-semibold text-sm text-herb-100 leading-tight max-w-[160px]">
+                {process.env.NEXT_PUBLIC_WEBSITE_NAME || "Association of Dietetics Professionals"}
               </span>
-            </div>
-            <p className="text-zinc-400 text-sm leading-relaxed">
-              Empowering nutrition professionals across India through education,
-              resources, and community support.
+            </Link>
+
+            <p className="text-herb-400 text-sm leading-relaxed max-w-xs">
+              Empowering nutrition professionals across India through education, research, and professional community.
             </p>
-            <div className="flex space-x-4">
-              <Link
-                href={process.env.NEXT_PUBLIC_FACEBOOK_URL || "https://www.facebook.com/adp.org.in"}
-                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaFacebook className="w-4 h-4" />
-              </Link>
-              <Link
-                href={process.env.NEXT_PUBLIC_TWITTER_URL || "https://x.com/adp_org_in"}
-                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaXTwitter className="w-4 h-4" />
-              </Link>
-              <Link
-                href={process.env.NEXT_PUBLIC_LINKEDIN_URL || "https://www.linkedin.com/company/adp-org-in/"}
-                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaLinkedin className="w-4 h-4" />
-              </Link>
-              <Link
-                href={process.env.NEXT_PUBLIC_YOUTUBE_URL || "https://www.youtube.com/@adp_org_in"}
-                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaYoutube className="w-4 h-4" />
-              </Link>
-              <Link
-                href={process.env.NEXT_PUBLIC_INSTAGRAM_URL || "https://www.instagram.com/adp.org.in/"}
-                className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <FaInstagram className="w-4 h-4" />
-              </Link>
+
+            {/* Social links */}
+            <div className="flex items-center gap-3 pt-1">
+              {socialLinks.map(({ Icon, href, label }) => (
+                <Link
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="w-8 h-8 rounded-full bg-herb-800/60 hover:bg-herb-700 flex items-center justify-center text-herb-400 hover:text-herb-100 transition-all duration-200 hover:-translate-y-0.5"
+                >
+                  <Icon className="w-3.5 h-3.5" />
+                </Link>
+              ))}
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="space-y-4">
-            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Quick Links</h3>
-            <ul className="space-y-2.5">
+            <h3 className="text-[11px] font-bold text-herb-500 uppercase tracking-widest">Quick Links</h3>
+            <ul className="space-y-2">
               {quickLinks.map((item) => (
                 <li key={item.href}>
                   <Link
                     href={item.href}
-                    className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150 text-sm"
+                    className="text-herb-400 hover:text-herb-100 text-sm transition-colors duration-150 inline-flex items-center gap-1 group"
                   >
                     {item.name}
                   </Link>
@@ -106,13 +85,13 @@ export function Footer() {
 
           {/* Member Resources */}
           <div className="space-y-4">
-            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Member Resources</h3>
-            <ul className="space-y-2.5">
+            <h3 className="text-[11px] font-bold text-herb-500 uppercase tracking-widest">Member Resources</h3>
+            <ul className="space-y-2">
               {memberResourceLinks.map((item) => (
                 <li key={item.label}>
                   <Link
                     href={item.href}
-                    className="text-zinc-500 hover:text-zinc-100 transition-colors duration-150 text-sm"
+                    className="text-herb-400 hover:text-herb-100 text-sm transition-colors duration-150"
                   >
                     {item.label}
                   </Link>
@@ -121,63 +100,53 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Contact Info */}
+          {/* Contact */}
           <div className="space-y-4">
-            <h3 className="text-xs font-semibold text-zinc-400 uppercase tracking-widest">Contact Us</h3>
+            <h3 className="text-[11px] font-bold text-herb-500 uppercase tracking-widest">Contact Us</h3>
             <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <Mail className="w-4 h-4 text-zinc-500 flex-shrink-0" />
-                <a
-                  href="mailto:info@adp.org.in"
-                  className="text-zinc-500 text-sm hover:text-zinc-100 transition-colors duration-150"
-                >
-                  info@adp.org.in
-                </a>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="w-4 h-4 text-zinc-500 flex-shrink-0" />
-                <a
-                  href="tel:+918059655000"
-                  className="text-zinc-500 text-sm hover:text-zinc-100 transition-colors duration-150"
-                >
-                  +91 80596 55000
-                </a>
-              </div>
-              <div className="flex items-start space-x-3">
-                <a
-                  href="https://maps.google.com/?q=RZ-96, UG FLOOR, UTTAM NAGAR, NEW DELHI-110059"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-2 group"
-                  title="View on Google Maps"
-                >
-                  <MapPin className="w-4 h-4 text-zinc-500 mt-0.5 flex-shrink-0 group-hover:text-zinc-100 transition-colors duration-150" />
-                  <address className="not-italic text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-100 transition-colors duration-150">
-                    <span className="block">New Delhi - 110059</span>
-                  </address>
-                </a>
-              </div>
+              <a
+                href="mailto:info@adp.org.in"
+                className="flex items-center gap-2.5 text-herb-400 hover:text-herb-100 text-sm transition-colors duration-150 group"
+              >
+                <Mail className="w-3.5 h-3.5 text-herb-600 group-hover:text-herb-400 flex-shrink-0" />
+                info@adp.org.in
+              </a>
+              <a
+                href="tel:+918059655000"
+                className="flex items-center gap-2.5 text-herb-400 hover:text-herb-100 text-sm transition-colors duration-150 group"
+              >
+                <Phone className="w-3.5 h-3.5 text-herb-600 group-hover:text-herb-400 flex-shrink-0" />
+                +91 80596 55000
+              </a>
+              <a
+                href="https://maps.google.com/?q=RZ-96,+UG+FLOOR,+UTTAM+NAGAR,+NEW+DELHI-110059"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-start gap-2.5 text-herb-400 hover:text-herb-100 text-sm transition-colors duration-150 group"
+                title="View on Google Maps"
+              >
+                <MapPin className="w-3.5 h-3.5 text-herb-600 group-hover:text-herb-400 flex-shrink-0 mt-0.5" />
+                <address className="not-italic leading-relaxed">New Delhi — 110059</address>
+              </a>
             </div>
           </div>
         </div>
 
-        <div className="border-t border-zinc-800/60 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-zinc-600 text-sm">
-              &copy; {new Date().getFullYear()}{" "}
-              {process.env.NEXT_PUBLIC_WEBSITE_NAME || "Association of Dietetics Professionals"}. All rights reserved.
-            </p>
-            <div className="flex space-x-6">
-              <Link href="/privacy" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-150">
-                Privacy Policy
+        {/* Bottom bar */}
+        <div className="border-t border-herb-900 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-herb-700 text-xs text-center sm:text-left">
+            &copy; {new Date().getFullYear()} Association of Dietetics Professionals. All rights reserved.
+          </p>
+          <div className="flex items-center gap-5">
+            {["Privacy Policy", "Terms of Service", "Accessibility"].map((label, i) => (
+              <Link
+                key={label}
+                href={`/${label.toLowerCase().replace(/\s+/g, "-")}`}
+                className="text-herb-600 hover:text-herb-300 text-xs transition-colors duration-150"
+              >
+                {label}
               </Link>
-              <Link href="/terms" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-150">
-                Terms of Service
-              </Link>
-              <Link href="/accessibility" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors duration-150">
-                Accessibility
-              </Link>
-            </div>
+            ))}
           </div>
         </div>
       </div>

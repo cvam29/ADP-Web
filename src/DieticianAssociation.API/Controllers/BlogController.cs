@@ -1,4 +1,6 @@
 using DieticianAssociation.API.Constants;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace DieticianAssociation.API.Controllers;
 
@@ -7,6 +9,10 @@ namespace DieticianAssociation.API.Controllers;
 public class BlogController(IBlogService blogService) : ControllerBase
 {
     private readonly IBlogService _blogService = blogService;
+    private static readonly JsonSerializerOptions StreamJsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
     [HttpPost("paginated")]
     [ProducesResponseType(typeof(PagedResult<BlogPostDto>), StatusCodes.Status200OK)]
@@ -18,6 +24,42 @@ public class BlogController(IBlogService blogService) : ControllerBase
     {
         var result = await _blogService.GetPaginatedPostsAsync(request, cancellationToken);
         return Ok(result);
+    }
+
+    [HttpGet("stream")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task StreamPosts(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDirection = null,
+        [FromQuery] string? category = null,
+        [FromQuery] bool featured = false,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new PagedRequest
+        {
+            Page = page,
+            PageSize = pageSize,
+            Search = search,
+            SortBy = sortBy,
+            SortDirection = string.IsNullOrWhiteSpace(sortDirection) ? "desc" : sortDirection
+        };
+
+        Response.StatusCode = StatusCodes.Status200OK;
+        Response.ContentType = "application/x-ndjson";
+        Response.Headers["Cache-Control"] = "no-cache, no-transform";
+        Response.Headers["X-Accel-Buffering"] = "no";
+
+        var pageInfo = await _blogService.GetPublicBlogStreamPageInfoAsync(request, category, featured, cancellationToken);
+        await WriteStreamMessageAsync(new { type = "meta", pageInfo }, cancellationToken);
+
+        await foreach (var post in _blogService.StreamPublicPostsAsync(request, category, featured, cancellationToken))
+        {
+            await WriteStreamMessageAsync(new { type = "item", item = post }, cancellationToken);
+        }
     }
 
     [HttpGet("by-url/{url}")]
@@ -165,6 +207,13 @@ public class BlogController(IBlogService blogService) : ControllerBase
         createPost.AuthorId = userId;
         var post = await _blogService.SubmitNewPostAsync(createPost, cancellationToken);
         return CreatedAtAction(nameof(GetPostByUrl), new { url = post!.Url }, post);
+    }
+
+    private async Task WriteStreamMessageAsync(object payload, CancellationToken cancellationToken)
+    {
+        var line = JsonSerializer.Serialize(payload, StreamJsonOptions);
+        await Response.WriteAsync(line + "\n", cancellationToken);
+        await Response.Body.FlushAsync(cancellationToken);
     }
 
 }

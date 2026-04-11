@@ -2,7 +2,7 @@
 
 import PageLoading from "@/components/page-loading";
 
-import { useState, useEffect, useCallback } from "react";
+import { startTransition, useCallback, useEffect, useRef, useState } from "react";
 import {
   Card,
   CardContent,
@@ -28,9 +28,10 @@ import type {
   PagedRequest,
 } from "@/services/generated";
 import { getBlogPostUrl } from "@/lib/blog-utils";
+import { streamBlogPosts } from "@/lib/content-stream";
 
 export default function BlogPage() {
-  const { fetchPosts, loading, error } = useBlogStore();
+  const fetchPosts = useBlogStore((state) => state.fetchPosts);
 
   type UIPagination = {
     items: BlogPostDto[];
@@ -58,6 +59,14 @@ export default function BlogPage() {
   const [sortBy, setSortBy] = useState("PublishedDate");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [categories, setCategories] = useState<string[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [streaming, setStreaming] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
+  const requestIdRef = useRef(0);
+
+  const getErrorMessage = (value: unknown) =>
+    value instanceof Error ? value.message : "Unable to load blog posts.";
 
   /**
    * ------------------------------------------------------
@@ -79,52 +88,146 @@ export default function BlogPage() {
    */
   const fetchBlogPosts = useCallback(
     async (params: Partial<PagedRequest & { category?: string }> = {}) => {
+      abortRef.current?.abort();
+
+      const requestId = requestIdRef.current + 1;
+      requestIdRef.current = requestId;
+      const abortController = new AbortController();
+      abortRef.current = abortController;
+
+      const effectiveCategory =
+        params.category !== undefined
+          ? params.category === "all"
+            ? undefined
+            : params.category
+          : selectedCategory === "all"
+            ? undefined
+            : selectedCategory;
+
+      const requestParams: PagedRequest = {
+        page: params.page ?? paginationData.currentPage,
+        pageSize: params.pageSize ?? paginationData.pageSize,
+        search:
+          params.search !== undefined ? params.search : debouncedSearchTerm,
+        sortBy: params.sortBy ?? sortBy,
+        sortDirection: params.sortDirection ?? sortDirection,
+      };
+
       try {
-        const effectiveCategory =
-          params.category !== undefined
-            ? params.category === "all"
-              ? undefined
-              : params.category
-            : selectedCategory === "all"
-              ? undefined
-              : selectedCategory;
+        setLoading(true);
+        setStreaming(true);
+        setError(null);
 
-        const requestParams: PagedRequest = {
-          page: params.page ?? paginationData.currentPage,
-          pageSize: params.pageSize ?? paginationData.pageSize,
-          search:
-            params.search !== undefined ? params.search : debouncedSearchTerm,
-          sortBy: params.sortBy ?? sortBy,
-          sortDirection: params.sortDirection ?? sortDirection,
-          filters: {
-            isPublished: true,
-            ...(effectiveCategory ? { category: effectiveCategory } : {}),
+        setPaginationData((prev) => ({
+          ...prev,
+          items: [],
+          currentPage: requestParams.page ?? 1,
+          pageSize: requestParams.pageSize ?? prev.pageSize,
+        }));
+
+        await streamBlogPosts(
+          {
+            page: requestParams.page,
+            pageSize: requestParams.pageSize,
+            search: requestParams.search ?? undefined,
+            sortBy: requestParams.sortBy ?? undefined,
+            sortDirection: requestParams.sortDirection as "asc" | "desc" | undefined,
+            category: effectiveCategory,
           },
-        };
+          {
+            signal: abortController.signal,
+            onMeta: (pageInfo) => {
+              if (requestId !== requestIdRef.current) {
+                return;
+              }
 
-        const result: BlogPostDtoPagedResult = await fetchPosts(requestParams);
+              startTransition(() => {
+                setPaginationData({
+                  items: [],
+                  currentPage: pageInfo.currentPage,
+                  pageSize: pageInfo.pageSize,
+                  totalItems: pageInfo.totalItems,
+                  totalPages: pageInfo.totalPages,
+                  hasPreviousPage: pageInfo.hasPrevious,
+                  hasNextPage: pageInfo.hasNext,
+                });
+              });
+            },
+            onItem: (post) => {
+              if (requestId !== requestIdRef.current) {
+                return;
+              }
 
-        setPaginationData({
-          items: result.items ?? [],
-          currentPage: result.page ?? 1,
-          pageSize: result.pageSize ?? requestParams.pageSize ?? 10,
-          totalItems: result.totalItems ?? 0,
-          totalPages: result.totalPages ?? 0,
-          hasPreviousPage: result.hasPrevious ?? false,
-          hasNextPage: result.hasNext ?? false,
-        });
+              startTransition(() => {
+                setPaginationData((prev) => ({
+                  ...prev,
+                  items: [...prev.items, post],
+                }));
+                setLoading(false);
+              });
 
-        const currentCategories = Array.from(
-          new Set(
-            (result.items ?? []).map((post) => post.category).filter(Boolean),
-          ),
-        ) as string[];
-
-        setCategories((prev) =>
-          Array.from(new Set([...prev, ...currentCategories])),
+              if (post.category) {
+                setCategories((prev) =>
+                  prev.includes(post.category as string)
+                    ? prev
+                    : [...prev, post.category as string],
+                );
+              }
+            },
+          },
         );
       } catch (err) {
-        console.error("Error fetching blog posts:", err);
+        if (abortController.signal.aborted || requestId !== requestIdRef.current) {
+          return;
+        }
+
+        console.error("Error streaming blog posts:", err);
+
+        try {
+          const result: BlogPostDtoPagedResult = await fetchPosts({
+            ...requestParams,
+            filters: {
+              isPublished: true,
+              ...(effectiveCategory ? { category: effectiveCategory } : {}),
+            },
+          });
+
+          if (requestId !== requestIdRef.current) {
+            return;
+          }
+
+          setPaginationData({
+            items: result.items ?? [],
+            currentPage: result.page ?? 1,
+            pageSize: result.pageSize ?? requestParams.pageSize ?? 10,
+            totalItems: result.totalItems ?? 0,
+            totalPages: result.totalPages ?? 0,
+            hasPreviousPage: result.hasPrevious ?? false,
+            hasNextPage: result.hasNext ?? false,
+          });
+
+          const currentCategories = Array.from(
+            new Set(
+              (result.items ?? []).map((post) => post.category).filter(Boolean),
+            ),
+          ) as string[];
+
+          setCategories((prev) =>
+            Array.from(new Set([...prev, ...currentCategories])),
+          );
+        } catch (fallbackError) {
+          console.error("Error fetching blog posts fallback:", fallbackError);
+          setError(getErrorMessage(fallbackError));
+        }
+      } finally {
+        if (requestId === requestIdRef.current) {
+          setLoading(false);
+          setStreaming(false);
+        }
+
+        if (abortRef.current === abortController) {
+          abortRef.current = null;
+        }
       }
     },
     [
@@ -137,6 +240,12 @@ export default function BlogPage() {
       sortDirection,
     ],
   );
+
+  useEffect(() => {
+    return () => {
+      abortRef.current?.abort();
+    };
+  }, []);
 
   /**
    * ------------------------------------------------------
@@ -169,9 +278,10 @@ export default function BlogPage() {
     });
   };
 
-  const handleSortChange = (field: string) => {
+  const handleSortChange = (field: string, direction?: "asc" | "desc") => {
     const newDirection =
-      field === sortBy && sortDirection === "desc" ? "asc" : "desc";
+      direction ??
+      (field === sortBy && sortDirection === "desc" ? "asc" : "desc");
 
     setSortBy(field);
     setSortDirection(newDirection);
@@ -246,13 +356,16 @@ export default function BlogPage() {
    * ------------------------------------------------------
    */
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-12 px-4">
-        <div className="max-w-7xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+      <section className="border-b border-border bg-secondary/30 py-16 px-4">
+        <div className="max-w-7xl mx-auto flex items-end justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900">Blog</h1>
-            <p className="text-lg text-slate-600 mt-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              Knowledge Hub
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Blog</h1>
+            <p className="text-base text-muted-foreground mt-2">
               Insights, research, and professional perspectives from dietetics experts.
             </p>
           </div>
@@ -262,9 +375,9 @@ export default function BlogPage() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSearch()}
-              className="pl-10 bg-white/90 backdrop-blur"
+              className="pl-10 bg-background border-border"
             />
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           </div>
         </div>
       </section>
@@ -290,9 +403,7 @@ export default function BlogPage() {
             value={`${sortBy}-${sortDirection}`}
             onValueChange={(value) => {
               const [field, direction] = value.split("-");
-              setSortBy(field);
-              setSortDirection(direction as "asc" | "desc");
-              handleSortChange(field);
+              handleSortChange(field, direction as "asc" | "desc");
             }}
           >
             <SelectTrigger className="w-full sm:w-[180px]">
@@ -317,8 +428,14 @@ export default function BlogPage() {
 
       {/* Blog Grid */}
       <div className="max-w-7xl mx-auto px-4 pb-12">
+        {streaming && paginationData.items.length > 0 && (
+          <p className="mb-4 text-sm text-muted-foreground">
+            Loading posts progressively...
+          </p>
+        )}
+
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {paginationData.items.map((post) => {
+          {paginationData.items.map((post, index) => {
             const postUrl = getBlogPostUrl({
               id: post.id as string,
               title: post.title ?? undefined,
@@ -328,10 +445,14 @@ export default function BlogPage() {
             return (
               <Card
                 key={post.id}
-                className="group flex h-full flex-col overflow-hidden rounded-xl border-slate-200 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border-border bg-card transition-colors duration-150 hover:border-primary/30 animate-in fade-in-0 slide-in-from-bottom-4"
+                style={{
+                  animationDelay: `${Math.min(index, 8) * 60}ms`,
+                  animationFillMode: "both",
+                }}
               >
                 {/* Cover image */}
-                <div className="relative h-44 w-full bg-gradient-to-br from-emerald-50 to-blue-50 overflow-hidden">
+                <div className="relative h-44 w-full bg-secondary/50 overflow-hidden">
                   {post.image ? (
                     <Image
                       src={post.image}
@@ -356,7 +477,7 @@ export default function BlogPage() {
 
                   {/* Category badge (top-left) */}
                   <div className="absolute left-3 top-3">
-                    <Badge className="bg-white/95 text-emerald-700 text-xs font-semibold shadow-sm border-0">
+                    <Badge className="bg-foreground text-background text-xs font-semibold rounded-full border-0 shadow-sm">
                       {post.category || "Uncategorized"}
                     </Badge>
                   </div>
@@ -392,18 +513,18 @@ export default function BlogPage() {
                 {/* Content */}
                 <CardContent className="flex h-full flex-1 flex-col p-4">
                   <div className="flex-1 space-y-2">
-                    <h3 className="text-base font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                    <h3 className="text-base font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
                       {post.title}
                     </h3>
                     {post.excerpt && (
-                      <p className="text-sm text-slate-600 line-clamp-2">
+                      <p className="text-sm text-muted-foreground line-clamp-2">
                         {post.excerpt}
                       </p>
                     )}
                   </div>
 
                   <div className="mt-auto flex items-center gap-2 pt-4">
-                    <div className="text-xs text-slate-500 flex items-center gap-2">
+                    <div className="text-xs text-muted-foreground flex items-center gap-2">
                       <Calendar className="h-3 w-3" />
                       <time dateTime={post.publishedAt || undefined}>
                         {formatDate(post.publishedAt)}

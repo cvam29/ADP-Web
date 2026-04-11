@@ -1,11 +1,18 @@
 namespace DieticianAssociation.API.Controllers;
 
+using System.Text.Json;
+using System.Text.Json.Serialization;
+
 [ApiController]
 [Route("api/[controller]")]
 public class EducationController(IEducationService educationService, ILogger<EducationController> logger) : ControllerBase
 {
     private readonly IEducationService _educationService = educationService;
     private readonly ILogger<EducationController> _logger = logger;
+    private static readonly JsonSerializerOptions StreamJsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
 
     /// <summary>
     /// Get academics data grouped by course tabs with pagination.
@@ -33,6 +40,56 @@ public class EducationController(IEducationService educationService, ILogger<Edu
         }
     }
 
+    [HttpGet("academics/stream")]
+    [AllowAnonymous]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    public async Task StreamAcademics(
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? search = null,
+        [FromQuery] string? sortBy = null,
+        [FromQuery] string? sortDirection = null,
+        [FromQuery] CoursesOffered? selectedTab = null,
+        [FromQuery] long? stateId = null,
+        [FromQuery] int? districtId = null,
+        [FromQuery] int? universityId = null,
+        [FromQuery] bool includeInstitutions = true,
+        [FromQuery] bool includeColleges = true,
+        [FromQuery] string? institutionTypeCategory = null,
+        CancellationToken cancellationToken = default)
+    {
+        var request = new AcademicsPagedRequest
+        {
+            Page = page,
+            PageSize = pageSize,
+            Search = search,
+            SortBy = sortBy,
+            SortDirection = string.IsNullOrWhiteSpace(sortDirection) ? "asc" : sortDirection,
+            SelectedTab = selectedTab,
+            StateId = stateId,
+            DistrictId = districtId,
+            UniversityId = universityId,
+            IncludeInstitutions = includeInstitutions,
+            IncludeColleges = includeColleges,
+            Filters = string.IsNullOrWhiteSpace(institutionTypeCategory)
+                ? null
+                : new Dictionary<string, object> { ["institutionTypeCategory"] = institutionTypeCategory }
+        };
+
+        Response.StatusCode = StatusCodes.Status200OK;
+        Response.ContentType = "application/x-ndjson";
+        Response.Headers["Cache-Control"] = "no-cache, no-transform";
+        Response.Headers["X-Accel-Buffering"] = "no";
+
+        var metadata = await _educationService.GetAcademicsStreamMetadataAsync(request, cancellationToken);
+        await WriteStreamMessageAsync(new { type = "meta", metadata }, cancellationToken);
+
+        await foreach (var item in _educationService.StreamAcademicsAsync(request, cancellationToken))
+        {
+            await WriteStreamMessageAsync(new { type = "item", item }, cancellationToken);
+        }
+    }
+
     // University endpoints
     /// <summary>
     /// Get all universities
@@ -53,6 +110,13 @@ public class EducationController(IEducationService educationService, ILogger<Edu
             _logger.LogError(ex, "Error fetching universities");
             return StatusCode(500, new ErrorResponseDto { Message = "An error occurred while fetching universities." });
         }
+    }
+
+    private async Task WriteStreamMessageAsync(object payload, CancellationToken cancellationToken)
+    {
+        var line = JsonSerializer.Serialize(payload, StreamJsonOptions);
+        await Response.WriteAsync(line + "\n", cancellationToken);
+        await Response.Body.FlushAsync(cancellationToken);
     }
 
     /// <summary>

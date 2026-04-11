@@ -3,6 +3,8 @@ namespace DieticianAssociation.API.Interfaces;
 public interface IEducationService
 {
     Task<AcademicsPagedResponseDto> GetAcademicsPaginatedAsync(AcademicsPagedRequest request, CancellationToken cancellationToken = default);
+    Task<AcademicsPagedResponseDto> GetAcademicsStreamMetadataAsync(AcademicsPagedRequest request, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<AcademicsEntryDto> StreamAcademicsAsync(AcademicsPagedRequest request, CancellationToken cancellationToken = default);
 
     // University operations
     Task<IEnumerable<UniversityDto>> GetAllUniversitiesAsync(CancellationToken cancellationToken = default);

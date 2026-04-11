@@ -1,5 +1,7 @@
 namespace DieticianAssociation.API.Services;
 
+using System.Runtime.CompilerServices;
+
 public interface IResourceService
 {
     Task<IEnumerable<ResourceDto>> GetAllResourcesAsync(CancellationToken cancellationToken = default);
@@ -12,6 +14,8 @@ public interface IResourceService
     Task<bool> DeleteResourceAsync(string id, CancellationToken cancellationToken = default);
     Task<bool> IncrementDownloadAsync(string id, CancellationToken cancellationToken = default);
     Task<PagedResult<ResourceDto>> GetPaginatedResourcesAsync(PagedRequest request, CancellationToken cancellationToken = default);
+    Task<DieticianAssociation.API.Helper.PageInfo> GetResourceStreamPageInfoAsync(PagedRequest request, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<ResourceDto> StreamResourcesAsync(PagedRequest request, CancellationToken cancellationToken = default);
 
     // Public methods for free resources (no authentication required)
     Task<IEnumerable<ResourceDto>> GetFreeResourcesAsync(CancellationToken cancellationToken = default);
@@ -19,11 +23,42 @@ public interface IResourceService
     Task<IEnumerable<ResourceDto>> GetFreeResourcesByTypeAsync(string type, CancellationToken cancellationToken = default);
     Task<IEnumerable<ResourceDto>> SearchFreeResourcesAsync(string searchTerm, CancellationToken cancellationToken = default);
     Task<PagedResult<ResourceDto>> GetPaginatedFreeResourcesAsync(PagedRequest request, CancellationToken cancellationToken = default);
+    Task<DieticianAssociation.API.Helper.PageInfo> GetFreeResourceStreamPageInfoAsync(PagedRequest request, CancellationToken cancellationToken = default);
+    IAsyncEnumerable<ResourceDto> StreamFreeResourcesAsync(PagedRequest request, CancellationToken cancellationToken = default);
 }
 
 public class ResourceService(ApplicationDbContext context) : IResourceService
 {
     private readonly ApplicationDbContext _context = context;
+
+    private IQueryable<Resource> BuildResourceQuery(PagedRequest request, bool freeOnly)
+    {
+        var query = _context.Resources
+            .AsNoTracking()
+            .AsQueryable();
+
+        if (freeOnly)
+        {
+            query = query.Where(r => !r.Premium);
+        }
+
+        if (!string.IsNullOrWhiteSpace(request.Search))
+        {
+            var term = request.Search.ToLower();
+            query = query.Where(r =>
+                (r.Title != null && r.Title.ToLower().Contains(term)) ||
+                (r.Description != null && r.Description.ToLower().Contains(term)) ||
+                (r.Category != null && r.Category.ToLower().Contains(term)) ||
+                (r.Type != null && r.Type.ToLower().Contains(term))
+            );
+        }
+
+        query = query.ApplyFilters(request);
+
+        var sortBy = string.IsNullOrWhiteSpace(request.SortBy) ? "PublishedDate" : request.SortBy;
+        var sortDirection = string.IsNullOrWhiteSpace(request.SortBy) ? "desc" : request.SortDirection;
+        return query.ApplySorting(sortBy, sortDirection);
+    }
 
     public async Task<IEnumerable<ResourceDto>> GetAllResourcesAsync(CancellationToken cancellationToken = default)
     {
@@ -40,21 +75,42 @@ public class ResourceService(ApplicationDbContext context) : IResourceService
         if (!request.IsValid)
             throw new ArgumentException("Invalid pagination parameters", nameof(request));
 
-        var query = _context.Resources.AsNoTracking().AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(request.Search))
-        {
-            var term = request.Search.ToLower();
-            query = query.Where(r =>
-                (r.Title != null && r.Title.ToLower().Contains(term)) ||
-                (r.Description != null && r.Description.ToLower().Contains(term)) ||
-                (r.Category != null && r.Category.ToLower().Contains(term)) ||
-                (r.Type != null && r.Type.ToLower().Contains(term))
-            );
-        }
-
+        var query = BuildResourceQuery(request, freeOnly: false);
         var result = await query.ToPagedResultAsync(request, MapToDto, cancellationToken);
         return result;
+    }
+
+    public async Task<DieticianAssociation.API.Helper.PageInfo> GetResourceStreamPageInfoAsync(PagedRequest request, CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+
+        var totalItems = await BuildResourceQuery(request, freeOnly: false).CountAsync(cancellationToken);
+        return new DieticianAssociation.API.Helper.PageInfo
+        {
+            CurrentPage = request.Page,
+            PageSize = request.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling((double)totalItems / request.PageSize),
+            HasPrevious = request.Page > 1,
+            HasNext = request.Page * request.PageSize < totalItems,
+        };
+    }
+
+    public async IAsyncEnumerable<ResourceDto> StreamResourcesAsync(PagedRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+
+        var query = BuildResourceQuery(request, freeOnly: false)
+            .Skip(request.Skip)
+            .Take(request.PageSize)
+            .AsAsyncEnumerable();
+
+        await foreach (var resource in query.WithCancellation(cancellationToken))
+        {
+            yield return MapToDto(resource);
+        }
     }
 
     public async Task<IEnumerable<ResourceDto>> GetResourcesByCategoryAsync(string category, CancellationToken cancellationToken = default)
@@ -237,24 +293,42 @@ public class ResourceService(ApplicationDbContext context) : IResourceService
         if (!request.IsValid)
             throw new ArgumentException("Invalid pagination parameters", nameof(request));
 
-        var query = _context.Resources
-            .AsNoTracking()
-            .Where(r => !r.Premium)
-            .AsQueryable();
-
-        if (!string.IsNullOrWhiteSpace(request.Search))
-        {
-            var term = request.Search.ToLower();
-            query = query.Where(r =>
-                (r.Title != null && r.Title.ToLower().Contains(term)) ||
-                (r.Description != null && r.Description.ToLower().Contains(term)) ||
-                (r.Category != null && r.Category.ToLower().Contains(term)) ||
-                (r.Type != null && r.Type.ToLower().Contains(term))
-            );
-        }
-
+        var query = BuildResourceQuery(request, freeOnly: true);
         var result = await query.ToPagedResultAsync(request, MapToDto, cancellationToken);
         return result;
+    }
+
+    public async Task<DieticianAssociation.API.Helper.PageInfo> GetFreeResourceStreamPageInfoAsync(PagedRequest request, CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+
+        var totalItems = await BuildResourceQuery(request, freeOnly: true).CountAsync(cancellationToken);
+        return new DieticianAssociation.API.Helper.PageInfo
+        {
+            CurrentPage = request.Page,
+            PageSize = request.PageSize,
+            TotalItems = totalItems,
+            TotalPages = (int)Math.Ceiling((double)totalItems / request.PageSize),
+            HasPrevious = request.Page > 1,
+            HasNext = request.Page * request.PageSize < totalItems,
+        };
+    }
+
+    public async IAsyncEnumerable<ResourceDto> StreamFreeResourcesAsync(PagedRequest request, [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        if (!request.IsValid)
+            throw new ArgumentException("Invalid pagination parameters", nameof(request));
+
+        var query = BuildResourceQuery(request, freeOnly: true)
+            .Skip(request.Skip)
+            .Take(request.PageSize)
+            .AsAsyncEnumerable();
+
+        await foreach (var resource in query.WithCancellation(cancellationToken))
+        {
+            yield return MapToDto(resource);
+        }
     }
 
     public async Task<IEnumerable<ResourceDto>> GetFreeResourcesByCategoryAsync(string category, CancellationToken cancellationToken = default)

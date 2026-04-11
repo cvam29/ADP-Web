@@ -19,12 +19,15 @@ export default function MembershipPage() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-20">
+      <section className="border-b border-border bg-secondary/30 py-24">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-4xl lg:text-5xl font-bold text-slate-900 mb-6">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-4">
+            Membership
+          </p>
+          <h1 className="text-4xl lg:text-5xl font-bold tracking-tight text-foreground mb-6 text-balance">
             Join Our Professional Community
           </h1>
-          <p className="text-xl text-slate-600 max-w-3xl mx-auto mb-8">
+          <p className="text-base text-muted-foreground max-w-2xl mx-auto leading-relaxed">
             Advance your career with access to exclusive resources, continuing
             education, networking opportunities, and professional development
             programs.

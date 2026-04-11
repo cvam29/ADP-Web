@@ -1,14 +1,24 @@
-﻿import type React from "react"
+import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Inter } from "next/font/google"
+import { DM_Sans, Playfair_Display } from "next/font/google"
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
 import { AuthProvider } from "@/contexts/auth-context"
 import { RoleBasedLayout } from "@/components/layouts/role-based-layout"
-import { Toaster } from "@/components/ui/sonner"
+import { Toaster } from "@/components/ui/toaster"
 import { WebVitals } from "@/components/web-vitals"
 
-const inter = Inter({ subsets: ["latin"], display: "swap" })
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+})
+
+const playfair = Playfair_Display({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-serif",
+})
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://www.adp.org.in"
 
@@ -121,7 +131,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
       </head>
-      <body className={inter.className}>
+      <body className={`${dmSans.variable} ${playfair.variable} font-sans`}>
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
           <AuthProvider>
             <RoleBasedLayout>{children}</RoleBasedLayout>

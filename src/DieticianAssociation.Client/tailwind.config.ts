@@ -19,6 +19,10 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -53,7 +57,35 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Health-focused color palette
+        // Nutrition / Dietetics brand palette
+        // Primary: herb green
+        herb: {
+          50:  "#f0f7f2",
+          100: "#d9ede0",
+          200: "#b3dbc2",
+          300: "#7fc29f",
+          400: "#4caf76",
+          500: "#2d7a4f",
+          600: "#236040",
+          700: "#1b4c32",
+          800: "#133826",
+          900: "#0d2419",
+          950: "#0d1a12",
+        },
+        // Accent: amber-gold (turmeric / whole grain)
+        grain: {
+          50:  "#fef9f0",
+          100: "#fdefd6",
+          200: "#fad9a0",
+          300: "#f6be62",
+          400: "#d4974a",
+          500: "#c4893a",
+          600: "#a56f28",
+          700: "#7e5320",
+          800: "#5c3c18",
+          900: "#3a2710",
+        },
+        // Keep emerald for backward compat
         emerald: {
           50: "#ecfdf5",
           100: "#d1fae5",
@@ -84,10 +116,30 @@ const config: Config = {
           from: { height: "var(--radix-accordion-content-height)" },
           to: { height: "0" },
         },
+        "fade-up": {
+          from: { opacity: "0", transform: "translateY(24px)" },
+          to: { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        "slide-in-left": {
+          from: { opacity: "0", transform: "translateX(-24px)" },
+          to: { opacity: "1", transform: "translateX(0)" },
+        },
+        ticker: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "fade-up": "fade-up 0.7s cubic-bezier(0.16,1,0.3,1) both",
+        "fade-in": "fade-in 0.5s ease both",
+        "slide-in-left": "slide-in-left 0.7s cubic-bezier(0.16,1,0.3,1) both",
+        "ticker": "ticker 30s linear infinite",
       },
     },
   },

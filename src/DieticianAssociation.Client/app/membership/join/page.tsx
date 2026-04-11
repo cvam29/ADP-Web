@@ -182,123 +182,122 @@ export default function MembershipJoinPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-8 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header with Back Button */}
-        <div className="mb-8">
+    <div className="min-h-screen bg-secondary/30">
+      {/* Page header bar */}
+      <div className="border-b border-border bg-background">
+        <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium mb-6"
+            href="/membership"
+            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            Back to Membership
           </Link>
-        </div>
-
-        {/* Main Form Card */}
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-          {/* Header Section */}
-          <div className="bg-gradient-to-r from-emerald-600 to-emerald-700 text-white p-8">
-            <h1 className="text-3xl font-bold mb-2">Join ADP Today</h1>
-            <p className="text-emerald-100 text-lg">
-              Association of Dietetics Professionals
-            </p>
-            <p className="text-emerald-50 text-sm mt-3">
-              Complete your membership registration in just 4 simple steps
-            </p>
-          </div>
-
-          {/* Form Content */}
-          <div className="p-8">
-            <FormStepper steps={steps} currentStep={currentStep} />
-
-            <div className="mt-12">
-              {currentStep === 0 && (
-                <StepPersonalInfo
-                  data={{
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
-                    dateOfBirth: formData.dateOfBirth,
-                    gender: formData.gender,
-                    nationality: formData.nationality,
-                    email: formData.email,
-                    countryCode: formData.countryCode,
-                    phone: formData.phone,
-                    streetAddress: formData.streetAddress,
-                    addressLine2: formData.addressLine2,
-                    postalCode: formData.postalCode,
-                    countryId: formData.countryId,
-                    stateId: formData.stateId,
-                    cityId: formData.cityId,
-                  }}
-                  onChange={(data) => setFormData({ ...formData, ...data })}
-                  onValidateUniqueEmail={validateUniqueEmail}
-                  onNext={handleNext}
-                />
-              )}
-
-              {currentStep === 1 && (
-                <StepMembershipDetails
-                  data={formData}
-                  onChange={(data) => setFormData({ ...formData, ...data })}
-                  // onChange={setFormData}
-                  onNext={handleNext}
-                  onBack={handleBack}
-                />
-              )}
-
-              {currentStep === 2 && (
-                <StepPayment
-                  data={formData}
-                  selectedPlan={selectedPlan}
-                  // onChange={(data) => setFormData({ ...formData})}
-                  onChange={(data) => setFormData({ ...formData, ...data })}
-                  onNext={handleNext}
-                  onBack={handleBack}
-                />
-              )}
-
-              {currentStep === 3 && (
-                <StepDeclaration
-                  data={{
-                    agreeTerms: formData.agreeTerms,
-                    agreePrivacy: formData.agreePrivacy,
-                    agreeDataUsage: formData.agreeDataUsage,
-                    agreeDeclaration: formData.certifyTrue,
-                    captcha: formData.captchaInput,
-                    captchaCode: formData.captchaCode,
-                  }}
-                  onChange={(data) =>
-                    setFormData({
-                      ...formData,
-                      agreeTerms: data.agreeTerms,
-                      agreePrivacy: data.agreePrivacy,
-                      agreeDataUsage: data.agreeDataUsage,
-                      certifyTrue: data.agreeDeclaration,
-                      captchaInput: data.captcha,
-                      captchaCode: data.captchaCode,
-                    })
-                  }
-                  onSubmit={handleSubmit}
-                  onBack={handleBack}
-                />
-              )}
-            </div>
+          <div className="text-xs text-muted-foreground">
+            Step {currentStep + 1} of {steps.length}
           </div>
         </div>
+      </div>
 
-        {/* Footer Info */}
-        <div className="mt-8 text-center text-gray-600 text-sm">
-          <p>
-            Have questions?{" "}
-            <Link
-              href="/contact"
-              className="text-emerald-600 hover:text-emerald-700 font-medium"
-            >
-              Contact us
-            </Link>
+      <div className="max-w-4xl mx-auto px-4 py-10">
+        {/* Page title */}
+        <div className="text-center mb-8">
+          <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">Registration</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Join ADP Today</h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            Complete your membership registration in {steps.length} simple steps
           </p>
         </div>
+
+        {/* Stepper */}
+        <FormStepper steps={steps} currentStep={currentStep} />
+
+        {/* Form card */}
+        <div className="mt-6 bg-card border border-border rounded-2xl overflow-hidden">
+          {/* Step label strip */}
+          <div className="border-b border-border bg-secondary/40 px-8 py-4">
+            <h2 className="text-sm font-semibold text-foreground">{steps[currentStep]}</h2>
+          </div>
+
+          <div className="p-8">
+            {currentStep === 0 && (
+              <StepPersonalInfo
+                data={{
+                  firstName: formData.firstName,
+                  lastName: formData.lastName,
+                  dateOfBirth: formData.dateOfBirth,
+                  gender: formData.gender,
+                  nationality: formData.nationality,
+                  email: formData.email,
+                  countryCode: formData.countryCode,
+                  phone: formData.phone,
+                  streetAddress: formData.streetAddress,
+                  addressLine2: formData.addressLine2,
+                  postalCode: formData.postalCode,
+                  countryId: formData.countryId,
+                  stateId: formData.stateId,
+                  cityId: formData.cityId,
+                }}
+                onChange={(data) => setFormData({ ...formData, ...data })}
+                onValidateUniqueEmail={validateUniqueEmail}
+                onNext={handleNext}
+              />
+            )}
+
+            {currentStep === 1 && (
+              <StepMembershipDetails
+                data={formData}
+                onChange={(data) => setFormData({ ...formData, ...data })}
+                onNext={handleNext}
+                onBack={handleBack}
+              />
+            )}
+
+            {currentStep === 2 && (
+              <StepPayment
+                data={formData}
+                selectedPlan={selectedPlan}
+                onChange={(data) => setFormData({ ...formData, ...data })}
+                onNext={handleNext}
+                onBack={handleBack}
+              />
+            )}
+
+            {currentStep === 3 && (
+              <StepDeclaration
+                data={{
+                  agreeTerms: formData.agreeTerms,
+                  agreePrivacy: formData.agreePrivacy,
+                  agreeDataUsage: formData.agreeDataUsage,
+                  agreeDeclaration: formData.certifyTrue,
+                  captcha: formData.captchaInput,
+                  captchaCode: formData.captchaCode,
+                }}
+                onChange={(data) =>
+                  setFormData({
+                    ...formData,
+                    agreeTerms: data.agreeTerms,
+                    agreePrivacy: data.agreePrivacy,
+                    agreeDataUsage: data.agreeDataUsage,
+                    certifyTrue: data.agreeDeclaration,
+                    captchaInput: data.captcha,
+                    captchaCode: data.captchaCode,
+                  })
+                }
+                onSubmit={handleSubmit}
+                onBack={handleBack}
+              />
+            )}
+          </div>
+        </div>
+
+        {/* Footer note */}
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Have questions?{" "}
+          <Link href="/contact" className="font-medium text-primary hover:text-primary/80 transition-colors">
+            Contact us
+          </Link>
+        </p>
       </div>
     </div>
   );

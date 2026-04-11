@@ -1,5 +1,7 @@
 namespace DieticianAssociation.API.Services;
 
+using System.Runtime.CompilerServices;
+
 public class EducationService(ApplicationDbContext context, ILogger<EducationService> logger) : IEducationService
 {
     private readonly ApplicationDbContext _context = context;
@@ -14,7 +16,9 @@ public class EducationService(ApplicationDbContext context, ILogger<EducationSer
         CoursesOffered.Fellowship
     ];
 
-    public async Task<AcademicsPagedResponseDto> GetAcademicsPaginatedAsync(AcademicsPagedRequest request, CancellationToken cancellationToken = default)
+    private async Task<(CoursesOffered SelectedTab, List<AcademicsTabSummaryDto> TabSummaries, List<AcademicsEntryDto> Ordered)> BuildAcademicsResultAsync(
+        AcademicsPagedRequest request,
+        CancellationToken cancellationToken)
     {
         if (!request.IsValid)
         {
@@ -39,6 +43,16 @@ public class EducationService(ApplicationDbContext context, ILogger<EducationSer
         {
             var colleges = await GetCollegeEntriesAsync(request, cancellationToken);
             entries.AddRange(colleges);
+        }
+
+        if (request.Filters != null &&
+            request.Filters.TryGetValue("institutionTypeCategory", out var institutionTypeValue) &&
+            !string.IsNullOrWhiteSpace(institutionTypeValue?.ToString()))
+        {
+            var institutionType = institutionTypeValue.ToString()!;
+            entries = entries
+                .Where(e => string.Equals(e.InstitutionTypeCategory, institutionType, StringComparison.OrdinalIgnoreCase))
+                .ToList();
         }
 
         if (!string.IsNullOrWhiteSpace(request.Search))
@@ -72,6 +86,12 @@ public class EducationService(ApplicationDbContext context, ILogger<EducationSer
             .ToList();
 
         var ordered = ApplySorting(tabFiltered, request.SortBy, request.SortDirection);
+        return (selectedTab, tabSummaries, ordered);
+    }
+
+    public async Task<AcademicsPagedResponseDto> GetAcademicsPaginatedAsync(AcademicsPagedRequest request, CancellationToken cancellationToken = default)
+    {
+        var (selectedTab, tabSummaries, ordered) = await BuildAcademicsResultAsync(request, cancellationToken);
         var pageItems = ordered
             .Skip(request.Skip)
             .Take(request.PageSize)
@@ -84,6 +104,32 @@ public class EducationService(ApplicationDbContext context, ILogger<EducationSer
             TabSummaries = tabSummaries,
             Results = PagedResult<AcademicsEntryDto>.Create(pageItems, request.Page, request.PageSize, ordered.Count)
         };
+    }
+
+    public async Task<AcademicsPagedResponseDto> GetAcademicsStreamMetadataAsync(AcademicsPagedRequest request, CancellationToken cancellationToken = default)
+    {
+        var (selectedTab, tabSummaries, ordered) = await BuildAcademicsResultAsync(request, cancellationToken);
+
+        return new AcademicsPagedResponseDto
+        {
+            SelectedTab = selectedTab,
+            AvailableTabs = AvailableCourseTabs,
+            TabSummaries = tabSummaries,
+            Results = PagedResult<AcademicsEntryDto>.Create([], request.Page, request.PageSize, ordered.Count)
+        };
+    }
+
+    public async IAsyncEnumerable<AcademicsEntryDto> StreamAcademicsAsync(
+        AcademicsPagedRequest request,
+        [EnumeratorCancellation] CancellationToken cancellationToken = default)
+    {
+        var (_, _, ordered) = await BuildAcademicsResultAsync(request, cancellationToken);
+
+        foreach (var item in ordered.Skip(request.Skip).Take(request.PageSize))
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            yield return item;
+        }
     }
 
     // University operations

@@ -2,7 +2,7 @@
 
 import PageLoading from "@/components/page-loading"
 
-import { useState, useEffect, useMemo, useCallback } from "react"
+import { startTransition, useState, useEffect, useMemo, useCallback, useRef } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { useRouter } from "next/navigation"
 import { useResourcesStore } from "@/store/useResourcesStore"
 import type { ResourceDto } from "@/services/generated"
+import { streamPublicFreeResources, streamResources } from "@/lib/content-stream"
 
 export default function ResourcesPage() {
   const { user } = useAuth()
@@ -25,41 +26,104 @@ export default function ResourcesPage() {
 
   // Store state & actions
   const {
-    resources,
-    categories: storeCategories,
-    formats: storeFormats,
-    loading,
     fetchResources,
     fetchPublicFreeResources,
-    fetchCategories,
-    fetchFormats,
     download,
     downloadPublicFree,
   } = useResourcesStore()
+  const [resources, setResources] = useState<ResourceDto[]>([])
+  const [loading, setLoading] = useState(true)
+  const [streaming, setStreaming] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const abortRef = useRef<AbortController | null>(null)
+  const requestIdRef = useRef(0)
 
   const isAuthenticated = !!user
 
   // Load resources (initial + on auth change)
   const load = useCallback(async (q?: string) => {
+    abortRef.current?.abort()
+    const requestId = requestIdRef.current + 1
+    requestIdRef.current = requestId
+    const abortController = new AbortController()
+    abortRef.current = abortController
+
     const params = q?.trim()
       ? { search: q.trim(), page: 1, pageSize: 50 }
       : { page: 1, pageSize: 50 }
+
     try {
-      if (isAuthenticated) {
-        await fetchResources(params as any)
-      } else {
-        await fetchPublicFreeResources(params as any)
+      setLoading(true)
+      setStreaming(true)
+      setError(null)
+      setResources([])
+
+      const streamRequest = isAuthenticated ? streamResources : streamPublicFreeResources
+      await streamRequest(
+        {
+          page: params.page,
+          pageSize: params.pageSize,
+          search: params.search,
+          sortBy: "PublishedDate",
+          sortDirection: "desc",
+        },
+        {
+          signal: abortController.signal,
+          onMeta: () => {
+            if (requestId !== requestIdRef.current) {
+              return
+            }
+
+            setLoading(false)
+          },
+          onItem: (resource) => {
+            if (requestId !== requestIdRef.current) {
+              return
+            }
+
+            startTransition(() => {
+              setResources((prev) => [...prev, resource])
+              setLoading(false)
+            })
+          },
+        },
+      )
+    } catch (streamError) {
+      if (abortController.signal.aborted || requestId !== requestIdRef.current) {
+        return
       }
-      // derive categories & formats from freshly fetched list
-      await fetchCategories()
-      await fetchFormats()
-    } catch (e) {
-      // errors already handled by store toast
+
+      try {
+        const result = isAuthenticated
+          ? await fetchResources(params as any)
+          : await fetchPublicFreeResources(params as any)
+
+        if (requestId !== requestIdRef.current) {
+          return
+        }
+
+        setResources(result.items ?? [])
+      } catch (fallbackError) {
+        setError(fallbackError instanceof Error ? fallbackError.message : "Unable to load resources.")
+      }
+    } finally {
+      if (requestId === requestIdRef.current) {
+        setLoading(false)
+        setStreaming(false)
+      }
+
+      if (abortRef.current === abortController) {
+        abortRef.current = null
+      }
     }
-  }, [isAuthenticated, fetchResources, fetchPublicFreeResources, fetchCategories, fetchFormats])
+  }, [isAuthenticated, fetchResources, fetchPublicFreeResources])
 
   useEffect(() => {
     load()
+
+    return () => {
+      abortRef.current?.abort()
+    }
   }, [load])
 
   // Handle search (Enter key or explicit trigger)
@@ -120,17 +184,30 @@ export default function ResourcesPage() {
   }
 
   // Build categories / formats list for UI (prepend All)
-  const categories = useMemo(() => ["All", ...storeCategories], [storeCategories])
-  const formats = useMemo(() => ["All", ...storeFormats], [storeFormats])
+  const categories = useMemo(
+    () => ["All", ...Array.from(new Set((resources ?? []).map((r) => r.category).filter(Boolean))) as string[]],
+    [resources],
+  )
+  const formats = useMemo(
+    () => ["All", ...Array.from(new Set((resources ?? []).map((r) => r.format).filter(Boolean))) as string[]],
+    [resources],
+  )
+
+  if (error) {
+    return <div className="flex min-h-[200px] items-center justify-center text-red-600">{error}</div>
+  }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Hero Section — matches events page layout */}
-      <section className="bg-gradient-to-br from-emerald-50 to-blue-50 py-12 px-4">
-        <div className="max-w-7xl mx-auto flex items-end justify-between gap-4 flex-wrap">
+    <div className="min-h-screen bg-background">
+      {/* Hero Section */}
+      <section className="border-b border-border bg-secondary/30 py-16 px-4">
+        <div className="max-w-7xl mx-auto flex items-end justify-between gap-6 flex-wrap">
           <div>
-            <h1 className="text-4xl font-bold text-slate-900">Resource Library</h1>
-            <p className="text-lg text-slate-600 mt-2">
+            <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+              Library
+            </p>
+            <h1 className="text-4xl font-bold tracking-tight text-foreground">Resource Library</h1>
+            <p className="text-base text-muted-foreground mt-2">
               Professional resources, research papers, tools, and educational materials.
               {!user && (
                 <span className="text-emerald-600 font-medium">
@@ -146,7 +223,7 @@ export default function ResourcesPage() {
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSearch(searchQuery)}
               placeholder="Search resources..."
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-transparent bg-white/90 backdrop-blur"
+              className="w-full pl-10 pr-4 py-2 border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-background"
             />
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
           </div>
@@ -212,6 +289,9 @@ export default function ResourcesPage() {
 
       {/* Resources Grid */}
       <section className="max-w-7xl mx-auto px-4 pb-12">
+        {streaming && filteredResources.length > 0 && (
+          <p className="mb-4 text-sm text-muted-foreground">Loading resources progressively...</p>
+        )}
         {loading ? (
           <PageLoading
             minHeightClassName="py-12"
@@ -222,7 +302,7 @@ export default function ResourcesPage() {
           />
         ) : (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredResources.map((resource) => {
+            {filteredResources.map((resource, index) => {
               const type = (resource.type || '').toLowerCase()
               const getIconAndGradient = (t: string) => {
                 switch (t) {
@@ -241,7 +321,7 @@ export default function ResourcesPage() {
               const { icon: IconComponent, gradient, iconColor } = getIconAndGradient(type)
 
               return (
-                <Card key={resource.id || Math.random()} className="group overflow-hidden border-slate-200 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 rounded-xl">
+                <Card key={resource.id || `${resource.title}-${index}`} className="group overflow-hidden border-border bg-card hover:border-primary/30 transition-colors duration-150 rounded-2xl animate-in fade-in-0 slide-in-from-bottom-4" style={{ animationDelay: `${Math.min(index, 8) * 60}ms`, animationFillMode: "both" }}>
                   {/* Icon header — mimics event card image area */}
                   <div className={`relative h-44 w-full bg-gradient-to-br ${gradient} overflow-hidden flex items-center justify-center`}>
                     <IconComponent className={`w-16 h-16 ${iconColor} opacity-80 group-hover:scale-110 transition-transform duration-300`} />
@@ -291,11 +371,11 @@ export default function ResourcesPage() {
                   {/* Content */}
                   <CardContent className="p-4">
                     <div className="space-y-2">
-                      <h3 className="text-base font-semibold text-slate-900 line-clamp-2 group-hover:text-emerald-700 transition-colors">
+                      <h3 className="text-base font-semibold text-foreground line-clamp-2 group-hover:text-primary transition-colors">
                         {resource.title || 'Untitled Resource'}
                       </h3>
                       {resource.description && (
-                        <p className="text-sm text-slate-600 line-clamp-2">{resource.description}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-2">{resource.description}</p>
                       )}
                     </div>
 
