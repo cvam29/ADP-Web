@@ -73,7 +73,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-background text-foreground font-sans;
+    @apply bg-background text-foreground font-sans transition-colors duration-200;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif tracking-tight;
@@ -111,19 +111,18 @@
 .reveal-delay-4 { transition-delay: 0.4s; }
 .reveal-delay-5 { transition-delay: 0.5s; }
 
-/* ─── Custom scrollbar — sage palette ─── */
+/* ─── Custom scrollbar — adapts to theme ─── */
 ::-webkit-scrollbar {
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #edf2ea;
+  @apply bg-secondary;
 }
 ::-webkit-scrollbar-thumb {
-  background: #b5ccb0;
-  border-radius: 3px;
+  @apply bg-border rounded;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #7faa78;
+  @apply bg-muted-foreground/40;
 }
 
 /* ─── Focus styles ─── */
@@ -166,10 +165,10 @@
 
 /* ─── Surface accent ─── */
 .gradient-health {
-  background: #f2f6ef;
+  @apply bg-secondary/60;
 }
 .gradient-emerald {
-  background: #2d7a4f;
+  @apply bg-primary;
 }
 
 /* ─── Form sections ─── */
@@ -184,28 +183,28 @@
 
 /* Membership tier styling */
 .tier-student {
-  @apply border-green-200 bg-green-50;
+  @apply border-green-300 bg-green-50 dark:border-green-800 dark:bg-green-950/40;
 }
 
 .tier-professional {
-  @apply border-blue-200 bg-blue-50;
+  @apply border-blue-300 bg-blue-50 dark:border-blue-800 dark:bg-blue-950/40;
 }
 
 .tier-premium {
-  @apply border-purple-200 bg-purple-50;
+  @apply border-purple-300 bg-purple-50 dark:border-purple-800 dark:bg-purple-950/40;
 }
 
 /* Status indicators */
 .status-active {
-  @apply bg-green-100 text-green-800;
+  @apply bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300;
 }
 
 .status-expired {
-  @apply bg-red-100 text-red-800;
+  @apply bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300;
 }
 
 .status-pending {
-  @apply bg-yellow-100 text-yellow-800;
+  @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300;
 }
 
 /* Responsive typography */
@@ -242,7 +241,7 @@
 .ProseMirror p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   float: left;
-  color: #9ca3af;
+  @apply text-muted-foreground;
   pointer-events: none;
   height: 0;
 }
@@ -262,7 +261,7 @@
 .ProseMirror table td,
 .ProseMirror table th {
   min-width: 1em;
-  border: 1px solid #d1d5db;
+  @apply border border-border;
   padding: 8px;
   vertical-align: top;
   box-sizing: border-box;
@@ -271,7 +270,7 @@
 
 .ProseMirror table th {
   font-weight: bold;
-  background-color: #f9fafb;
+  @apply bg-secondary/60 text-foreground;
 }
 
 .ProseMirror table .selectedCell:after {
@@ -299,7 +298,8 @@
 
 .ProseMirror blockquote {
   padding-left: 1rem;
-  border-left: 4px solid #e5e7eb;
+  @apply border-l-4 border-border;
   margin: 1rem 0;
   font-style: italic;
+  @apply text-muted-foreground;
 }

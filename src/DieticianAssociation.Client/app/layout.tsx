@@ -132,7 +132,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${dmSans.variable} ${playfair.variable} font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
             <RoleBasedLayout>{children}</RoleBasedLayout>
           </AuthProvider>
