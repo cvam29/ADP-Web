@@ -159,7 +159,7 @@ export function Hero() {
 
             {/* Floating stat card — members */}
             <div className="hidden sm:flex absolute -top-4 -right-4 lg:-right-6 flex-col bg-card border border-border rounded-2xl shadow-xl p-4 min-w-[130px] animate-fade-in [animation-delay:200ms]">
-              <p className="text-2xl font-serif font-bold text-foreground leading-none">5,000<span className="text-primary">+</span></p>
+              <p className="text-2xl font-serif font-bold text-foreground leading-none">50<span className="text-primary">+</span></p>
               <p className="text-xs text-muted-foreground mt-1 leading-tight">Active Members</p>
             </div>
           </div>

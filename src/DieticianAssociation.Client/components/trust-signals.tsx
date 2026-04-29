@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react"
 import { useReveal } from "@/hooks/use-reveal"
 
 const stats = [
-  { value: 5000, suffix: "+", label: "Active Members",       sub: "across India" },
-  { value: 15,   suffix: "+", label: "Years of Excellence",  sub: "since 2009" },
-  { value: 50,   suffix: "+", label: "Events Per Year",      sub: "workshops & conferences" },
-  { value: 98,   suffix: "%", label: "Member Satisfaction",  sub: "independently verified" },
+  { value: 50,  suffix: "+", label: "Active Members",      sub: "across India" },
+  { value: 1,   suffix: "+", label: "Years of Excellence", sub: "since 2025" },
+  { value: 50,  suffix: "+", label: "Events Per Year",     sub: "workshops & conferences" },
+  { value: 98,  suffix: "%", label: "Member Satisfaction", sub: "independently verified" },
 ]
 
 function Counter({ target, suffix }: { target: number; suffix: string }) {
