@@ -146,10 +146,10 @@ export default function BlogFormPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             {isEdit ? "Edit Blog Post" : "Create Blog Post"}
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-muted-foreground">
             {isEdit
               ? "Update blog content, settings, and publishing options."
               : "Compose a new blog post for your readers."}
@@ -287,7 +287,7 @@ export default function BlogFormPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <Label>Featured</Label>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Showcase on landing sections
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default function BlogFormPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <Label>Publish</Label>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Make post visible to users
                   </p>
                 </div>

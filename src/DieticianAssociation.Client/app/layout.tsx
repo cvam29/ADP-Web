@@ -12,6 +12,7 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   display: "swap",
   variable: "--font-sans",
+  weight: ["300", "400", "500", "600", "700"],
 })
 
 const playfair = Playfair_Display({
@@ -132,7 +133,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${dmSans.variable} ${playfair.variable} font-sans`}>
-        <ThemeProvider attribute="class" defaultTheme="light" enableSystem disableTransitionOnChange>
+        <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <AuthProvider>
             <RoleBasedLayout>{children}</RoleBasedLayout>
           </AuthProvider>

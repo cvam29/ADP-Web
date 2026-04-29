@@ -37,27 +37,27 @@ export default function UserOverview({ user }: UserOverviewProps) {
             </Avatar>
             <div>
               <h3 className="text-lg font-semibold">{user.name}</h3>
-              <p className="text-sm text-gray-600">{user.email}</p>
+              <p className="text-sm text-muted-foreground">{user.email}</p>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4 pt-4 border-t">
             <div>
-              <p className="text-sm font-medium text-gray-500">Phone</p>
+              <p className="text-sm font-medium text-muted-foreground">Phone</p>
               <p className="text-sm">{user.phoneNumber || "—"}</p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Gender</p>
+              <p className="text-sm font-medium text-muted-foreground">Gender</p>
               <p className="text-sm">{user.gender || "—"}</p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Date of Birth</p>
+              <p className="text-sm font-medium text-muted-foreground">Date of Birth</p>
               <p className="text-sm">
                 {user.dob ? new Date(user.dob).toLocaleDateString() : "—"}
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Nationality</p>
+              <p className="text-sm font-medium text-muted-foreground">Nationality</p>
               <p className="text-sm">{getNationalityName(user.nationality)}</p>
             </div>
           </div>
@@ -71,22 +71,22 @@ export default function UserOverview({ user }: UserOverviewProps) {
         </CardHeader>
         <CardContent className="space-y-4">
           <div>
-            <p className="text-sm font-medium text-gray-500">Role</p>
+            <p className="text-sm font-medium text-muted-foreground">Role</p>
             <Badge className="mt-1">{getRoleName(user.role)}</Badge>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-500">Organization</p>
+            <p className="text-sm font-medium text-muted-foreground">Organization</p>
             <p className="text-sm">{user.organization || "—"}</p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-500">Designation</p>
+            <p className="text-sm font-medium text-muted-foreground">Designation</p>
             <p className="text-sm">{user.designation || "—"}</p>
           </div>
 
           <div>
-            <p className="text-sm font-medium text-gray-500">Specializations</p>
+            <p className="text-sm font-medium text-muted-foreground">Specializations</p>
             {user.specializations && user.specializations.length > 0 ? (
               <div className="flex flex-wrap gap-2 mt-1">
                 {user.specializations.map((spec: string, index: number) => (
@@ -124,19 +124,19 @@ export default function UserOverview({ user }: UserOverviewProps) {
 
           <div className="pt-4 border-t space-y-2">
             <div>
-              <p className="text-sm font-medium text-gray-500">Join Date</p>
+              <p className="text-sm font-medium text-muted-foreground">Join Date</p>
               <p className="text-sm">
                 {new Date(user.joinDate).toLocaleDateString()}
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Created At</p>
+              <p className="text-sm font-medium text-muted-foreground">Created At</p>
               <p className="text-sm">
                 {new Date(user.createdAt).toLocaleString()}
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Last Updated</p>
+              <p className="text-sm font-medium text-muted-foreground">Last Updated</p>
               <p className="text-sm">
                 {new Date(user.updatedAt).toLocaleString()}
               </p>

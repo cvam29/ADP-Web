@@ -29,19 +29,19 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const sidebarWidth = collapsed ? "w-16" : "w-64";
 
   return (
-    <div className="h-screen bg-zinc-50 dark:bg-zinc-950 overflow-hidden">
+    <div className="h-screen bg-background overflow-hidden">
       <div className="flex h-full flex-col overflow-hidden">
         {/* Header aligned with sidebar */}
-        <div className="sticky top-0 z-40 flex border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          {/* Sidebar header slot — clean dark brand panel */}
+        <div className="sticky top-0 z-40 flex border-b border-border bg-card">
+          {/* Sidebar header slot — clean brand panel */}
           {isDesktop && (
             <div
-              className={`${sidebarWidth} transition-all duration-300 h-16 flex items-center justify-center bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 flex-shrink-0 overflow-hidden`}
+              className={`${sidebarWidth} transition-all duration-300 h-16 flex items-center justify-center bg-card border-r border-border flex-shrink-0 overflow-hidden`}
             >
               {!collapsed ? (
                 <Link href="/" className="flex items-center gap-2 px-5 w-full">
                   <Image src="/ADP.svg" alt="ADP logo" width={24} height={24} className="rounded flex-shrink-0" />
-                  <span className="font-semibold text-sm text-zinc-900 dark:text-zinc-100 truncate tracking-tight">Admin</span>
+                  <span className="font-semibold text-sm text-foreground truncate tracking-tight">Admin</span>
                 </Link>
               ) : (
                 <Image src="/ADP.svg" alt="ADP logo" width={24} height={24} className="rounded" />

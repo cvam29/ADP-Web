@@ -47,11 +47,11 @@ export function Header() {
 
   const getRoleBadgeColor = (role: string | null | undefined) => {
     switch (role) {
-      case "admin":      return "bg-red-100 text-red-800";
-      case "premium":    return "bg-amber-100 text-amber-800";
-      case "professional": return "bg-herb-100 text-herb-800";
-      case "student":    return "bg-herb-100 text-herb-700";
-      default:           return "bg-secondary text-muted-foreground";
+      case "admin":        return "bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300";
+      case "premium":      return "bg-amber-100 text-amber-800 dark:bg-amber-900/40 dark:text-amber-300";
+      case "professional": return "bg-herb-100 text-herb-800 dark:bg-herb-900/40 dark:text-herb-300";
+      case "student":      return "bg-herb-100 text-herb-700 dark:bg-herb-900/40 dark:text-herb-300";
+      default:             return "bg-secondary text-muted-foreground";
     }
   };
 
@@ -179,7 +179,7 @@ export function Header() {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem
                     onClick={logout}
-                    className="flex items-center gap-2 text-red-600 focus:text-red-600 focus:bg-red-50"
+                    className="flex items-center gap-2 text-destructive focus:text-destructive focus:bg-destructive/10"
                   >
                     <LogOut className="w-4 h-4" />
                     Logout

@@ -132,167 +132,135 @@ export function StepDeclaration({
     <div className="space-y-8">
       {/* Section Header */}
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">
+        <h3 className="text-lg font-bold text-foreground mb-1">
           Declaration & Consent
         </h3>
-        <p className="text-sm text-gray-500">
+        <p className="text-sm text-muted-foreground">
           Please review and accept the terms before submitting
         </p>
       </div>
 
       {/* Terms & Conditions Section */}
-      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-        <h4 className="text-sm font-semibold text-gray-900 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6 space-y-4">
+        <h4 className="text-sm font-semibold text-foreground flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             1
           </span>
           Terms & Conditions
         </h4>
-        <ScrollArea className="h-48 border border-gray-200 rounded-lg p-4 bg-white">
-          <p className="text-sm text-gray-700 whitespace-pre-wrap">
+        <ScrollArea className="h-48 border border-border rounded-lg p-4 bg-card">
+          <p className="text-sm text-foreground whitespace-pre-wrap">
             {termsAndConditions}
           </p>
         </ScrollArea>
       </div>
 
       {/* Agreements Section */}
-      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-        <h4 className="text-sm font-semibold text-gray-900 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6 space-y-4">
+        <h4 className="text-sm font-semibold text-foreground flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             2
           </span>
           Agreements & Declarations
         </h4>
         <div className="space-y-4">
-          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white transition">
+          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-background transition">
             <Checkbox
               id="agreeTerms"
               checked={data.agreeTerms}
               onCheckedChange={(checked) =>
-                onChange({
-                  ...data,
-                  agreeTerms: checked as boolean,
-                })
+                onChange({ ...data, agreeTerms: checked as boolean })
               }
               className="mt-1"
             />
-            <Label
-              htmlFor="agreeTerms"
-              className="font-normal cursor-pointer text-gray-700 text-sm"
-            >
+            <Label htmlFor="agreeTerms" className="font-normal cursor-pointer text-foreground text-sm">
               I agree to the ADP membership terms, rules, regulations, and ethics guidelines{" "}
-              <span className="text-red-500">*</span>
+              <span className="text-destructive">*</span>
             </Label>
           </div>
           {errors.agreeTerms && (
-            <p className="text-sm text-red-500 ml-8">{errors.agreeTerms}</p>
+            <p className="text-sm text-destructive ml-8">{errors.agreeTerms}</p>
           )}
 
-          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white transition">
+          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-background transition">
             <Checkbox
               id="agreePrivacy"
               checked={data.agreePrivacy}
               onCheckedChange={(checked) =>
-                onChange({
-                  ...data,
-                  agreePrivacy: checked as boolean,
-                })
+                onChange({ ...data, agreePrivacy: checked as boolean })
               }
               className="mt-1"
             />
-            <Label
-              htmlFor="agreePrivacy"
-              className="font-normal cursor-pointer text-gray-700 text-sm"
-            >
+            <Label htmlFor="agreePrivacy" className="font-normal cursor-pointer text-foreground text-sm">
               I have read and accept the ADP privacy policy for handling my personal information{" "}
-              <span className="text-red-500">*</span>
+              <span className="text-destructive">*</span>
             </Label>
           </div>
           {errors.agreePrivacy && (
-            <p className="text-sm text-red-500 ml-8">{errors.agreePrivacy}</p>
+            <p className="text-sm text-destructive ml-8">{errors.agreePrivacy}</p>
           )}
 
-          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white transition">
+          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-background transition">
             <Checkbox
               id="agreeDataUsage"
               checked={data.agreeDataUsage}
               onCheckedChange={(checked) =>
-                onChange({
-                  ...data,
-                  agreeDataUsage: checked as boolean,
-                })
+                onChange({ ...data, agreeDataUsage: checked as boolean })
               }
               className="mt-1"
             />
-            <Label
-              htmlFor="agreeDataUsage"
-              className="font-normal cursor-pointer text-gray-700 text-sm"
-            >
+            <Label htmlFor="agreeDataUsage" className="font-normal cursor-pointer text-foreground text-sm">
               I consent to ADP using my submitted information and documents for membership review, communication, and compliance needs{" "}
-              <span className="text-red-500">*</span>
+              <span className="text-destructive">*</span>
             </Label>
           </div>
           {errors.agreeDataUsage && (
-            <p className="text-sm text-red-500 ml-8">{errors.agreeDataUsage}</p>
+            <p className="text-sm text-destructive ml-8">{errors.agreeDataUsage}</p>
           )}
 
-          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-white transition">
+          <div className="flex items-start space-x-3 p-3 rounded-lg hover:bg-background transition">
             <Checkbox
               id="declaration"
               checked={data.agreeDeclaration}
               onCheckedChange={(checked) =>
-                onChange({
-                  ...data,
-                  agreeDeclaration: checked as boolean,
-                })
+                onChange({ ...data, agreeDeclaration: checked as boolean })
               }
               className="mt-1"
             />
-            <Label
-              htmlFor="declaration"
-              className="font-normal cursor-pointer text-gray-700 text-sm"
-            >
+            <Label htmlFor="declaration" className="font-normal cursor-pointer text-foreground text-sm">
               I declare that all information provided is accurate and complete.
               I consent to data processing as per ADP privacy policy{" "}
-              <span className="text-red-500">*</span>
+              <span className="text-destructive">*</span>
             </Label>
           </div>
           {errors.agreeDeclaration && (
-            <p className="text-sm text-red-500 ml-8">
-              {errors.agreeDeclaration}
-            </p>
+            <p className="text-sm text-destructive ml-8">{errors.agreeDeclaration}</p>
           )}
         </div>
       </div>
 
       {/* Contact Info */}
-      <div className="bg-slate-50 p-4 rounded-lg space-y-2 text-sm">
-        <h3 className="font-semibold text-slate-900">Contact Information</h3>
-        <p className="text-slate-600">
+      <div className="bg-secondary/40 p-4 rounded-lg space-y-2 text-sm">
+        <h3 className="font-semibold text-foreground">Contact Information</h3>
+        <p className="text-muted-foreground">
           Website:{" "}
-          <a
-            href="https://www.adp.org.in/"
-            className="text-emerald-600 hover:underline"
-          >
+          <a href="https://www.adp.org.in/" className="text-primary hover:underline">
             www.adp.org.in
           </a>
         </p>
-        <p className="text-slate-600">
+        <p className="text-muted-foreground">
           Email:{" "}
-          <a
-            href="mailto:info@adp.org.in"
-            className="text-emerald-600 hover:underline"
-          >
+          <a href="mailto:info@adp.org.in" className="text-primary hover:underline">
             info@adp.org.in
           </a>
         </p>
-        <p className="text-slate-600">
+        <p className="text-muted-foreground">
           WhatsApp:{" "}
           <a
             href="https://wa.me/918059655000?text=Hello%20I%20need%20assistance%20regarding%20your%20services."
             target="_blank"
             rel="noopener noreferrer"
-            className="text-emerald-600 hover:underline"
+            className="text-primary hover:underline"
           >
             +91 80596 55000
           </a>
@@ -300,23 +268,23 @@ export function StepDeclaration({
       </div>
 
       {/* Security Verification Section */}
-      <div className="bg-gray-50 rounded-xl p-6 space-y-4">
-        <h4 className="text-sm font-semibold text-gray-900 flex items-center">
-          <span className="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center text-xs font-bold mr-2">
+      <div className="bg-secondary/40 rounded-xl p-6 space-y-4">
+        <h4 className="text-sm font-semibold text-foreground flex items-center">
+          <span className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold mr-2">
             3
           </span>
-          Security Verification <span className="text-red-500">*</span>
+          Security Verification <span className="text-destructive">*</span>
         </h4>
         <div className="space-y-4">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-muted-foreground">
             Enter the security code below to verify you are human
           </p>
           <div className="flex gap-3 items-end">
             <div className="flex-1">
-              <Label className="text-sm font-medium text-gray-700 block mb-2">
+              <Label className="text-sm font-medium text-foreground block mb-2">
                 Captcha Code
               </Label>
-              <div className="bg-gradient-to-r from-emerald-100 to-emerald-50 p-4 rounded-lg font-mono font-bold text-xl tracking-widest text-center border border-emerald-300 select-none">
+              <div className="bg-primary/10 p-4 rounded-lg font-mono font-bold text-xl tracking-widest text-center border border-primary/30 select-none text-foreground">
                 {data.captchaCode}
               </div>
             </div>
@@ -325,7 +293,6 @@ export function StepDeclaration({
               variant="outline"
               size="sm"
               onClick={() => generateCaptcha()}
-              className="border-emerald-300 text-emerald-600 hover:bg-emerald-50"
             >
               ↻ Reload
             </Button>
@@ -333,7 +300,7 @@ export function StepDeclaration({
           <div>
             <Label
               htmlFor="captcha-input"
-              className="text-sm font-medium text-gray-700 block mb-2"
+              className="text-sm font-medium text-foreground block mb-2"
             >
               Enter Code Above
             </Label>
@@ -342,26 +309,20 @@ export function StepDeclaration({
               placeholder="Enter the text shown above"
               value={data.captcha}
               onChange={(e) =>
-                onChange({
-                  ...data,
-                  captcha: e.target.value.toUpperCase(),
-                })
+                onChange({ ...data, captcha: e.target.value.toUpperCase() })
               }
-              className={`${errors.captcha ? "border-red-500 focus:ring-red-500" : "focus:ring-emerald-500"}`}
+              className={errors.captcha ? "border-destructive" : ""}
             />
             {errors.captcha && (
-              <p className="text-sm text-red-500 mt-1">{errors.captcha}</p>
+              <p className="text-sm text-destructive mt-1">{errors.captcha}</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Security Warning */}
-      <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg text-sm text-amber-900">
-        <p className="font-semibold mb-2 flex items-center">
-          <span className="text-xl mr-2">⚠️</span>
-          Security Warning
-        </p>
+      <div className="bg-yellow-50 dark:bg-yellow-950/30 border border-yellow-200 dark:border-yellow-800 p-4 rounded-lg text-sm text-yellow-900 dark:text-yellow-200">
+        <p className="font-semibold mb-2">Security Warning</p>
         <p>
           Do not submit confidential information such as credit card details,
           OTPs, or passwords through this form.
@@ -369,18 +330,18 @@ export function StepDeclaration({
       </div>
 
       {/* Action Buttons */}
-      <div className="flex justify-between gap-3 pt-6 border-t border-gray-200">
+      <div className="flex justify-between gap-3 pt-6 border-t border-border">
         <Button
           variant="outline"
           onClick={onBack}
-          className="px-6 text-gray-700 border-gray-300 hover:bg-gray-50 bg-transparent"
+          className="px-6 bg-transparent"
         >
           ← Back
         </Button>
         <Button
           onClick={handleSubmit}
           disabled={submitting}
-          className="bg-emerald-600 hover:bg-emerald-700 text-white px-8 font-semibold"
+          className="px-8 font-semibold"
         >
           {submitting ? "Submitting..." : "Submit Application"}
         </Button>

@@ -149,10 +149,10 @@ export default function EmailTemplateAddEditPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
+          <h1 className="text-3xl font-bold text-foreground">
             {isEdit ? "Edit Email Template" : "Create Email Template"}
           </h1>
-          <p className="text-gray-600">
+          <p className="text-muted-foreground">
             {isEdit
               ? "Update the template and validate with live preview"
               : "Create a reusable template with live preview"}
@@ -184,7 +184,7 @@ export default function EmailTemplateAddEditPage() {
                 }
                 disabled={isEdit}
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 Unique identifier used to reference this template in API calls.
               </p>
             </div>
@@ -221,7 +221,7 @@ export default function EmailTemplateAddEditPage() {
                 rows={18}
                 className="font-mono text-sm"
               />
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-muted-foreground mt-1">
                 You can use placeholders like {"{{name}}"} in the body.
               </p>
             </div>
@@ -243,7 +243,7 @@ export default function EmailTemplateAddEditPage() {
           <CardHeader className="bg-gray-50/50 border-b py-3 px-4">
             <div className="flex items-center justify-between">
               <CardTitle className="text-base font-medium flex items-center gap-2">
-                <Search className="w-4 h-4 text-gray-500" /> Preview
+                <Search className="w-4 h-4 text-muted-foreground" /> Preview
               </CardTitle>
               <Badge variant="outline" className="text-xs font-normal">
                 HTML View

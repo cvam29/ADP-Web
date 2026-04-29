@@ -19,6 +19,7 @@ export default function ResetPasswordPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<{ current?: string; new?: string; confirm?: string }>({});
 
   useEffect(() => {
     if (loading) return;
@@ -28,20 +29,27 @@ export default function ResetPasswordPage() {
     event.preventDefault();
     setError("");
 
-    if (!currentPassword || !newPassword || !confirmPassword) {
-      setError("All fields are required.");
-      return;
+    const errors: { current?: string; new?: string; confirm?: string } = {};
+
+    if (!currentPassword) {
+      errors.current = "Current password is required.";
+    }
+    if (!newPassword) {
+      errors.new = "New password is required.";
+    } else if (newPassword.length < 6) {
+      errors.new = "New password must be at least 6 characters long.";
+    }
+    if (!confirmPassword) {
+      errors.confirm = "Please confirm your new password.";
+    } else if (newPassword && confirmPassword !== newPassword) {
+      errors.confirm = "Confirm password must match the new password.";
     }
 
-    if (newPassword.length < 6) {
-      setError("New password must be at least 6 characters long.");
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
       return;
     }
-
-    if (newPassword !== confirmPassword) {
-      setError("New password and confirm password must match.");
-      return;
-    }
+    setFieldErrors({});
 
     setSubmitting(true);
     try {
@@ -113,8 +121,17 @@ export default function ResetPasswordPage() {
                 id="currentPassword"
                 type="password"
                 value={currentPassword}
-                onChange={(event) => setCurrentPassword(event.target.value)}
+                onChange={(event) => {
+                  setCurrentPassword(event.target.value);
+                  if (fieldErrors.current) setFieldErrors((prev) => ({ ...prev, current: undefined }));
+                }}
+                aria-invalid={!!fieldErrors.current}
+                aria-describedby={fieldErrors.current ? "currentPassword-error" : undefined}
+                className={fieldErrors.current ? "border-red-500 focus-visible:ring-red-500" : ""}
               />
+              {fieldErrors.current && (
+                <p id="currentPassword-error" className="text-sm text-red-600">{fieldErrors.current}</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -123,8 +140,19 @@ export default function ResetPasswordPage() {
                 id="newPassword"
                 type="password"
                 value={newPassword}
-                onChange={(event) => setNewPassword(event.target.value)}
+                onChange={(event) => {
+                  setNewPassword(event.target.value);
+                  if (fieldErrors.new) setFieldErrors((prev) => ({ ...prev, new: undefined }));
+                }}
+                aria-invalid={!!fieldErrors.new}
+                aria-describedby={fieldErrors.new ? "newPassword-error" : "newPassword-hint"}
+                className={fieldErrors.new ? "border-red-500 focus-visible:ring-red-500" : ""}
               />
+              {fieldErrors.new ? (
+                <p id="newPassword-error" className="text-sm text-red-600">{fieldErrors.new}</p>
+              ) : (
+                <p id="newPassword-hint" className="text-xs text-muted-foreground">Must be at least 6 characters.</p>
+              )}
             </div>
 
             <div className="space-y-2">
@@ -133,8 +161,17 @@ export default function ResetPasswordPage() {
                 id="confirmPassword"
                 type="password"
                 value={confirmPassword}
-                onChange={(event) => setConfirmPassword(event.target.value)}
+                onChange={(event) => {
+                  setConfirmPassword(event.target.value);
+                  if (fieldErrors.confirm) setFieldErrors((prev) => ({ ...prev, confirm: undefined }));
+                }}
+                aria-invalid={!!fieldErrors.confirm}
+                aria-describedby={fieldErrors.confirm ? "confirmPassword-error" : undefined}
+                className={fieldErrors.confirm ? "border-red-500 focus-visible:ring-red-500" : ""}
               />
+              {fieldErrors.confirm && (
+                <p id="confirmPassword-error" className="text-sm text-red-600">{fieldErrors.confirm}</p>
+              )}
             </div>
 
             {error && <p className="text-sm text-red-600">{error}</p>}

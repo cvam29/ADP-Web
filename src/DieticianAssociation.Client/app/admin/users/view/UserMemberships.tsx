@@ -66,7 +66,7 @@ export default function UserMemberships({ memberships }: UserMembershipsProps) {
                   const statusInfo = getStatusBadge(membership.status);
                   return (
                     <TableRow key={membership.id}>
-                      <TableCell className="font-mono text-xs text-slate-700">
+                      <TableCell className="font-mono text-xs text-muted-foreground">
                         {membership.applicationRequestId || "—"}
                       </TableCell>
                       <TableCell className="font-medium">
@@ -99,7 +99,7 @@ export default function UserMemberships({ memberships }: UserMembershipsProps) {
             </Table>
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">
+          <p className="text-center text-muted-foreground py-8">
             No membership records found
           </p>
         )}

@@ -173,28 +173,28 @@ export function ProfileSettings() {
   const getMembershipStatusColor = (status: string) => {
     switch (status) {
       case "active":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/40 dark:text-green-300 dark:border-green-800";
       case "expired":
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-secondary text-secondary-foreground border-border";
       case "pending":
-        return "bg-amber-100 text-amber-800 border-amber-200";
+        return "bg-amber-100 text-amber-800 border-amber-200 dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
   const getRoleBadgeColor = (role: string) => {
     switch (role) {
       case "admin":
-        return "bg-red-100 text-red-800 border-red-200";
+        return "bg-red-100 text-red-800 border-red-200 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800";
       case "premium":
-        return "bg-purple-100 text-purple-800 border-purple-200";
+        return "bg-purple-100 text-purple-800 border-purple-200 dark:bg-purple-900/40 dark:text-purple-300 dark:border-purple-800";
       case "professional":
-        return "bg-blue-100 text-blue-800 border-blue-200";
+        return "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900/40 dark:text-blue-300 dark:border-blue-800";
       case "student":
-        return "bg-green-100 text-green-800 border-green-200";
+        return "bg-green-100 text-green-800 border-green-200 dark:bg-green-900/40 dark:text-green-300 dark:border-green-800";
       default:
-        return "bg-gray-100 text-gray-800 border-gray-200";
+        return "bg-secondary text-secondary-foreground border-border";
     }
   };
 
@@ -219,11 +219,11 @@ export function ProfileSettings() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div className="flex flex-col gap-4 rounded-xl border border-slate-200 p-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-4 rounded-xl border border-border p-4 sm:flex-row sm:items-center sm:justify-between">
               <div className="flex items-center gap-4">
-                <Avatar className="h-20 w-20 border border-slate-200">
+                <Avatar className="h-20 w-20 border border-border">
                   <AvatarImage src={profileData.avatar || undefined} alt={profileData.name || user?.name || "Profile photo"} />
-                  <AvatarFallback className="bg-emerald-100 text-emerald-700 text-lg font-semibold">
+                  <AvatarFallback className="bg-primary/10 text-primary text-lg font-semibold">
                     {(profileData.name || user?.name || "U")
                       .split(" ")
                       .map((value) => value[0])
@@ -233,8 +233,8 @@ export function ProfileSettings() {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-medium text-slate-900">Profile picture</p>
-                  <p className="text-sm text-slate-500">
+                  <p className="font-medium text-foreground">Profile picture</p>
+                  <p className="text-sm text-muted-foreground">
                     This image is reused on your member testimonial when you submit one.
                   </p>
                 </div>
@@ -334,7 +334,7 @@ export function ProfileSettings() {
                 }
                 placeholder="e.g., Clinical Nutrition, Sports Nutrition, Pediatric"
               />
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-muted-foreground">
                 Separate multiple specializations with commas
               </p>
             </div>
@@ -379,7 +379,7 @@ export function ProfileSettings() {
             <div className="grid md:grid-cols-2 gap-6">
               <div className="space-y-4">
                 <div>
-                  <Label className="text-sm font-medium text-slate-700">
+                  <Label className="text-sm font-medium text-foreground">
                     Membership Tier
                   </Label>
                   <div className="flex items-center space-x-2 mt-1">
@@ -397,31 +397,31 @@ export function ProfileSettings() {
                   </div>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-slate-700">
+                  <Label className="text-sm font-medium text-foreground">
                     Member Since
                   </Label>
-                  <p className="text-slate-900 mt-1">
+                  <p className="text-foreground mt-1">
                     {user?.membership?.joinDate}
                   </p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-slate-700">
+                  <Label className="text-sm font-medium text-foreground">
                     Next Renewal
                   </Label>
-                  <p className="text-slate-900 mt-1">
+                  <p className="text-foreground mt-1">
                     {user?.membership?.expirationDate}
                   </p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div>
-                  <Label className="text-sm font-medium text-slate-700">
+                  <Label className="text-sm font-medium text-foreground">
                     Member ID
                   </Label>
-                  <p className="text-slate-900 mt-1 font-mono">{user?.id}</p>
+                  <p className="text-foreground mt-1 font-mono">{user?.id}</p>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-slate-700">
+                  <Label className="text-sm font-medium text-foreground">
                     Role
                   </Label>
                   <Badge className={getRoleBadgeColor(user?.role || "")} variant="outline">
@@ -451,13 +451,13 @@ export function ProfileSettings() {
             {loading ? (
               <div className="flex items-center justify-center py-8">
                 <div className="flex items-center space-x-2">
-                  <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
-                  <span className="text-gray-600">Loading certificates...</span>
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                  <span className="text-muted-foreground">Loading certificates...</span>
                 </div>
               </div>
             ) : error ? (
               <div className="text-center py-8">
-                <p className="text-gray-600">Failed to load certificates. Please try again later.</p>
+                <p className="text-muted-foreground">Failed to load certificates. Please try again later.</p>
               </div>
             ) : (
               <CertificateDisplay certificates={certificates} />
@@ -479,30 +479,30 @@ export function ProfileSettings() {
           </CardHeader>
           <CardContent>
             {testimonialsLoading ? (
-              <div className="flex items-center gap-2 text-sm text-slate-500">
+              <div className="flex items-center gap-2 text-sm text-muted-foreground">
                 <Loader2 className="w-4 h-4 animate-spin" />
                 Loading testimonials...
               </div>
             ) : myTestimonials.length === 0 ? (
-              <div className="rounded-lg border border-dashed border-slate-300 p-6 text-sm text-slate-500">
+              <div className="rounded-lg border border-dashed border-border p-6 text-sm text-muted-foreground">
                 No testimonials submitted yet. You can submit one from your dashboard.
               </div>
             ) : (
               <div className="space-y-4">
                 {myTestimonials.map((testimonial) => (
-                  <div key={testimonial.id} className="rounded-xl border border-slate-200 p-4">
+                  <div key={testimonial.id} className="rounded-xl border border-border p-4">
                     <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <p className="font-semibold text-slate-900">{testimonial.professionalTitle}</p>
+                          <p className="font-semibold text-foreground">{testimonial.professionalTitle}</p>
                           <Badge
                             variant="outline"
                             className={
                               testimonial.status === "Approved"
-                                ? "border-green-200 bg-green-50 text-green-700"
+                                ? "border-green-300 bg-green-50 text-green-700 dark:bg-green-900/40 dark:text-green-300 dark:border-green-800"
                                 : testimonial.status === "Rejected"
-                                  ? "border-red-200 bg-red-50 text-red-700"
-                                  : "border-amber-200 bg-amber-50 text-amber-700"
+                                  ? "border-red-300 bg-red-50 text-red-700 dark:bg-red-900/40 dark:text-red-300 dark:border-red-800"
+                                  : "border-amber-300 bg-amber-50 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300 dark:border-amber-800"
                             }
                           >
                             {testimonial.status}
@@ -514,13 +514,13 @@ export function ProfileSettings() {
                           ))}
                         </div>
                       </div>
-                      <p className="text-xs text-slate-500">
+                      <p className="text-xs text-muted-foreground">
                         Submitted {new Date(testimonial.submittedAt).toLocaleDateString()}
                       </p>
                     </div>
-                    <p className="mt-3 text-sm leading-6 text-slate-600">{testimonial.content}</p>
+                    <p className="mt-3 text-sm leading-6 text-muted-foreground">{testimonial.content}</p>
                     {testimonial.rejectionReason ? (
-                      <div className="mt-3 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+                      <div className="mt-3 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
                         <span className="font-medium">Review note:</span> {testimonial.rejectionReason}
                       </div>
                     ) : null}

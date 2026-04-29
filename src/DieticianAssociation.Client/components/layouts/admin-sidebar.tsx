@@ -130,7 +130,7 @@ export function AdminSidebar({
       {/* Sidebar */}
       <div
         className={cn(
-          "fixed top-16 left-0 z-50 h-[calc(100vh-4rem)] bg-white dark:bg-zinc-950 border-r border-zinc-200 dark:border-zinc-800 transition-all duration-300 ease-in-out flex flex-col overflow-hidden",
+          "fixed top-16 left-0 z-50 h-[calc(100vh-4rem)] bg-card border-r border-border transition-all duration-300 ease-in-out flex flex-col overflow-hidden",
           collapsed ? "lg:w-16" : "lg:w-64",
           "lg:translate-x-0",
           isOpen ? "translate-x-0" : "-translate-x-full",
@@ -138,7 +138,7 @@ export function AdminSidebar({
         )}
       >
         {/* Mobile close button */}
-        <div className="lg:hidden flex justify-end p-4 border-b border-zinc-200 dark:border-zinc-800">
+        <div className="lg:hidden flex justify-end p-4 border-b border-border">
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="w-4 h-4" />
           </Button>
@@ -146,14 +146,14 @@ export function AdminSidebar({
 
         {/* Admin info */}
         {user && !collapsed && (
-          <div className="p-5 border-b border-zinc-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+          <div className="p-5 border-b border-border bg-card">
             <div className="flex items-center space-x-3">
-              <Avatar className="w-9 h-9 ring-2 ring-zinc-100 dark:ring-zinc-800">
+              <Avatar className="w-9 h-9 ring-2 ring-border">
                 <AvatarImage
                   src={user.avatar || "/admin-placeholder.avif"}
                   alt={user.name ?? ""}
                 />
-                <AvatarFallback className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 font-semibold text-xs">
+                <AvatarFallback className="bg-secondary text-secondary-foreground font-semibold text-xs">
                   {(user?.name ?? "")
                     .split(" ")
                     .map((n) => n[0])
@@ -162,11 +162,11 @@ export function AdminSidebar({
                 </AvatarFallback>
               </Avatar>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-zinc-900 dark:text-zinc-100 truncate">
+                <p className="text-sm font-semibold text-foreground truncate">
                   {user.name}
                 </p>
                 <Badge
-                  className="bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 text-xs mt-1 flex items-center w-fit"
+                  className="bg-secondary text-secondary-foreground border-border text-xs mt-1 flex items-center w-fit"
                   variant="outline"
                 >
                   <Shield className="w-3 h-3 mr-1" />
@@ -178,11 +178,11 @@ export function AdminSidebar({
         )}
 
         {/* Navigation */}
-        <nav className="flex-1 min-h-0 p-3 space-y-5 overflow-y-auto overscroll-contain scrollbar-thin scrollbar-thumb-zinc-200 dark:scrollbar-thumb-zinc-800 scrollbar-track-transparent">
+        <nav className="flex-1 min-h-0 p-3 space-y-5 overflow-y-auto overscroll-contain">
           {/* Admin Section */}
           <div>
             {!collapsed && (
-              <h3 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-2 px-2">
+              <h3 className="text-xs font-semibold text-muted-foreground/70 uppercase tracking-widest mb-2 px-2">
                 Administration
               </h3>
             )}
@@ -210,16 +210,16 @@ export function AdminSidebar({
                             ? "justify-center px-3 py-2.5"
                             : "px-3 py-2.5 space-x-2.5",
                           isActive || isChildActive
-                            ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-l-2 border-zinc-900 dark:border-zinc-100"
-                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
+                            ? "bg-secondary text-foreground border-l-2 border-foreground"
+                            : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                         )}
                       >
                         <item.icon
                           className={cn(
                             "w-4 h-4 flex-shrink-0",
                             isActive || isChildActive
-                              ? "text-zinc-900 dark:text-zinc-100"
-                              : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300",
+                              ? "text-foreground"
+                              : "text-muted-foreground group-hover:text-foreground",
                           )}
                         />
                         {!collapsed && (
@@ -227,14 +227,14 @@ export function AdminSidebar({
                             <span className="flex-1 text-left">{item.name}</span>
                             <ChevronDown
                               className={cn(
-                                "w-3.5 h-3.5 text-zinc-400 transition-transform duration-200",
+                                "w-3.5 h-3.5 text-muted-foreground transition-transform duration-200",
                                 isExpanded && "rotate-180",
                               )}
                             />
                           </>
                         )}
                         {collapsed && (
-                          <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2.5 py-1.5 text-xs text-zinc-100 shadow-lg group-hover:block z-50">
+                          <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-popover text-popover-foreground px-2.5 py-1.5 text-xs shadow-lg group-hover:block z-50">
                             {item.name}
                           </span>
                         )}
@@ -242,7 +242,7 @@ export function AdminSidebar({
                       {!collapsed && (
                         <div
                           className={cn(
-                            "ml-4 space-y-0.5 border-l border-zinc-200 dark:border-zinc-800 pl-3 overflow-hidden transition-all duration-200",
+                            "ml-4 space-y-0.5 border-l border-border pl-3 overflow-hidden transition-all duration-200",
                             isExpanded
                               ? "max-h-96 mt-0.5 opacity-100"
                               : "max-h-0 opacity-0",
@@ -258,16 +258,16 @@ export function AdminSidebar({
                                 className={cn(
                                   "group relative flex items-center rounded-lg text-sm font-medium transition-colors duration-150 px-2.5 py-2 space-x-2",
                                   isChildItemActive
-                                    ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100"
-                                    : "text-zinc-500 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
+                                    ? "bg-secondary text-foreground"
+                                    : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                                 )}
                               >
                                 <child.icon
                                   className={cn(
                                     "w-3.5 h-3.5 flex-shrink-0",
                                     isChildItemActive
-                                      ? "text-zinc-900 dark:text-zinc-100"
-                                      : "text-zinc-400 dark:text-zinc-500",
+                                      ? "text-foreground"
+                                      : "text-muted-foreground",
                                   )}
                                 />
                                 <span>{child.name}</span>
@@ -291,21 +291,21 @@ export function AdminSidebar({
                         ? "justify-center px-3 py-2.5"
                         : "px-3 py-2.5 space-x-2.5",
                       isActive
-                        ? "bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 border-l-2 border-zinc-900 dark:border-zinc-100"
-                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
+                        ? "bg-secondary text-foreground border-l-2 border-foreground"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                     )}
                   >
                     <item.icon
                       className={cn(
                         "w-4 h-4 flex-shrink-0",
                         isActive
-                          ? "text-zinc-900 dark:text-zinc-100"
-                          : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300",
+                          ? "text-foreground"
+                          : "text-muted-foreground group-hover:text-foreground",
                       )}
                     />
                     {!collapsed && <span>{item.name}</span>}
                     {collapsed && (
-                      <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2.5 py-1.5 text-xs text-zinc-100 shadow-lg group-hover:block z-50">
+                      <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-popover text-popover-foreground px-2.5 py-1.5 text-xs shadow-lg group-hover:block z-50">
                         {item.name}
                       </span>
                     )}
@@ -318,7 +318,7 @@ export function AdminSidebar({
           {/* Workspace Section */}
           <div>
             {!collapsed && (
-              <h3 className="text-xs font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-widest mb-2 px-2">
+              <h3 className="text-xs font-semibold text-muted-foreground/70 uppercase tracking-widest mb-2 px-2">
                 Workspace
               </h3>
             )}
@@ -336,21 +336,21 @@ export function AdminSidebar({
                         ? "justify-center px-3 py-2.5"
                         : "px-3 py-2.5 space-x-2.5",
                       isActive
-                        ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300 border-l-2 border-emerald-600"
-                        : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-50 dark:hover:bg-zinc-800/60 hover:text-zinc-900 dark:hover:text-zinc-100",
+                        ? "bg-primary/10 text-primary border-l-2 border-primary"
+                        : "text-muted-foreground hover:bg-secondary hover:text-foreground",
                     )}
                   >
                     <item.icon
                       className={cn(
                         "w-4 h-4 flex-shrink-0",
                         isActive
-                          ? "text-emerald-600 dark:text-emerald-400"
-                          : "text-zinc-400 dark:text-zinc-500 group-hover:text-zinc-700 dark:group-hover:text-zinc-300",
+                          ? "text-primary"
+                          : "text-muted-foreground group-hover:text-foreground",
                       )}
                     />
                     {!collapsed && <span>{item.name}</span>}
                     {collapsed && (
-                      <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-zinc-900 dark:bg-zinc-800 px-2.5 py-1.5 text-xs text-zinc-100 shadow-lg group-hover:block z-50">
+                      <span className="absolute left-14 hidden whitespace-nowrap rounded-lg bg-popover text-popover-foreground px-2.5 py-1.5 text-xs shadow-lg group-hover:block z-50">
                         {item.name}
                       </span>
                     )}
@@ -362,17 +362,17 @@ export function AdminSidebar({
         </nav>
 
         {/* Collapse toggle button */}
-        <div className="p-3 border-t border-zinc-100 dark:border-zinc-800 hidden lg:flex justify-center">
+        <div className="p-3 border-t border-border hidden lg:flex justify-center">
           <Button
             variant="ghost"
             size="icon"
             onClick={() => setCollapsed(!collapsed)}
-            className="w-8 h-8 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors duration-150"
+            className="w-8 h-8 rounded-lg hover:bg-secondary transition-colors duration-150"
           >
             {collapsed ? (
-              <ChevronRight className="w-4 h-4 text-zinc-500" />
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
             ) : (
-              <ChevronLeft className="w-4 h-4 text-zinc-500" />
+              <ChevronLeft className="w-4 h-4 text-muted-foreground" />
             )}
           </Button>
         </div>

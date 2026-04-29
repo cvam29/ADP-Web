@@ -57,8 +57,8 @@ export default function PermissionsDialog({
             .map(([category, entries]) => (
               <div key={category} className="space-y-3">
                 <div>
-                  <h3 className="text-sm font-semibold text-slate-900">{category}</h3>
-                  <p className="text-xs text-slate-500">Use `inherit` to rely on membership-plan defaults, `allow` for a direct grant, and `deny` for an explicit override.</p>
+                  <h3 className="text-sm font-semibold text-foreground">{category}</h3>
+                  <p className="text-xs text-muted-foreground">Use inherit to rely on membership-plan defaults, allow for a direct grant, and deny for an explicit override.</p>
                 </div>
 
                 <div className="space-y-2">
@@ -69,11 +69,11 @@ export default function PermissionsDialog({
                       const currentValue = selections[key] ?? "inherit";
 
                       return (
-                        <div key={key} className="grid gap-3 rounded-lg border border-slate-200 px-3 py-3 md:grid-cols-[1fr_180px] md:items-center">
+                        <div key={key} className="grid gap-3 rounded-lg border border-border px-3 py-3 md:grid-cols-[1fr_180px] md:items-center">
                           <div>
-                            <p className="text-sm font-medium text-slate-900">{permission.name}</p>
-                            <p className="text-xs text-slate-500">{permission.description}</p>
-                            <p className="mt-1 text-[11px] text-slate-400">{key}</p>
+                            <p className="text-sm font-medium text-foreground">{permission.name}</p>
+                            <p className="text-xs text-muted-foreground">{permission.description}</p>
+                            <p className="mt-1 text-[11px] text-muted-foreground/60">{key}</p>
                           </div>
 
                           <Select

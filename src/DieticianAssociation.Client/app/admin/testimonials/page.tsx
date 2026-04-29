@@ -127,8 +127,8 @@ export default function AdminTestimonialsPage() {
     >
       <div className="w-full px-6 py-8 space-y-6">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Testimonials</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Testimonials</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Review, approve, reject, and feature member-submitted testimonials.
           </p>
         </div>
@@ -198,7 +198,7 @@ export default function AdminTestimonialsPage() {
                 <TableBody>
                   {loading ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="py-8 text-center text-slate-500">
+                      <TableCell colSpan={8} className="py-8 text-center text-muted-foreground">
                         <div className="inline-flex items-center gap-2">
                           <Loader2 className="h-4 w-4 animate-spin" />
                           Loading testimonials...
@@ -207,7 +207,7 @@ export default function AdminTestimonialsPage() {
                     </TableRow>
                   ) : adminTestimonials.length === 0 ? (
                     <TableRow>
-                      <TableCell colSpan={8} className="py-8 text-center text-slate-500">
+                      <TableCell colSpan={8} className="py-8 text-center text-muted-foreground">
                         No testimonials found
                       </TableCell>
                     </TableRow>
@@ -216,8 +216,8 @@ export default function AdminTestimonialsPage() {
                       <TableRow key={testimonial.id}>
                         <TableCell>
                           <div>
-                            <p className="font-medium text-slate-900">{testimonial.memberName}</p>
-                            <p className="text-xs text-slate-500">{testimonial.submittedBy?.email}</p>
+                            <p className="font-medium text-foreground">{testimonial.memberName}</p>
+                            <p className="text-xs text-muted-foreground">{testimonial.submittedBy?.email}</p>
                           </div>
                         </TableCell>
                         <TableCell>{testimonial.professionalTitle}</TableCell>
@@ -253,12 +253,12 @@ export default function AdminTestimonialsPage() {
                                 }))
                               }
                             />
-                            <span className="text-xs text-slate-500">Feature</span>
+                            <span className="text-xs text-muted-foreground">Feature</span>
                           </div>
                         </TableCell>
                         <TableCell>{new Date(testimonial.submittedAt).toLocaleDateString()}</TableCell>
                         <TableCell className="max-w-sm">
-                          <p className="line-clamp-3 text-sm text-slate-600">{testimonial.content}</p>
+                          <p className="line-clamp-3 text-sm text-muted-foreground">{testimonial.content}</p>
                           {testimonial.rejectionReason ? (
                             <p className="mt-2 text-xs text-red-700">Reason: {testimonial.rejectionReason}</p>
                           ) : null}
@@ -312,7 +312,7 @@ export default function AdminTestimonialsPage() {
               </Table>
             </div>
 
-            <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
+            <div className="mt-4 flex items-center justify-between text-sm text-muted-foreground">
               <span>
                 Page {adminPagedResult?.page ?? page} of {adminPagedResult?.totalPages ?? 1}
               </span>
@@ -391,8 +391,8 @@ export default function AdminTestimonialsPage() {
                       </AvatarFallback>
                     </Avatar>
                     <div>
-                      <p className="font-semibold text-slate-900">{previewTestimonial.memberName}</p>
-                      <p className="text-sm text-slate-500">{previewTestimonial.professionalTitle}</p>
+                      <p className="font-semibold text-foreground">{previewTestimonial.memberName}</p>
+                      <p className="text-sm text-muted-foreground">{previewTestimonial.professionalTitle}</p>
                     </div>
                   </div>
                   <Badge
@@ -409,7 +409,7 @@ export default function AdminTestimonialsPage() {
                   </Badge>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-3 text-sm text-slate-500">
+                <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
                   <span>Submitted {new Date(previewTestimonial.submittedAt).toLocaleDateString()}</span>
                   <span>Featured: {previewTestimonial.isFeatured ? "Yes" : "No"}</span>
                   <span>Consent to publish: {previewTestimonial.consentToPublish ? "Yes" : "No"}</span>
@@ -422,7 +422,7 @@ export default function AdminTestimonialsPage() {
                 </div>
 
                 <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                  <p className="text-sm text-slate-700 whitespace-pre-line">
+                  <p className="text-sm text-foreground whitespace-pre-line">
                     {previewTestimonial.content}
                   </p>
                 </div>

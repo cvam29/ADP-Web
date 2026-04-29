@@ -173,7 +173,7 @@ export default function UniversityFormDialog({
                       className={`h-6 w-6 ${
                         active
                           ? "fill-amber-400 text-amber-400"
-                          : "text-slate-300"
+                          : "text-muted-foreground/30"
                       }`}
                     />
                   </button>

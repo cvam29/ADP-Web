@@ -24,7 +24,7 @@ export function Footer() {
   const quickLinks = publicNavigation.filter((item) => item.href !== "/")
 
   return (
-    <footer className="bg-herb-950 border-t border-herb-900">
+    <footer className="bg-herb-950 dark:bg-card border-t border-herb-900 dark:border-border">
       <div className="container mx-auto px-4 lg:px-6">
 
         {/* Main grid */}
@@ -133,7 +133,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="border-t border-herb-900 py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="border-t border-herb-900 dark:border-border py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-herb-700 text-xs text-center sm:text-left">
             &copy; {new Date().getFullYear()} Association of Dietetics Professionals. All rights reserved.
           </p>

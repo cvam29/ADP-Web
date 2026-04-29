@@ -413,14 +413,14 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Admin Dashboard
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Welcome back, {user.name}. Here’s an overview of your platform.
+          <p className="mt-1 text-sm text-muted-foreground">
+            Welcome back, {user.name}. Here&apos;s an overview of your platform.
           </p>
         </div>
-        <Badge className="bg-blue-100 text-blue-800">Administrator</Badge>
+        <Badge className="bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300">Administrator</Badge>
       </div>
 
       {/* Insights */}
@@ -433,7 +433,7 @@ export default function AdminDashboard() {
               className="hover:shadow-md transition-shadow"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium text-gray-600">
+                <CardTitle className="text-sm font-medium text-muted-foreground">
                   {card.title}
                 </CardTitle>
                 <div className={`p-2 rounded-md ${card.color}`}>
@@ -441,7 +441,7 @@ export default function AdminDashboard() {
                 </div>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-gray-900">
+                <div className="text-2xl font-bold text-foreground">
                   {card.value}
                 </div>
               </CardContent>
@@ -502,18 +502,18 @@ export default function AdminDashboard() {
                 {recentPlans.map((plan) => (
                   <div
                     key={plan.id}
-                    className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    className="flex items-center justify-between p-3 bg-secondary/50 rounded-lg"
                   >
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="font-medium">{plan.name}</p>
+                        <p className="font-medium text-foreground">{plan.name}</p>
                         {plan.popular && (
                           <Badge variant="secondary" className="text-xs">
                             Popular
                           </Badge>
                         )}
                       </div>
-                      <p className="text-sm text-gray-500">
+                      <p className="text-sm text-muted-foreground">
                         ₹{plan.price} • {plan.duration} months
                       </p>
                     </div>
@@ -532,7 +532,7 @@ export default function AdminDashboard() {
               </div>
             ) : (
               <div className="text-center py-6">
-                <p className="text-gray-500 mb-4">No membership plans found</p>
+                <p className="text-muted-foreground mb-4">No membership plans found</p>
                 <Link href="/admin/membership">
                   <Button>
                     <Plus className="w-4 h-4 mr-2" /> Create First Plan
@@ -558,19 +558,19 @@ export default function AdminDashboard() {
               {recentActivity.map((activity) => (
                 <div
                   key={activity.key}
-                  className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center space-x-4 p-3 bg-secondary/50 rounded-lg"
                 >
                   <div className={`w-2 h-2 rounded-full ${activity.color}`}></div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium">{activity.title}</p>
-                    <p className="text-sm text-gray-600 truncate">{activity.description}</p>
-                    <p className="text-xs text-gray-500">{formatRelativeTime(activity.timestamp)}</p>
+                    <p className="text-sm font-medium text-foreground">{activity.title}</p>
+                    <p className="text-sm text-muted-foreground truncate">{activity.description}</p>
+                    <p className="text-xs text-muted-foreground/70">{formatRelativeTime(activity.timestamp)}</p>
                   </div>
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center py-6 text-gray-500">
+            <div className="text-center py-6 text-muted-foreground">
               No recent platform activity available yet.
             </div>
           )}

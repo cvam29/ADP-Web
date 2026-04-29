@@ -254,8 +254,8 @@ export default function EmailManagement() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Email Management</h1>
-          <p className="text-gray-600">
+          <h1 className="text-3xl font-bold text-foreground">Email Management</h1>
+          <p className="text-muted-foreground">
             Create templates and send emails to users
           </p>
         </div>
@@ -318,7 +318,7 @@ export default function EmailManagement() {
                     <TableRow>
                       <TableCell
                         colSpan={5}
-                        className="text-center py-8 text-gray-500"
+                        className="text-center py-8 text-muted-foreground"
                       >
                         No templates found. Create one to get started.
                       </TableCell>
@@ -339,7 +339,7 @@ export default function EmailManagement() {
                             <Badge variant="secondary">Inactive</Badge>
                           )}
                         </TableCell>
-                        <TableCell className="text-sm text-gray-600">
+                        <TableCell className="text-sm text-muted-foreground">
                           {template.createdAt
                             ? new Date(template.createdAt).toLocaleDateString()
                             : "-"}
@@ -432,7 +432,7 @@ export default function EmailManagement() {
                         }))
                       }
                     />
-                    <p className="text-xs text-gray-500 mt-1">
+                    <p className="text-xs text-muted-foreground mt-1">
                       Enter a single email address.
                     </p>
                   </div>
@@ -468,7 +468,7 @@ export default function EmailManagement() {
                       {/* Dynamic Placeholders */}
                       {Object.keys(templatePlaceholders).length > 0 && (
                         <div className="space-y-4 bg-gray-50 p-4 rounded-md border">
-                          <label className="text-sm font-medium block text-gray-700 border-b pb-2 mb-2">
+                          <label className="text-sm font-medium block text-foreground border-b pb-2 mb-2">
                             Template Variables
                           </label>
                           <div className="space-y-3">
@@ -478,7 +478,7 @@ export default function EmailManagement() {
                                 className="flex items-center gap-3"
                               >
                                 <label
-                                  className="text-sm font-medium text-gray-600 capitalize w-1/3 text-left truncate"
+                                  className="text-sm font-medium text-muted-foreground capitalize w-1/3 text-left truncate"
                                   title={key}
                                 >
                                   {key.replace(/_/g, " ")}:
@@ -498,7 +498,7 @@ export default function EmailManagement() {
 
                       {emailForm.templateKey &&
                         Object.keys(templatePlaceholders).length === 0 && (
-                          <div className="p-4 bg-gray-50 rounded-md border text-sm text-gray-500 text-center">
+                          <div className="p-4 bg-gray-50 rounded-md border text-sm text-muted-foreground text-center">
                             No variables found in this template.
                           </div>
                         )}
@@ -561,7 +561,7 @@ export default function EmailManagement() {
               <CardHeader className="bg-gray-50/50 border-b py-3 px-4">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-base font-medium flex items-center gap-2">
-                    <Search className="w-4 h-4 text-gray-500" /> Preview
+                    <Search className="w-4 h-4 text-muted-foreground" /> Preview
                   </CardTitle>
                   <Badge variant="outline" className="text-xs font-normal">
                     HTML View
@@ -617,7 +617,7 @@ export default function EmailManagement() {
             <DialogTitle className="text-lg font-semibold">
               {previewTemplate?.subject}
             </DialogTitle>
-            <div className="text-sm text-gray-500 space-y-1 mt-2">
+            <div className="text-sm text-muted-foreground space-y-1 mt-2">
               <p>
                 <strong>Key:</strong>{" "}
                 <code className="bg-gray-100 px-2 py-0.5 rounded text-xs">

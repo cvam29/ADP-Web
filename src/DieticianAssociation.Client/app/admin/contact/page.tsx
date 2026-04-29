@@ -118,9 +118,9 @@ export default function AdminContactMessagesPage() {
       new: "bg-blue-100 text-blue-800 border-blue-200",
       "in-progress": "bg-amber-100 text-amber-800 border-amber-200",
       resolved: "bg-green-100 text-green-800 border-green-200",
-      closed: "bg-gray-100 text-gray-800 border-gray-200",
+      closed: "bg-secondary text-secondary-foreground border-border",
     }
-    const cls = map[status] ?? "bg-slate-100 text-slate-800 border-slate-200"
+    const cls = map[status] ?? "bg-secondary text-secondary-foreground border-border"
     return (
       <Badge variant="outline" className={cls}>
         {status}
@@ -135,12 +135,12 @@ export default function AdminContactMessagesPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Contact Messages</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Contact Messages</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Review, update status, and respond to Contact Us messages.
           </p>
         </div>
-        <div className="flex items-center gap-2 text-gray-600">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Mail className="w-5 h-5" />
           <span className="text-sm">Total: {pagedResult?.totalItems ?? messages.length}</span>
         </div>
@@ -244,14 +244,14 @@ export default function AdminContactMessagesPage() {
                   messages?.map((m) => (
                     <TableRow key={String(m.id)}>
                       <TableCell className="font-medium w-[14rem] whitespace-nowrap">{m.name ?? "—"}</TableCell>
-                      <TableCell className="text-sm text-gray-600 w-[18rem] whitespace-nowrap">{m.email ?? "—"}</TableCell>
-                      <TableCell className="text-sm text-gray-600 w-[14rem] whitespace-nowrap hidden md:table-cell">{m.mobileNumber ?? "—"}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground w-[18rem] whitespace-nowrap">{m.email ?? "—"}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground w-[14rem] whitespace-nowrap hidden md:table-cell">{m.mobileNumber ?? "—"}</TableCell>
                       <TableCell className="min-w-0 truncate">{m.subject ?? "—"}</TableCell>
                       <TableCell className="w-[10rem] hidden md:table-cell">
                         <Badge variant="outline">{m.category ?? "—"}</Badge>
                       </TableCell>
                       <TableCell className="w-[12rem]">{renderStatusBadge(m.status)}</TableCell>
-                      <TableCell className="text-sm text-gray-600 w-[16rem] whitespace-nowrap hidden lg:table-cell">
+                      <TableCell className="text-sm text-muted-foreground w-[16rem] whitespace-nowrap hidden lg:table-cell">
                         {m.createdAt ? new Date(m.createdAt).toLocaleString() : "—"}
                       </TableCell>
                       <TableCell className="w-[8rem] text-right">
@@ -303,28 +303,28 @@ export default function AdminContactMessagesPage() {
             <div className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <div className="text-xs text-gray-500">From</div>
+                  <div className="text-xs text-muted-foreground">From</div>
                   <div className="font-medium">{current.name}</div>
-                  <div className="text-sm text-gray-600">{current.email}</div>
-                  <div className="text-xs text-gray-500 mt-3">Mobile</div>
-                  <div className="text-sm text-gray-600">{current.mobileNumber ?? "—"}</div>
+                  <div className="text-sm text-muted-foreground">{current.email}</div>
+                  <div className="text-xs text-muted-foreground mt-3">Mobile</div>
+                  <div className="text-sm text-muted-foreground">{current.mobileNumber ?? "—"}</div>
                 </div>
                 <div>
-                  <div className="text-xs text-gray-500">Category</div>
+                  <div className="text-xs text-muted-foreground">Category</div>
                   <div>{current.category}</div>
                 </div>
               </div>
               <div>
-                <div className="text-xs text-gray-500">Subject</div>
+                <div className="text-xs text-muted-foreground">Subject</div>
                 <div className="font-medium">{current.subject}</div>
               </div>
               <div>
-                <div className="text-xs text-gray-500">Message</div>
+                <div className="text-xs text-muted-foreground">Message</div>
                 <div className="whitespace-pre-wrap text-sm">{current.message}</div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-end">
                 <div>
-                  <div className="text-xs text-gray-500 mb-2">Status</div>
+                  <div className="text-xs text-muted-foreground mb-2">Status</div>
                   <Select value={statusDraft} onValueChange={setStatusDraft}>
                     <SelectTrigger>
                       <SelectValue />
@@ -356,7 +356,7 @@ export default function AdminContactMessagesPage() {
               </div>
             </div>
           ) : (
-            <div className="py-6 text-center text-sm text-gray-600">No message selected</div>
+            <div className="py-6 text-center text-sm text-muted-foreground">No message selected</div>
           )}
           <DialogFooter></DialogFooter>
         </DialogContent>

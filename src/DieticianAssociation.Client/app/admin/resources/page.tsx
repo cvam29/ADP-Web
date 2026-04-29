@@ -541,10 +541,10 @@ export default function ResourcesManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Resources Management
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-muted-foreground">
             Upload and manage educational materials and guides
           </p>
         </div>
@@ -640,13 +640,13 @@ export default function ResourcesManagement() {
                     onChange={handleFileSelect}
                     accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.mp4,.mp3,.png,.jpg,.jpeg,.zip"
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     Files will be stored in Azure Blob Storage under the
                     resources/{"{category}"} folder
                   </p>
                   {selectedFile && (
                     <div className="space-y-2">
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-muted-foreground">
                         Selected: {selectedFile.name} (
                         {(selectedFile.size / (1024 * 1024)).toFixed(2)} MB)
                       </p>
@@ -739,7 +739,7 @@ export default function ResourcesManagement() {
                     placeholder="Upload a file to generate blob storage URL"
                     className="bg-gray-50"
                   />
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xs text-muted-foreground">
                     This URL is automatically generated when you upload a file
                   </p>
                 </div>
@@ -882,7 +882,7 @@ export default function ResourcesManagement() {
                           </div>
                           <div>
                             <div className="font-medium">{resource.title}</div>
-                            <div className="text-sm text-gray-500">
+                            <div className="text-sm text-muted-foreground">
                               {resource.format} • {resource.fileSize}
                             </div>
                           </div>
@@ -897,11 +897,11 @@ export default function ResourcesManagement() {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1">
-                          <Download className="w-4 h-4 text-gray-500" />
+                          <Download className="w-4 h-4 text-muted-foreground" />
                           {resource.downloads}
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">
+                      <TableCell className="text-sm text-muted-foreground">
                         {resource.date
                           ? new Date(resource.date).toLocaleDateString()
                           : ""}
@@ -1110,7 +1110,7 @@ export default function ResourcesManagement() {
                   <h3 className="text-xl font-semibold">
                     {selectedResource.title}
                   </h3>
-                  <p className="text-gray-600 mt-1">
+                  <p className="text-muted-foreground mt-1">
                     {selectedResource.description}
                   </p>
                   <div className="flex gap-2 mt-3">
@@ -1123,24 +1123,24 @@ export default function ResourcesManagement() {
 
               <div className="grid grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900">
+                  <h4 className="font-medium text-foreground">
                     File Information
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">Format:</span>
+                      <span className="text-sm text-muted-foreground">Format:</span>
                       <span className="text-sm font-medium">
                         {selectedResource.format}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">File Size:</span>
+                      <span className="text-sm text-muted-foreground">File Size:</span>
                       <span className="text-sm font-medium">
                         {selectedResource.fileSize}
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">Downloads:</span>
+                      <span className="text-sm text-muted-foreground">Downloads:</span>
                       <span className="text-sm font-medium">
                         {selectedResource.downloads}
                       </span>
@@ -1149,12 +1149,12 @@ export default function ResourcesManagement() {
                 </div>
 
                 <div className="space-y-4">
-                  <h4 className="font-medium text-gray-900">
+                  <h4 className="font-medium text-foreground">
                     Publishing Information
                   </h4>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-muted-foreground">
                         Access Level:
                       </span>
                       <span className="text-sm font-medium">
@@ -1162,7 +1162,7 @@ export default function ResourcesManagement() {
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">Date Added:</span>
+                      <span className="text-sm text-muted-foreground">Date Added:</span>
                       <span className="text-sm font-medium">
                         {selectedResource.date
                           ? new Date(selectedResource.date).toLocaleDateString()
@@ -1170,7 +1170,7 @@ export default function ResourcesManagement() {
                       </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-muted-foreground">
                         Resource ID:
                       </span>
                       <span className="text-sm font-medium">

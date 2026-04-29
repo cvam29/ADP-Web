@@ -169,9 +169,9 @@ export default function EventsManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Events Management</h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Manage, monitor, and analyze your organization’s events.
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Events Management</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Manage, monitor, and analyze your organization&apos;s events.
           </p>
         </div>
         <div className="flex gap-2">
@@ -239,18 +239,18 @@ export default function EventsManagement() {
                 return (
                   <TableRow key={event.id} className="hover:bg-gray-50 transition-colors">
                     <TableCell>
-                      <div className="font-medium text-gray-900">{event.title}</div>
+                      <div className="font-medium text-foreground">{event.title}</div>
                       {priceNumber > 0 ? (
                         <div className="text-sm font-medium text-green-600">₹{priceNumber}</div>
                       ) : (
-                        <div className="text-sm text-gray-500">Free</div>
+                        <div className="text-sm text-muted-foreground">Free</div>
                       )}
                     </TableCell>
-                    <TableCell className="text-sm text-gray-600">
+                    <TableCell className="text-sm text-muted-foreground">
                       {formatDate(event.date || new Date().toISOString())}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-2 text-sm text-gray-700">
+                      <div className="flex items-center gap-2 text-sm text-foreground">
                         <MapPin className="h-4 w-4 text-gray-400" />
                         {event.location}
                       </div>
@@ -260,7 +260,7 @@ export default function EventsManagement() {
                     <TableCell className="text-sm">
                       <Users className="inline mr-1 h-4 w-4 text-gray-400" />
                       {event.registered ?? 0}/{event.capacity ?? 0}
-                      <div className="text-xs text-gray-500">
+                      <div className="text-xs text-muted-foreground">
                         {getOccupancyRate(event.registered, event.capacity)}% full
                       </div>
                     </TableCell>
@@ -309,8 +309,8 @@ export default function EventsManagement() {
           {filteredEvents.length === 0 && !isLoading && (
             <div className="text-center py-12">
               <Calendar className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No events found</h3>
-              <p className="text-gray-600 mb-4">
+              <h3 className="text-lg font-medium text-foreground mb-2">No events found</h3>
+              <p className="text-muted-foreground mb-4">
                 {searchTerm ? "Try adjusting your search terms." : "Get started by creating your first event."}
               </p>
               {!searchTerm && (

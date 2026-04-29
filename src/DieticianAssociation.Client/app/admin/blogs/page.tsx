@@ -137,11 +137,11 @@ export default function AdminBlogsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Blogs
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
-            Manage and organize your platform’s blog posts.
+          <p className="mt-1 text-sm text-muted-foreground">
+            {"Manage and organize your platform's blog posts."}
           </p>
         </div>
         <Link href="/admin/blogs/add-edit">
@@ -183,7 +183,7 @@ export default function AdminBlogsPage() {
                     </SelectItem>
                   ))
                 ) : (
-                  <div className="px-2 py-1 text-sm text-gray-500">
+                  <div className="px-2 py-1 text-sm text-muted-foreground">
                     No categories
                   </div>
                 )}
@@ -281,7 +281,7 @@ export default function AdminBlogsPage() {
                               Published
                             </Badge>
                           ) : (
-                            <Badge className="bg-gray-100 text-gray-800 border-gray-200 w-fit" variant="outline">Draft</Badge>
+                            <Badge className="bg-secondary text-secondary-foreground border-border w-fit" variant="outline">Draft</Badge>
                           )}
                           {(post.hasPendingEdit || post.editStatus === "PendingReview") && (
                             <Badge className="bg-yellow-100 text-yellow-800 border-yellow-200 w-fit" variant="outline">
@@ -290,7 +290,7 @@ export default function AdminBlogsPage() {
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">
+                      <TableCell className="text-sm text-muted-foreground">
                         {post.publishedAt
                           ? new Date(post.publishedAt).toLocaleDateString()
                           : post.createdAt

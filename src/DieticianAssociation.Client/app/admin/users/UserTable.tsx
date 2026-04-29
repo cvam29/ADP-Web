@@ -113,7 +113,7 @@ export default function UserTable({
   return (
     <>
       <Table className="border-collapse table-auto">
-        <TableHeader className="bg-gray-50">
+        <TableHeader className="bg-secondary/50">
           <TableRow>
             <TableHead className="w-[160px]">Name</TableHead>
             <TableHead className="w-[220px]">Email</TableHead>
@@ -140,14 +140,14 @@ export default function UserTable({
             const canViewAs = user.roleId !== 1 && user.roleId !== 2;
 
             return (
-              <TableRow key={user.id} className="hover:bg-gray-50">
+              <TableRow key={user.id} className="hover:bg-secondary/40">
                 {/* Name */}
                 <TableCell className="font-medium whitespace-nowrap">
                   {user.name ?? "—"}
                 </TableCell>
 
                 {/* Email */}
-                <TableCell className="text-sm text-gray-700 truncate max-w-[220px]">
+                <TableCell className="text-sm text-muted-foreground truncate max-w-[220px]">
                   {user.email ?? "—"}
                 </TableCell>
 
@@ -178,7 +178,7 @@ export default function UserTable({
                 </TableCell>
 
                 {/* Membership (Expandable) */}
-                <TableCell className="text-sm text-gray-700 hidden lg:table-cell">
+                <TableCell className="text-sm text-muted-foreground hidden lg:table-cell">
                   {membership && memStatus ? (
                     <div className="flex flex-col gap-1">
                       {/* Header Row (Tier + Status + Toggle) */}
@@ -189,8 +189,8 @@ export default function UserTable({
                             className={cn(
                               "px-2 py-0.5 rounded text-xs",
                               isActiveMembership
-                                ? "bg-blue-50 text-blue-700 border-blue-200"
-                                : "bg-gray-100 text-gray-500 border-gray-200",
+                                ? "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-800"
+                                : "bg-secondary text-muted-foreground border-border",
                             )}
                           >
                             {memName ?? "—"}
@@ -200,11 +200,11 @@ export default function UserTable({
                             className={cn(
                               "px-2 py-0.5 rounded-full text-xs font-medium",
                               memStatus === "Active" &&
-                                "bg-green-100 text-green-700",
+                                "bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300",
                               memStatus === "Pending" &&
-                                "bg-gray-100 text-gray-600",
+                                "bg-secondary text-muted-foreground",
                               (memStatus === "Expired" || expired) &&
-                                "bg-red-100 text-red-700",
+                                "bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300",
                             )}
                           >
                             {memStatus}
@@ -213,7 +213,7 @@ export default function UserTable({
 
                         <button
                           onClick={() => toggleExpand(user.id)}
-                          className="text-gray-500 hover:text-gray-700"
+                          className="text-muted-foreground hover:text-foreground"
                         >
                           {isExpanded ? (
                             <ChevronUp className="w-4 h-4" />
@@ -225,9 +225,9 @@ export default function UserTable({
 
                       {/* Expanded Details */}
                       {isExpanded && (
-                        <div className="mt-1 rounded-md bg-gray-50 p-2 text-xs text-gray-600 border border-gray-200">
+                        <div className="mt-1 rounded-md bg-secondary p-2 text-xs text-muted-foreground border border-border">
                           <div>
-                            <span className="font-medium">Joined:</span>{" "}
+                            <span className="font-medium text-foreground">Joined:</span>{" "}
                             {membership.joinDate
                               ? new Date(
                                   membership.joinDate,
@@ -235,7 +235,7 @@ export default function UserTable({
                               : "—"}
                           </div>
                           <div>
-                            <span className="font-medium">Expires:</span>{" "}
+                            <span className="font-medium text-foreground">Expires:</span>{" "}
                             {membership.expirationDate
                               ? new Date(
                                   membership.expirationDate,
@@ -246,7 +246,7 @@ export default function UserTable({
                       )}
                     </div>
                   ) : (
-                    <span className="text-gray-400 italic">No Membership</span>
+                    <span className="text-muted-foreground/60 italic">No Membership</span>
                   )}
                 </TableCell>
 
@@ -258,8 +258,8 @@ export default function UserTable({
                       className={cn(
                         "inline-flex items-center rounded-full p-1",
                         user.confirmationSent
-                          ? "bg-green-100 text-green-600"
-                          : "bg-gray-100 text-gray-400"
+                          ? "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400"
+                          : "bg-secondary text-muted-foreground"
                       )}
                     >
                       <MailCheck className="w-3.5 h-3.5" />
@@ -269,8 +269,8 @@ export default function UserTable({
                       className={cn(
                         "inline-flex items-center rounded-full p-1",
                         user.tempPasswordSent
-                          ? "bg-amber-100 text-amber-600"
-                          : "bg-gray-100 text-gray-400"
+                          ? "bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400"
+                          : "bg-secondary text-muted-foreground"
                       )}
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -280,8 +280,8 @@ export default function UserTable({
                       className={cn(
                         "inline-flex items-center rounded-full p-1",
                         user.requirePasswordReset
-                          ? "bg-red-100 text-red-600"
-                          : "bg-gray-100 text-gray-400"
+                          ? "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"
+                          : "bg-secondary text-muted-foreground"
                       )}
                     >
                       <KeySquare className="w-3.5 h-3.5" />

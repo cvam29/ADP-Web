@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Header } from '@/components/header'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -72,21 +73,21 @@ function SidebarContent({
   return (
     <div className="flex flex-col h-full">
       {!collapsed && (
-        <div className="flex items-center gap-3 border-b border-gray-100 px-4 py-5 transition-all">
-          <div className="h-9 w-9 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0">
-            <LayoutDashboard className="h-5 w-5 text-white" />
+        <div className="flex items-center gap-3 border-b border-border px-4 py-5 transition-all">
+          <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+            <LayoutDashboard className="h-5 w-5 text-primary-foreground" />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 truncate">My Dashboard</p>
-            <p className="text-xs text-gray-400 truncate">{user?.email}</p>
+            <p className="text-sm font-semibold text-foreground truncate">My Dashboard</p>
+            <p className="text-xs text-muted-foreground truncate">{user?.email}</p>
           </div>
         </div>
       )}
 
       {collapsed && (
-        <div className="flex justify-center border-b border-gray-100 px-3 py-4 transition-all">
-          <div className="h-9 w-9 rounded-xl bg-emerald-600 flex items-center justify-center flex-shrink-0">
-            <LayoutDashboard className="h-5 w-5 text-white" />
+        <div className="flex justify-center border-b border-border px-3 py-4 transition-all">
+          <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center flex-shrink-0">
+            <LayoutDashboard className="h-5 w-5 text-primary-foreground" />
           </div>
         </div>
       )}
@@ -107,14 +108,14 @@ function SidebarContent({
                   'flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-all',
                   collapsed ? 'justify-center px-2' : 'px-3',
                   active
-                    ? 'bg-emerald-50 text-emerald-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
                 )}
               >
                 <Icon
                   className={cn(
                     'h-4 w-4 flex-shrink-0',
-                    active ? 'text-emerald-600' : 'text-gray-400',
+                    active ? 'text-primary' : 'text-muted-foreground',
                   )}
                 />
                 {!collapsed && <span className="flex-1">{item.label}</span>}
@@ -131,14 +132,14 @@ function SidebarContent({
                 'flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-all',
                 collapsed ? 'justify-center px-2' : 'px-3',
                 pathname.startsWith('/admin')
-                  ? 'bg-emerald-50 text-emerald-700'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                  ? 'bg-primary/10 text-primary'
+                  : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
               )}
             >
               <ShieldCheck
                 className={cn(
                   'h-4 w-4 flex-shrink-0',
-                  pathname.startsWith('/admin') ? 'text-emerald-600' : 'text-gray-400',
+                  pathname.startsWith('/admin') ? 'text-primary' : 'text-muted-foreground',
                 )}
               />
               {!collapsed && <span className="flex-1">Admin Workspace</span>}
@@ -151,8 +152,8 @@ function SidebarContent({
           {collapsed ? (
             <Separator className="my-3" />
           ) : (
-            <div className="mb-2 px-3 mt-4">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
+              <div className="mb-2 px-3 mt-4">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground/70">
                 Resources
               </p>
             </div>
@@ -171,14 +172,14 @@ function SidebarContent({
                     'flex items-center gap-3 py-2.5 rounded-lg text-sm font-medium transition-all',
                     collapsed ? 'justify-center px-2' : 'px-3',
                     active
-                      ? 'bg-emerald-50 text-emerald-700'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:bg-secondary hover:text-foreground',
                   )}
                 >
                   <Icon
                     className={cn(
                       'h-4 w-4 flex-shrink-0',
-                      active ? 'text-emerald-600' : 'text-gray-400',
+                      active ? 'text-primary' : 'text-muted-foreground',
                     )}
                   />
                   {!collapsed && item.label}
@@ -239,7 +240,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       )?.label ?? 'Dashboard'
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-background">
       {showWebsiteHeader ? <Header /> : null}
 
       <div className={cn('flex', shellMinHeightClass)}>
@@ -250,7 +251,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             collapsed ? 'w-16' : 'w-64 xl:w-72',
           )}
         >
-          <div className="relative h-16 overflow-hidden border-r border-gray-100 bg-gray-100">
+          <div className="relative h-16 overflow-hidden border-r border-border bg-secondary/40">
             {!collapsed && (
               <>
                 <Image
@@ -266,7 +267,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           </div>
           <aside
             className={cn(
-              'flex flex-col border-r border-gray-100 bg-white flex-shrink-0 sticky transition-all duration-300 w-full',
+              'flex flex-col border-r border-border bg-card flex-shrink-0 sticky transition-all duration-300 w-full',
               showWebsiteHeader ? 'top-32 h-[calc(100vh-8rem)]' : stickyTopClass,
               showWebsiteHeader ? '' : sidebarHeightClass,
             )}
@@ -276,13 +277,13 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Collapse toggle */}
           <button
             onClick={() => setCollapsed((c) => !c)}
-            className="absolute -right-3 top-20 z-10 h-6 w-6 rounded-full border border-gray-200 bg-white shadow-sm flex items-center justify-center hover:bg-gray-50 transition-colors"
+            className="absolute -right-3 top-20 z-10 h-6 w-6 rounded-full border border-border bg-card shadow-sm flex items-center justify-center hover:bg-secondary transition-colors"
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             {collapsed ? (
-              <ChevronRight className="h-3 w-3 text-gray-500" />
+              <ChevronRight className="h-3 w-3 text-muted-foreground" />
             ) : (
-              <ChevronLeft className="h-3 w-3 text-gray-500" />
+              <ChevronLeft className="h-3 w-3 text-muted-foreground" />
             )}
           </button>
           </aside>
@@ -292,9 +293,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {mobileOpen && (
           <div className="fixed inset-0 z-50 lg:hidden">
             <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-            <aside className="absolute left-0 top-0 h-full w-72 bg-white shadow-xl flex flex-col">
-              <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
-                <p className="text-sm font-semibold text-gray-800">Navigation</p>
+            <aside className="absolute left-0 top-0 h-full w-72 bg-card shadow-xl flex flex-col">
+              <div className="flex items-center justify-between px-4 py-3 border-b border-border">
+                <p className="text-sm font-semibold text-foreground">Navigation</p>
                 <Button
                   variant="ghost"
                   size="icon"
@@ -310,9 +311,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         )}
 
         {/* ─── Main content ─── */}
-        <div className="flex-1 flex flex-col min-w-0 bg-slate-50">
+        <div className="flex-1 flex flex-col min-w-0 bg-background">
           {/* Topbar */}
-          <div className={cn('bg-white border-b border-gray-100 px-5 py-3 flex items-center gap-4 sticky z-10', stickyTopClass)}>
+          <div className={cn('bg-card border-b border-border px-5 py-3 flex items-center gap-4 sticky z-10', stickyTopClass)}>
             <Button
               variant="ghost"
               size="icon"
@@ -323,10 +324,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             </Button>
 
             <div className="flex-1 min-w-0">
-              <h1 className="text-base font-semibold text-gray-900 truncate">{currentLabel}</h1>
+              <h1 className="text-base font-semibold text-foreground truncate">{currentLabel}</h1>
             </div>
 
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <ThemeToggle />
               <NotificationCenter />
             </div>
           </div>
@@ -334,7 +336,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           {/* Page content */}
           <main className="flex-1 p-5 md:p-7 space-y-5">
             {isViewingAs ? (
-              <Alert className="border-amber-200 bg-amber-50 text-amber-950 [&>svg]:text-amber-700">
+              <Alert className="border-amber-300 bg-amber-50 text-amber-950 dark:bg-amber-950/30 dark:border-amber-800 dark:text-amber-200 [&>svg]:text-amber-700 dark:[&>svg]:text-amber-400">
                 <ArrowLeftRight className="h-4 w-4" />
                 <AlertTitle>Viewing as {user?.name}</AlertTitle>
                 <AlertDescription className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -344,7 +346,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   </span>
                   <Button
                     variant="outline"
-                    className="border-amber-300 bg-white text-amber-900 hover:bg-amber-100"
+                    className="border-amber-300 text-amber-900 hover:bg-amber-100 dark:border-amber-700 dark:text-amber-300 dark:hover:bg-amber-950/40"
                     onClick={() => {
                       void exitViewAs()
                     }}

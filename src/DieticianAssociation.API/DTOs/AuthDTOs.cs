@@ -20,7 +20,7 @@ namespace DieticianAssociation.API.DTOs
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        [MinLength(12)]
+        [MinLength(6)]
         public string Password { get; set; } = string.Empty;
 
         [Required]
@@ -80,7 +80,7 @@ namespace DieticianAssociation.API.DTOs
         public string CurrentPassword { get; set; } = string.Empty;
 
         [Required]
-        [MinLength(12)]
+        [MinLength(6)]
         public string NewPassword { get; set; } = string.Empty;
 
         [Required]

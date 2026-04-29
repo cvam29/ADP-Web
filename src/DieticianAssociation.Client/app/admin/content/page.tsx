@@ -231,8 +231,8 @@ export default function ContentManagement() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Content Management</h1>
-          <p className="text-gray-600">Manage resources, pages, and media files</p>
+          <h1 className="text-3xl font-bold text-foreground">Content Management</h1>
+          <p className="text-muted-foreground">Manage resources, pages, and media files</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="gap-2">
@@ -255,13 +255,13 @@ export default function ContentManagement() {
         {stats.map((stat) => (
           <Card key={stat.name}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">{stat.name}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.name}</CardTitle>
               <div className={`p-2 rounded-lg ${stat.color}`}>
                 <stat.icon className="w-4 h-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
@@ -316,7 +316,7 @@ export default function ContentManagement() {
                           {getTypeIcon(item.type)}
                           <div>
                             <div className="font-medium">{item.title}</div>
-                            <div className="text-sm text-gray-500">ID: {item.id}</div>
+                            <div className="text-sm text-muted-foreground">ID: {item.id}</div>
                           </div>
                         </div>
                       </TableCell>
@@ -326,24 +326,24 @@ export default function ContentManagement() {
                         </Badge>
                       </TableCell>
                       <TableCell>{getStatusBadge(item.status)}</TableCell>
-                      <TableCell className="text-sm text-gray-600">{item.author}</TableCell>
+                      <TableCell className="text-sm text-muted-foreground">{item.author}</TableCell>
                       <TableCell>
                         <div className="space-y-1">
                           {item.views && (
-                            <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Eye className="w-3 h-3" />
                               {formatNumber(item.views)}
                             </div>
                           )}
                           {item.rating && (
-                            <div className="flex items-center gap-1 text-sm text-gray-600">
+                            <div className="flex items-center gap-1 text-sm text-muted-foreground">
                               <Star className="w-3 h-3 fill-yellow-400 text-yellow-400" />
                               {item.rating}
                             </div>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm text-gray-600">
+                      <TableCell className="text-sm text-muted-foreground">
                         {new Date(item.updatedAt).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-right">
