@@ -147,7 +147,7 @@ const getFileIcon = (contentType: string, fileName?: string) => {
         return <FileCode className="w-4 h-4 text-yellow-500" />
       case 'txt':
       case 'rtf':
-        return <FileText className="w-4 h-4 text-gray-600" />
+        return <FileText className="w-4 h-4 text-muted-foreground" />
       case 'csv':
         return <FileSpreadsheet className="w-4 h-4 text-green-500" />
       case 'mp3':
@@ -168,10 +168,10 @@ const getFileIcon = (contentType: string, fileName?: string) => {
   if (contentType.includes('powerpoint') || contentType.includes('presentation')) return <FileSliders className="w-4 h-4 text-orange-600" />
   if (contentType.includes('zip') || contentType.includes('rar') || contentType.includes('7z') || contentType.includes('compressed')) return <Archive className="w-4 h-4 text-purple-600" />
   if (contentType.includes('json') || contentType.includes('xml') || contentType.includes('javascript') || contentType.includes('html') || contentType.includes('css')) return <FileCode className="w-4 h-4 text-yellow-600" />
-  if (contentType.includes('text')) return <FileText className="w-4 h-4 text-gray-600" />
+  if (contentType.includes('text')) return <FileText className="w-4 h-4 text-muted-foreground" />
   
   // Default file icon
-  return <File className="w-4 h-4 text-gray-500" />
+  return <File className="w-4 h-4 text-muted-foreground" />
 }
 
 const getFileTypeLabel = (contentType: string, fileName?: string) => {
@@ -221,7 +221,7 @@ const getFolderIcon = (folderName: string) => {
     return <Folder className="w-12 h-12 text-purple-600" />
   }
   if (name.includes('archive') || name.includes('backup') || name.includes('zip')) {
-    return <Folder className="w-12 h-12 text-gray-600" />
+    return <Folder className="w-12 h-12 text-muted-foreground" />
   }
   if (name.includes('public') || name.includes('shared')) {
     return <FolderOpen className="w-12 h-12 text-blue-500" />
@@ -550,11 +550,11 @@ export default function MediaPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Media Library</h1>
-          <p className="mt-1 text-sm text-gray-600">Manage your media files and folders</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Media Library</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Manage your media files and folders</p>
           
           {/* Breadcrumb Navigation */}
-          <div className="flex items-center mt-2 text-sm text-gray-600">
+          <div className="flex items-center mt-2 text-sm text-muted-foreground">
             <button 
               onClick={() => navigateToFolder("")}
               className="hover:text-blue-600 transition-colors"
@@ -644,7 +644,7 @@ export default function MediaPage() {
                     accept="image/*,video/*,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.txt,.csv,.rtf,.zip,.rar,.7z,.json,.xml,.html,.css,.js"
                   />
                   {selectedFile && (
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-muted-foreground mt-1">
                       Selected: {selectedFile.name} ({formatFileSize(selectedFile.size)})
                     </p>
                   )}
@@ -723,8 +723,8 @@ export default function MediaPage() {
           <CardContent className="pt-6">
             <div className="text-center py-12">
               <ImageIcon className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No media files found</h3>
-              <p className="text-gray-600 mb-4">Get started by uploading your first media file.</p>
+              <h3 className="text-lg font-medium text-foreground mb-2">No media files found</h3>
+              <p className="text-muted-foreground mb-4">Get started by uploading your first media file.</p>
               <Button onClick={() => setUploadDialogOpen(true)}>
                 <Upload className="w-4 h-4 mr-2" />
                 Upload Media
@@ -743,7 +743,7 @@ export default function MediaPage() {
                 >
                   <div className="flex flex-col items-center justify-center h-full">
                     {getFolderIcon(item.displayName)}
-                    <span className="text-sm text-gray-600 mt-2">Folder</span>
+                    <span className="text-sm text-muted-foreground mt-2">Folder</span>
                   </div>
                 </div>
               ) : (
@@ -758,7 +758,7 @@ export default function MediaPage() {
                   ) : (
                     <div className="flex flex-col items-center justify-center h-full">
                       {item.contentType && getFileIcon(item.contentType, item.displayName)}
-                      <span className="text-xs text-gray-500 mt-2">
+                      <span className="text-xs text-muted-foreground mt-2">
                         {item.contentType && getFileTypeLabel(item.contentType, item.displayName)}
                       </span>
                     </div>
@@ -808,13 +808,13 @@ export default function MediaPage() {
                 </div>
                 <div className="space-y-1">
                   {item.type === 'file' && item.size && (
-                    <p className="text-xs text-gray-500">{formatFileSize(item.size)}</p>
+                    <p className="text-xs text-muted-foreground">{formatFileSize(item.size)}</p>
                   )}
                   {item.type === 'folder' && (
-                    <p className="text-xs text-gray-500">Folder</p>
+                    <p className="text-xs text-muted-foreground">Folder</p>
                   )}
                   {item.createdOn && (
-                    <p className="text-xs text-gray-500">
+                    <p className="text-xs text-muted-foreground">
                       {new Date(item.createdOn).toLocaleDateString()}
                     </p>
                   )}
@@ -830,11 +830,11 @@ export default function MediaPage() {
               <table className="w-full">
                 <thead className="bg-gray-50 border-b">
                   <tr>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Name</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Type</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Size</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Modified</th>
-                    <th className="text-left py-3 px-4 font-medium text-gray-900">Actions</th>
+                    <th className="text-left py-3 px-4 font-medium text-foreground">Name</th>
+                    <th className="text-left py-3 px-4 font-medium text-foreground">Type</th>
+                    <th className="text-left py-3 px-4 font-medium text-foreground">Size</th>
+                    <th className="text-left py-3 px-4 font-medium text-foreground">Modified</th>
+                    <th className="text-left py-3 px-4 font-medium text-foreground">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -878,10 +878,10 @@ export default function MediaPage() {
                           </Badge>
                         )}
                       </td>
-                      <td className="py-3 px-4 text-gray-600">
+                      <td className="py-3 px-4 text-muted-foreground">
                         {item.type === 'file' && item.size ? formatFileSize(item.size) : '—'}
                       </td>
-                      <td className="py-3 px-4 text-gray-600">
+                      <td className="py-3 px-4 text-muted-foreground">
                         {item.lastModified ? new Date(item.lastModified).toLocaleDateString() : '—'}
                       </td>
                       <td className="py-3 px-4">
@@ -957,7 +957,7 @@ export default function MediaPage() {
                     </div>
                     <div>
                       <h3 className="font-medium text-lg">{folder.name === "root" ? "Root Folder" : folder.name}</h3>
-                      <p className="text-sm text-gray-500">{folder.fileCount} files</p>
+                      <p className="text-sm text-muted-foreground">{folder.fileCount} files</p>
                     </div>
                   </div>
                   <DropdownMenu>
@@ -991,7 +991,7 @@ export default function MediaPage() {
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Total Size:</span>
+                    <span className="text-muted-foreground">Total Size:</span>
                     <span className="font-medium">{formatFileSize(folder.totalSize)}</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
@@ -1028,8 +1028,8 @@ export default function MediaPage() {
           <CardContent className="pt-6">
             <div className="text-center py-12">
               <Folder className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No folders found</h3>
-              <p className="text-gray-600 mb-4">Create your first folder to organize your media files.</p>
+              <h3 className="text-lg font-medium text-foreground mb-2">No folders found</h3>
+              <p className="text-muted-foreground mb-4">Create your first folder to organize your media files.</p>
               <Button onClick={() => setNewFolderDialogOpen(true)}>
                 <FolderPlus className="w-4 h-4 mr-2" />
                 Create Folder

@@ -48,7 +48,7 @@ export default function UserDetailPage() {
       <div className="w-full px-6 py-8">
         <Card>
           <CardContent className="py-12 text-center">
-            <p className="text-gray-500">User not found</p>
+            <p className="text-muted-foreground">User not found</p>
             <Button onClick={() => router.back()} className="mt-4">
               Back
             </Button>

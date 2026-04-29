@@ -532,7 +532,7 @@ export default function AdminDashboard() {
               </div>
             ) : (
               <div className="text-center py-6">
-                <p className="text-gray-500 mb-4">No membership plans found</p>
+                <p className="text-muted-foreground mb-4">No membership plans found</p>
                 <Link href="/admin/membership">
                   <Button>
                     <Plus className="w-4 h-4 mr-2" /> Create First Plan

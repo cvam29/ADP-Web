@@ -114,10 +114,10 @@ export default function OutboxPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             Email Outbox
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-muted-foreground">
             View all sent emails from the system via IMAP.
           </p>
         </div>
@@ -216,7 +216,7 @@ export default function OutboxPage() {
                   <TableBody>
                     {outboxEmails.map((email: any) => (
                       <TableRow key={email.id}>
-                        <TableCell className="text-sm text-gray-600 hidden sm:table-cell">
+                        <TableCell className="text-sm text-muted-foreground hidden sm:table-cell">
                           {formatEmailDate(email.dateSent)}
                         </TableCell>
                         <TableCell>
@@ -254,7 +254,7 @@ export default function OutboxPage() {
                       <TableRow>
                         <TableCell
                           colSpan={5}
-                          className="text-center text-gray-500 py-8"
+                          className="text-center text-muted-foreground py-8"
                         >
                           {outboxLoading
                             ? "Loading emails..."
@@ -297,7 +297,7 @@ export default function OutboxPage() {
             <DialogTitle className="text-lg font-semibold">
               {selectedEmail?.subject}
             </DialogTitle>
-            <div className="text-sm text-gray-500 space-y-1 mt-2">
+            <div className="text-sm text-muted-foreground space-y-1 mt-2">
               <p>
                 <strong>From:</strong> {selectedEmail?.fromAddress}
               </p>
@@ -312,7 +312,7 @@ export default function OutboxPage() {
           </DialogHeader>
           <div className="border rounded-lg p-4 mt-4 bg-gray-50">
             {emailDetailLoading ? (
-              <div className="flex items-center justify-center py-12 text-gray-500">
+              <div className="flex items-center justify-center py-12 text-muted-foreground">
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
                 Loading email content...
               </div>

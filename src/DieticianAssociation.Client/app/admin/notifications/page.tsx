@@ -285,8 +285,8 @@ export default function NotificationsManagement() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Notifications Management</h1>
-          <p className="text-gray-600">Send and manage platform notifications</p>
+          <h1 className="text-3xl font-bold text-foreground">Notifications Management</h1>
+          <p className="text-muted-foreground">Send and manage platform notifications</p>
         </div>
         <div className="flex gap-3">
           <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
@@ -393,13 +393,13 @@ export default function NotificationsManagement() {
         {stats.map((stat) => (
           <Card key={stat.name}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">{stat.name}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.name}</CardTitle>
               <div className={`p-2 rounded-lg ${stat.color}`}>
                 <stat.icon className="w-4 h-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
@@ -443,8 +443,8 @@ export default function NotificationsManagement() {
                   <TableCell>
                     <div>
                       <div className="font-medium">{notification.title}</div>
-                      <div className="text-sm text-gray-500 line-clamp-2">{notification.message}</div>
-                      <div className="text-xs text-gray-400 mt-1">
+                      <div className="text-sm text-muted-foreground line-clamp-2">{notification.message}</div>
+                      <div className="text-xs text-muted-foreground mt-1">
                         By {notification.createdBy} • {new Date(notification.createdAt).toLocaleDateString()}
                       </div>
                     </div>
@@ -464,7 +464,7 @@ export default function NotificationsManagement() {
                           {formatNumber(notification.recipientCount)} recipients
                         </div>
                         {notification.openRate && (
-                          <div className="text-sm text-gray-500">
+                          <div className="text-sm text-muted-foreground">
                             {notification.openRate}% open rate
                           </div>
                         )}

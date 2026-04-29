@@ -249,8 +249,8 @@ export default function MembershipPlansManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Membership Plans</h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Membership Plans</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
             Create and manage membership plans for your platform.
           </p>
         </div>
@@ -477,7 +477,7 @@ export default function MembershipPlansManagement() {
                             onCheckedChange={(checked) => togglePermission(permissionKey, !!checked)}
                           />
                           <div className="space-y-1">
-                            <div className="text-sm font-medium text-gray-900">{permission.name}</div>
+                            <div className="text-sm font-medium text-foreground">{permission.name}</div>
                             <div className="text-xs text-muted-foreground">
                               {permission.description || permissionKey}
                             </div>
@@ -548,7 +548,7 @@ export default function MembershipPlansManagement() {
 
                           return (
                             <div className="space-y-2 py-1">
-                              <div className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                              <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                                 {sortedPermissionKeys.length} enabled
                               </div>
 
@@ -567,8 +567,8 @@ export default function MembershipPlansManagement() {
                                         </div>
                                       </TooltipTrigger>
                                       <TooltipContent className="max-w-[260px] text-xs leading-relaxed">
-                                        <p className="font-medium text-slate-900">{permissionName}</p>
-                                        <p className="mt-1 text-slate-600">{permissionDescription}</p>
+                                        <p className="font-medium text-foreground">{permissionName}</p>
+                                        <p className="mt-1 text-muted-foreground">{permissionDescription}</p>
                                       </TooltipContent>
                                     </Tooltip>
                                   );
@@ -579,7 +579,7 @@ export default function MembershipPlansManagement() {
                                     <TooltipTrigger asChild>
                                       <Badge
                                         variant="outline"
-                                        className="cursor-default rounded-full border-slate-300 bg-white px-3 py-1 text-xs font-medium text-slate-700"
+                                        className="cursor-default rounded-full border-slate-300 bg-white px-3 py-1 text-xs font-medium text-foreground"
                                       >
                                         +{hiddenPermissionKeys.length} more
                                       </Badge>
@@ -591,7 +591,7 @@ export default function MembershipPlansManagement() {
                                           const permissionName = permission?.name ?? formatPermissionLabel(permissionKey);
 
                                           return (
-                                            <div key={permissionKey} className="flex items-center gap-2 text-slate-700">
+                                            <div key={permissionKey} className="flex items-center gap-2 text-foreground">
                                               <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
                                               <span>{permissionName}</span>
                                             </div>
@@ -636,7 +636,7 @@ export default function MembershipPlansManagement() {
 
               {memberships.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={8} className="text-center text-gray-500 py-8">
+                  <TableCell colSpan={8} className="text-center text-muted-foreground py-8">
                     No membership plans found. Create the first plan to get started.
                   </TableCell>
                 </TableRow>

@@ -153,8 +153,8 @@ export default function SettingsManagement() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">System Settings</h1>
-          <p className="mt-1 text-sm text-gray-600">Configure platform settings and preferences</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">System Settings</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Configure platform settings and preferences</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="gap-2" onClick={handleBackup}>
@@ -267,7 +267,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="maintenanceMode">Maintenance Mode</Label>
-                        <p className="text-sm text-gray-500">Put the site in maintenance mode</p>
+                        <p className="text-sm text-muted-foreground">Put the site in maintenance mode</p>
                       </div>
                       <Switch
                         id="maintenanceMode"
@@ -279,7 +279,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="registrationEnabled">User Registration</Label>
-                        <p className="text-sm text-gray-500">Allow new user registrations</p>
+                        <p className="text-sm text-muted-foreground">Allow new user registrations</p>
                       </div>
                       <Switch
                         id="registrationEnabled"
@@ -330,7 +330,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="requireSpecialCharacters">Require Special Characters</Label>
-                        <p className="text-sm text-gray-500">Passwords must contain special characters</p>
+                        <p className="text-sm text-muted-foreground">Passwords must contain special characters</p>
                       </div>
                       <Switch
                         id="requireSpecialCharacters"
@@ -342,7 +342,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="twoFactorEnabled">Two-Factor Authentication</Label>
-                        <p className="text-sm text-gray-500">Enable 2FA for all users</p>
+                        <p className="text-sm text-muted-foreground">Enable 2FA for all users</p>
                       </div>
                       <Switch
                         id="twoFactorEnabled"
@@ -393,7 +393,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="emailNotifications">Email Notifications</Label>
-                        <p className="text-sm text-gray-500">Send notifications via email</p>
+                        <p className="text-sm text-muted-foreground">Send notifications via email</p>
                       </div>
                       <Switch
                         id="emailNotifications"
@@ -405,7 +405,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="pushNotifications">Push Notifications</Label>
-                        <p className="text-sm text-gray-500">Send browser push notifications</p>
+                        <p className="text-sm text-muted-foreground">Send browser push notifications</p>
                       </div>
                       <Switch
                         id="pushNotifications"
@@ -417,7 +417,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="systemAlerts">System Alerts</Label>
-                        <p className="text-sm text-gray-500">Notify admins of system events</p>
+                        <p className="text-sm text-muted-foreground">Notify admins of system events</p>
                       </div>
                       <Switch
                         id="systemAlerts"
@@ -519,7 +519,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="refundEnabled">Refunds Enabled</Label>
-                        <p className="text-sm text-gray-500">Allow refunds for payments</p>
+                        <p className="text-sm text-muted-foreground">Allow refunds for payments</p>
                       </div>
                       <Switch
                         id="refundEnabled"
@@ -531,7 +531,7 @@ export default function SettingsManagement() {
                     <div className="flex items-center justify-between">
                       <div>
                         <Label htmlFor="recurringBilling">Recurring Billing</Label>
-                        <p className="text-sm text-gray-500">Enable subscription payments</p>
+                        <p className="text-sm text-muted-foreground">Enable subscription payments</p>
                       </div>
                       <Switch
                         id="recurringBilling"
@@ -636,21 +636,21 @@ export default function SettingsManagement() {
             <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
               <div>
                 <div className="font-medium">Database</div>
-                <div className="text-sm text-gray-500">Connected</div>
+                <div className="text-sm text-muted-foreground">Connected</div>
               </div>
               <Badge className="bg-green-100 text-green-800">Healthy</Badge>
             </div>
             <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
               <div>
                 <div className="font-medium">Email Service</div>
-                <div className="text-sm text-gray-500">Operational</div>
+                <div className="text-sm text-muted-foreground">Operational</div>
               </div>
               <Badge className="bg-green-100 text-green-800">Active</Badge>
             </div>
             <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
               <div>
                 <div className="font-medium">Backup</div>
-                <div className="text-sm text-gray-500">2 hours ago</div>
+                <div className="text-sm text-muted-foreground">2 hours ago</div>
               </div>
               <Badge className="bg-yellow-100 text-yellow-800">Warning</Badge>
             </div>

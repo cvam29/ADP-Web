@@ -162,10 +162,10 @@ export default function EventPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             {mode === "edit" ? "Edit Event" : "Create Event"}
           </h1>
-          <p className="mt-1 text-sm text-gray-600">
+          <p className="mt-1 text-sm text-muted-foreground">
             {mode === "edit"
               ? "Update event details below."
               : "Fill in the event details to create a new one."}

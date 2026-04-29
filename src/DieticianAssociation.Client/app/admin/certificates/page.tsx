@@ -273,8 +273,8 @@ export default function CertificatesManagement() {
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Certificates Management</h1>
-          <p className="text-gray-600">Issue, manage, and track professional certificates</p>
+          <h1 className="text-3xl font-bold text-foreground">Certificates Management</h1>
+          <p className="text-muted-foreground">Issue, manage, and track professional certificates</p>
         </div>
         <div className="flex gap-3">
           <Button variant="outline" className="gap-2">
@@ -297,13 +297,13 @@ export default function CertificatesManagement() {
         {stats.map((stat) => (
           <Card key={stat.name}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">{stat.name}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.name}</CardTitle>
               <div className={`p-2 rounded-lg ${stat.color}`}>
                 <stat.icon className="w-4 h-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
             </CardContent>
           </Card>
         ))}
@@ -358,14 +358,14 @@ export default function CertificatesManagement() {
                       </Avatar>
                       <div>
                         <div className="font-medium">{certificate.recipient.name}</div>
-                        <div className="text-sm text-gray-500">{certificate.recipient.email}</div>
+                        <div className="text-sm text-muted-foreground">{certificate.recipient.email}</div>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div>
                       <div className="font-medium">{certificate.title}</div>
-                      <div className="text-sm text-gray-500">
+                      <div className="text-sm text-muted-foreground">
                         {certificate.verificationCode}
                       </div>
                       {certificate.credits && (
@@ -374,7 +374,7 @@ export default function CertificatesManagement() {
                     </div>
                   </TableCell>
                   <TableCell>{getTypeBadge(certificate.type)}</TableCell>
-                  <TableCell className="text-sm text-gray-600">
+                  <TableCell className="text-sm text-muted-foreground">
                     {new Date(certificate.issuedDate).toLocaleDateString()}
                   </TableCell>
                   <TableCell>
@@ -386,7 +386,7 @@ export default function CertificatesManagement() {
                         )}
                       </div>
                     ) : (
-                      <span className="text-sm text-gray-500">No expiry</span>
+                      <span className="text-sm text-muted-foreground">No expiry</span>
                     )}
                   </TableCell>
                   <TableCell>
