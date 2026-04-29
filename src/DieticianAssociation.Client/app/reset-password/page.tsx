@@ -36,8 +36,8 @@ export default function ResetPasswordPage() {
     }
     if (!newPassword) {
       errors.new = "New password is required.";
-    } else if (newPassword.length < 12) {
-      errors.new = "New password must be at least 12 characters long.";
+    } else if (newPassword.length < 6) {
+      errors.new = "New password must be at least 6 characters long.";
     }
     if (!confirmPassword) {
       errors.confirm = "Please confirm your new password.";
@@ -151,7 +151,7 @@ export default function ResetPasswordPage() {
               {fieldErrors.new ? (
                 <p id="newPassword-error" className="text-sm text-red-600">{fieldErrors.new}</p>
               ) : (
-                <p id="newPassword-hint" className="text-xs text-muted-foreground">Must be at least 12 characters.</p>
+                <p id="newPassword-hint" className="text-xs text-muted-foreground">Must be at least 6 characters.</p>
               )}
             </div>
 
