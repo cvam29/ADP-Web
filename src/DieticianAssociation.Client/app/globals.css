@@ -22,7 +22,7 @@
     --secondary: 120 20% 94%;
     --secondary-foreground: 134 27% 14%;
     --muted: 120 20% 94%;
-    --muted-foreground: 134 14% 45%;
+    --muted-foreground: 134 14% 35%;
     --accent: 33 54% 49%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
@@ -52,7 +52,7 @@
     --secondary: 138 20% 14%;
     --secondary-foreground: 87 27% 95%;
     --muted: 138 20% 14%;
-    --muted-foreground: 120 10% 60%;
+    --muted-foreground: 120 10% 70%;
     --accent: 33 56% 56%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
@@ -71,12 +71,29 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    font-size: 16.5px;
   }
   body {
     @apply bg-background text-foreground font-sans transition-colors duration-200;
+    font-weight: 450;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
   }
   h1, h2, h3, h4, h5, h6 {
     @apply font-serif tracking-tight;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  p, li, td, th, label, span {
+    font-weight: 450;
+  }
+  .text-sm {
+    font-size: 0.9rem;
+    font-weight: 450;
+  }
+  .text-xs {
+    font-size: 0.8rem;
+    font-weight: 500;
   }
 }
 
