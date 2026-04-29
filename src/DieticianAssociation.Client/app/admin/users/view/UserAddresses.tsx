@@ -31,7 +31,7 @@ export default function UserAddresses({ addresses }: UserAddressesProps) {
                       <div className="flex-1">
                         <p className="font-medium">{address.streetAddress}</p>
                         {address.addressLine2 && (
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-muted-foreground">
                             {address.addressLine2}
                           </p>
                         )}
@@ -43,15 +43,15 @@ export default function UserAddresses({ addresses }: UserAddressesProps) {
                       )}
                     </div>
 
-                    <div className="text-sm text-gray-600">
+                    <div className="text-sm text-muted-foreground">
                       <p>
                         {address.cityName}, {address.stateName}
                       </p>
                       <p>{address.countryName}</p>
-                      <p className="font-medium mt-1">{address.postalCode}</p>
+                      <p className="font-medium mt-1 text-foreground">{address.postalCode}</p>
                     </div>
 
-                    <div className="pt-3 border-t text-xs text-gray-500">
+                    <div className="pt-3 border-t text-xs text-muted-foreground">
                       Added: {new Date(address.createdAt).toLocaleDateString()}
                     </div>
                   </div>
@@ -60,7 +60,7 @@ export default function UserAddresses({ addresses }: UserAddressesProps) {
             ))}
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">No addresses found</p>
+          <p className="text-center text-muted-foreground py-8">No addresses found</p>
         )}
       </CardContent>
     </Card>

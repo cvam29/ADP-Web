@@ -5,6 +5,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { Header } from '@/components/header'
+import { ThemeToggle } from '@/components/theme-toggle'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -326,7 +327,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <h1 className="text-base font-semibold text-foreground truncate">{currentLabel}</h1>
             </div>
 
-            <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="flex items-center gap-3 flex-shrink-0">
+              <ThemeToggle />
               <NotificationCenter />
             </div>
           </div>

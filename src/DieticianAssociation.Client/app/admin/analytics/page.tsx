@@ -96,8 +96,8 @@ export default function Analytics() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Analytics</h1>
-          <p className="mt-1 text-sm text-gray-600">Platform performance and user insights</p>
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">Analytics</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Platform performance and user insights</p>
         </div>
         <div className="flex gap-3">
           <Select value={timeRange} onValueChange={setTimeRange}>
@@ -123,13 +123,13 @@ export default function Analytics() {
         {stats.map((stat) => (
           <Card key={stat.name}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium text-gray-600">{stat.name}</CardTitle>
+              <CardTitle className="text-sm font-medium text-muted-foreground">{stat.name}</CardTitle>
               <div className={`p-2 rounded-lg ${stat.color}`}>
                 <stat.icon className="w-4 h-4 text-white" />
               </div>
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-gray-900">{stat.value}</div>
+              <div className="text-2xl font-bold text-foreground">{stat.value}</div>
               <div className="flex items-center mt-1">
                 <TrendingUp className={`w-3 h-3 mr-1 ${
                   stat.changeType === "positive" ? "text-green-500" : "text-red-500"
@@ -156,9 +156,9 @@ export default function Analytics() {
             <div className="space-y-4">
               {userGrowth.map((data, index) => (
                 <div key={data.month} className="flex items-center justify-between">
-                  <span className="text-sm text-gray-600">{data.month}</span>
+                  <span className="text-sm text-muted-foreground">{data.month}</span>
                   <div className="flex items-center gap-3">
-                    <div className="w-32 bg-gray-200 rounded-full h-2">
+                    <div className="w-32 bg-secondary rounded-full h-2">
                       <div 
                         className="bg-blue-500 h-2 rounded-full" 
                         style={{ width: `${(data.users / 3000) * 100}%` }}
@@ -184,7 +184,7 @@ export default function Analytics() {
                 <div key={page.page} className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="text-sm font-medium">{page.page}</div>
-                    <div className="w-full bg-gray-200 rounded-full h-1.5 mt-1">
+                    <div className="w-full bg-secondary rounded-full h-1.5 mt-1">
                       <div 
                         className="bg-green-500 h-1.5 rounded-full" 
                         style={{ width: `${page.percentage}%` }}
@@ -193,7 +193,7 @@ export default function Analytics() {
                   </div>
                   <div className="text-right ml-4">
                     <div className="text-sm font-medium">{formatNumber(page.views)}</div>
-                    <div className="text-xs text-gray-500">{page.percentage}%</div>
+                    <div className="text-xs text-muted-foreground">{page.percentage}%</div>
                   </div>
                 </div>
               ))}
@@ -212,14 +212,14 @@ export default function Analytics() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-900">3.2%</div>
-            <p className="text-sm text-gray-600 mt-1">+0.5% from last month</p>
+            <div className="text-3xl font-bold text-foreground">3.2%</div>
+            <p className="text-sm text-muted-foreground mt-1">+0.5% from last month</p>
             <div className="mt-4">
               <div className="flex justify-between text-sm">
                 <span>Goal: 4%</span>
                 <span>80%</span>
               </div>
-              <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
+              <div className="w-full bg-secondary rounded-full h-2 mt-1">
                 <div className="bg-blue-500 h-2 rounded-full" style={{ width: "80%" }}></div>
               </div>
             </div>
@@ -234,8 +234,8 @@ export default function Analytics() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-900">4m 32s</div>
-            <p className="text-sm text-gray-600 mt-1">+12s from last month</p>
+            <div className="text-3xl font-bold text-foreground">4m 32s</div>
+            <p className="text-sm text-muted-foreground mt-1">+12s from last month</p>
             <div className="mt-4">
               <Badge className="bg-green-100 text-green-800">Good</Badge>
             </div>
@@ -250,8 +250,8 @@ export default function Analytics() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-3xl font-bold text-gray-900">47</div>
-            <p className="text-sm text-gray-600 mt-1">This month</p>
+            <div className="text-3xl font-bold text-foreground">47</div>
+            <p className="text-sm text-muted-foreground mt-1">This month</p>
             <div className="mt-4">
               <div className="flex justify-between text-sm">
                 <span>Last month: 39</span>
@@ -270,26 +270,26 @@ export default function Analytics() {
         </CardHeader>
         <CardContent>
           <div className="space-y-3">
-            <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
                 <span className="text-sm">User registered for membership</span>
               </div>
-              <span className="text-xs text-gray-500">Just now</span>
+              <span className="text-xs text-muted-foreground">Just now</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-950/30 rounded-lg">
               <div className="flex items-center gap-3">
                 <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                 <span className="text-sm">New event registration</span>
               </div>
-              <span className="text-xs text-gray-500">2 minutes ago</span>
+              <span className="text-xs text-muted-foreground">2 minutes ago</span>
             </div>
-            <div className="flex items-center justify-between p-3 bg-purple-50 rounded-lg">
+            <div className="flex items-center justify-between p-3 bg-primary/5 rounded-lg">
               <div className="flex items-center gap-3">
-                <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
                 <span className="text-sm">Blog post published</span>
               </div>
-              <span className="text-xs text-gray-500">5 minutes ago</span>
+              <span className="text-xs text-muted-foreground">5 minutes ago</span>
             </div>
           </div>
         </CardContent>

@@ -23,7 +23,7 @@ export default function UniversityTable({
 }: UniversityTableProps) {
   if (universities.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-muted-foreground">
         No universities found. Add your first university to get started.
       </div>
     );
@@ -62,13 +62,13 @@ export default function UniversityTable({
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                    className="text-xs text-primary hover:underline flex items-center gap-1"
                   >
                     Visit website
                     <ExternalLink className="h-3 w-3" />
                   </a>
                 ) : (
-                  <span className="text-xs text-gray-400">No website</span>
+                  <span className="text-xs text-muted-foreground/60">No website</span>
                 )}
               </TableCell>
               <TableCell>{university.universityType}</TableCell>
@@ -80,7 +80,7 @@ export default function UniversityTable({
                       className={`h-4 w-4 ${
                         (university.rating ?? 0) >= value
                           ? "fill-amber-400 text-amber-400"
-                          : "text-slate-300"
+                          : "text-muted-foreground/30"
                       }`}
                     />
                   ))}
@@ -89,7 +89,7 @@ export default function UniversityTable({
               <TableCell>{university.stateName}</TableCell>
               <TableCell>{university.surveyYear}</TableCell>
               <TableCell className="text-center">
-                <span className="inline-flex items-center rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
+                <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
                   {university.collegeCount || 0}
                 </span>
               </TableCell>

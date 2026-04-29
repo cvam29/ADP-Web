@@ -84,7 +84,7 @@ export default function UserPayments({
                       <TableCell className="font-medium">
                         <div>
                           <p className="text-sm">{payment.referenceType}</p>
-                          <p className="text-xs text-gray-500">
+                          <p className="text-xs text-muted-foreground">
                             {payment.referenceId}
                           </p>
                         </div>
@@ -146,7 +146,7 @@ export default function UserPayments({
             </Table>
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">
+          <p className="text-center text-muted-foreground py-8">
             No payment records found
           </p>
         )}

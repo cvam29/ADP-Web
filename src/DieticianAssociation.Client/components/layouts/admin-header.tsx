@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useAuthStore } from "@/store/useAuthStore"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { Menu, LogOut, User, Settings, LayoutDashboard } from "lucide-react"
 
 interface AdminHeaderProps {
@@ -37,6 +38,7 @@ export function AdminHeader({ onMenuClick }: AdminHeaderProps) {
 
       {/* Right side */}
       <div className="flex items-center space-x-3">
+        <ThemeToggle />
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

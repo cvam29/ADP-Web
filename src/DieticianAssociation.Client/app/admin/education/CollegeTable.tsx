@@ -23,7 +23,7 @@ export default function CollegeTable({
 }: CollegeTableProps) {
   if (colleges.length === 0) {
     return (
-      <div className="text-center py-8 text-gray-500">
+      <div className="text-center py-8 text-muted-foreground">
         No colleges found. Add your first college to get started.
       </div>
     );

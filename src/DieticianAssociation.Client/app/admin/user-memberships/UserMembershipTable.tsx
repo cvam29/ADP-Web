@@ -103,7 +103,7 @@ export default function UserMembershipTable({
         <TableBody>
           {userMemberships?.map((membership) => (
             <TableRow key={membership.id}>
-              <TableCell className="font-mono text-xs text-slate-700">
+              <TableCell className="font-mono text-xs text-muted-foreground">
                 {membership.applicationRequestId || "—"}
               </TableCell>
               <TableCell className="font-medium">
@@ -215,8 +215,8 @@ export default function UserMembershipTable({
                     className={cn(
                       "inline-flex items-center rounded-full p-1",
                       membership.confirmationSent
-                        ? "bg-green-100 text-green-600"
-                        : "bg-gray-100 text-gray-400"
+                        ? "bg-green-100 text-green-600 dark:bg-green-900/40 dark:text-green-400"
+                        : "bg-secondary text-muted-foreground"
                     )}
                   >
                     <MailCheck className="w-3.5 h-3.5" />
@@ -226,8 +226,8 @@ export default function UserMembershipTable({
                     className={cn(
                       "inline-flex items-center rounded-full p-1",
                       membership.tempPasswordSent
-                        ? "bg-amber-100 text-amber-600"
-                        : "bg-gray-100 text-gray-400"
+                        ? "bg-amber-100 text-amber-600 dark:bg-amber-900/40 dark:text-amber-400"
+                        : "bg-secondary text-muted-foreground"
                     )}
                   >
                     <Mail className="w-3.5 h-3.5" />
@@ -237,8 +237,8 @@ export default function UserMembershipTable({
                     className={cn(
                       "inline-flex items-center rounded-full p-1",
                       membership.requirePasswordReset
-                        ? "bg-red-100 text-red-600"
-                        : "bg-gray-100 text-gray-400"
+                        ? "bg-red-100 text-red-600 dark:bg-red-900/40 dark:text-red-400"
+                        : "bg-secondary text-muted-foreground"
                     )}
                   >
                     <KeySquare className="w-3.5 h-3.5" />
@@ -295,7 +295,7 @@ export default function UserMembershipTable({
             <TableRow>
               <TableCell
                 colSpan={14}
-                className="text-center text-gray-500 py-8"
+                className="text-center text-muted-foreground py-8"
               >
                 No user memberships found. Adjust your filters or check back
                 later.

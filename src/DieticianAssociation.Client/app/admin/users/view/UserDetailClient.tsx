@@ -51,10 +51,10 @@ export default function UserDetailClient({
           <ArrowLeft className="w-5 h-5" />
         </Button>
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             {localUserDetail.name}
           </h1>
-          <p className="mt-1 text-sm text-gray-600">{localUserDetail.email}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{localUserDetail.email}</p>
         </div>
       </div>
 
@@ -165,7 +165,7 @@ export default function UserDetailClient({
                     </span>
                   </div>
                   <div className="pt-3 border-t">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-muted-foreground">
                       Consented At:{" "}
                       {new Date(
                         localUserDetail.userConsent.consentedAt,
@@ -174,7 +174,7 @@ export default function UserDetailClient({
                   </div>
                 </div>
               ) : (
-                <p className="text-gray-500">No consent data available</p>
+                <p className="text-muted-foreground">No consent data available</p>
               )}
             </CardContent>
           </Card>

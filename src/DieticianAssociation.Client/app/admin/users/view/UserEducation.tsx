@@ -94,7 +94,7 @@ export default function UserEducation({ qualifications }: UserEducationProps) {
             </Table>
           </div>
         ) : (
-          <p className="text-center text-gray-500 py-8">
+          <p className="text-center text-muted-foreground py-8">
             No education records found
           </p>
         )}

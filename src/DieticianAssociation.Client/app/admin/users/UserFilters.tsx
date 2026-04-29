@@ -55,10 +55,10 @@ export default function UserFilters({
     (dateFilter && dateFilter !== "all");
 
   return (
-    <div className="rounded-xl border bg-white p-5 shadow-sm space-y-4">
+    <div className="rounded-xl border bg-card p-5 shadow-sm space-y-4">
       {/* Header */}
-      <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-        <Filter className="h-4 w-4 text-blue-600" />
+      <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+        <Filter className="h-4 w-4 text-primary" />
         Filters
       </div>
 
@@ -66,7 +66,7 @@ export default function UserFilters({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Search */}
         <div className="relative">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
             placeholder="Search users by name, email, organization..."
             value={search}
@@ -129,7 +129,7 @@ export default function UserFilters({
       {/* Active Filters + Clear */}
       {hasActiveFilters && (
         <div className="flex items-center justify-between pt-2 border-t">
-          <div className="text-xs text-gray-500">
+          <div className="text-xs text-muted-foreground">
             Filters applied
           </div>
 
@@ -137,7 +137,7 @@ export default function UserFilters({
             variant="ghost"
             size="sm"
             onClick={clearFilters}
-            className="text-red-600 hover:bg-red-50"
+            className="text-destructive hover:bg-destructive/10"
           >
             <X className="h-4 w-4 mr-1" />
             Clear all

@@ -79,8 +79,8 @@ export default function TempPasswordDialog({
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="text-sm text-gray-600">
-            <p className="font-medium text-gray-800">{userName || "Selected user"}</p>
+          <div className="text-sm text-muted-foreground">
+            <p className="font-medium text-foreground">{userName || "Selected user"}</p>
             <p>{userEmail || "No email available"}</p>
           </div>
 
@@ -128,7 +128,7 @@ export default function TempPasswordDialog({
             </div>
           )}
 
-          <p className="text-xs text-gray-500">
+          <p className="text-xs text-muted-foreground">
             User will be asked to reset password on first login.
           </p>
         </div>
